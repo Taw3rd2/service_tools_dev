@@ -1,0 +1,847 @@
+/* topbar */
+.topbarContainer {
+    height: 65px;
+    width: 100%;
+    background-color: teal;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.topbarLeft {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topbarCenter {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topbarRight {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: white;
+}
+
+.topbarLogo {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+}
+
+.topbarButtonLink {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-right: 20px;
+    cursor: pointer;
+    /* color: teal; */
+}
+
+.topbarUser {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.topbarDropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.topbarDropdownContent {
+    display: block;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    border-radius: 5px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    text-align: center;
+    border: 1px solid teal;
+}
+
+.topbarDropdownLink {
+    color: teal;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+/* loading spinner */
+.calendarSpinner {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.spinnerImg {
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+/* notifications */
+.notificationContainer {
+    font-size: 14px;
+    box-sizing: border-box;
+    position: fixed;
+    z-index: 9999;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.notificationPosition {
+    bottom: 12px;
+    right: 12px;
+    animation: toastInLeft 0.7s;
+}
+
+.notification {
+    background: #fff;
+    transition: 0.3s ease;
+    position: relative;
+    pointer-events: auto;
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 20px;
+    margin-bottom: 15px;
+    width: 300px;
+    max-height: 100px;
+    border-radius: 3px;
+    box-shadow: 0 0 10px #999;
+    color: #000;
+    opacity: 0.9;
+}
+
+.notification:hover {
+    box-shadow: 0 0 12px #fff;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.notificationClose {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    font-size: 24px;
+}
+
+.notificationTitle {
+    font-weight: 700;
+    font-size: 16px;
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 6px;
+    width: 300px;
+    height: 18px;
+}
+
+.notificationMessage {
+    margin: 0;
+    text-align: left;
+    height: 18px;
+    margin-left: -1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.notificationIcon {
+    float: left;
+    margin-right: 15px;
+    font-size: 36px;
+}
+
+.toast {
+    height: 50px;
+    width: 365px;
+    color: #fff;
+    padding: 20px 15px 10px 10px;
+}
+
+.deleteWarningText {
+    font-size: 20px;
+    color: red;
+}
+
+
+
+/* homePage */
+.homePage {
+    width: 100%;
+    height: auto;
+}
+
+.homepageTopRow {
+    display: flex;
+}
+
+.homepageTopLeft {
+    flex: 4;
+    padding: 8px;
+}
+
+.homepageTopMiddle {
+    flex: 4;
+    padding: 8px;
+}
+
+.homepageTopRight {
+    flex: 4;
+    padding: 8px;
+}
+
+.homepageBottomRow {
+    display: flex;
+    align-items: center;
+}
+
+.homepageBottomLeft {
+    flex: 6;
+}
+
+.homepageBottomRight {
+    flex: 6;
+    padding: 8px;
+}
+
+/* Customer Search */
+.searchCustomers {
+    font-size: 30px;
+    color: teal;
+}
+
+.customerSearch {
+    color: antiquewhite;
+}
+
+/* Schedule Page */
+.schedulePage {
+    width: 100%;
+    height: auto;
+}
+
+/* Image Viewer */
+.imageContainer {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px;
+    background-color: teal;
+}
+
+/* Settings */
+.settings {
+    width: 100%;
+    height: auto;
+}
+
+.settingsRow {
+    display: flex;
+}
+
+.settingsTopLeft {
+    flex: 4;
+    padding: 8px;
+}
+
+.settingsTopMiddle {
+    flex: 4;
+    padding: 8px;
+}
+
+.settingsTopRight {
+    flex: 4;
+    padding: 8px;
+}
+
+.settingsBottomLeft {
+    flex: 4;
+    padding: 8px;
+}
+
+.settingsBottomRight {
+    flex: 8;
+    padding: 8px;
+}
+
+.settingsCard {
+    border: 1px solid black;
+    background-color: teal;
+    margin: 4px;
+    padding: 8px;
+}
+
+.settingsCardTitle {
+    margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: 500;
+    color: white
+}
+
+/* NoCustomerLoaded */
+.containerRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 8px;
+}
+
+.textTeal {
+    color: teal;
+}
+
+.columnHeaderText {
+    font-size: 20px;
+    color: teal;
+}
+
+.pageContainer {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* NoServiceCustomer */
+.noServiceTitle {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 26px;
+    color: red;
+    padding: 8px 0;
+}
+
+/* Edits */
+.row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.smallRow {
+    display: flex;
+    gap: 16px;
+}
+
+.singleRowInput {
+    flex: 12;
+}
+
+.doubleRowInput {
+    flex: 6;
+}
+
+.tripleRowInput {
+    flex: 4;
+}
+
+.quadRowInput {
+    flex: 3;
+}
+
+.twoThirdsRowInput {
+    flex: 8;
+}
+
+.oneThirdRowInput {
+    flex: 4;
+}
+
+/* Stack Buttons Full Width */
+.buttonBarStack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+/* Full Width Button Bar */
+.buttonBarFullWidth {
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.buttonBarFullWidth button {
+    flex: auto;
+}
+
+.buttonBarStack button {
+    flex: auto;
+}
+
+/* Button Bar */
+.buttonBar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-direction: row;
+    margin-top: 12px;
+}
+
+.listItemButtonBar {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+/* Buttons */
+.iconSeperation {
+    flex: 1;
+    padding-right: 16px;
+    padding-left: 16px;
+    text-align: center;
+}
+
+.buttonIcon {
+    width: 40px;
+}
+
+.deleteButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid pink;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    color: red;
+}
+
+.deleteButton:hover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    color: red;
+}
+
+.standardButton {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    border: 1px solid rgba(132, 230, 230, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    color: teal;
+}
+
+.standardButton:hover {
+    display: flex;
+    align-items: center;
+    border: 1px solid teal;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    color: teal;
+}
+
+.standardGoButton {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    border: 1px solid teal;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    color: green;
+}
+
+.standardGoButton:hover {
+    display: flex;
+    align-items: center;
+    border: 1px solid green;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    color: green;
+}
+
+.lineItemButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(132, 230, 230, 0.8);
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    color: teal;
+}
+
+.lineItemButton:hover {
+    display: flex;
+    align-items: center;
+    border: 1px solid teal;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    color: teal;
+}
+
+.standardButtonFullWidth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(132, 230, 230, 0.8);
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: large;
+    margin: 0 4px;
+    cursor: pointer;
+    color: teal;
+}
+
+.standardButtonFullWidth:hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid teal;
+    background: whitesmoke;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: large;
+    margin: 0 4px;
+    cursor: pointer;
+    color: teal;
+}
+
+/* Modal */
+.modalContainer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation-name: modalopen;
+    animation-duration: 0.5s;
+}
+
+.modalDark {
+    background-color: darkslategrey;
+    color: white;
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 8px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+}
+
+.modalLight {
+    background-color: white;
+    color: teal;
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 8px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+}
+
+.modalTitleDark {
+    margin-left: 8px;
+    font-size: 22px;
+    color: white;
+}
+
+.modalTitleLight {
+    margin-left: 8px;
+    font-size: 22px;
+    color: teal;
+}
+
+.modalContent {
+    margin: 8px;
+}
+
+.customerSearchModal {
+    background-color: darkslategray;
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+    padding: 8px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+}
+
+/* Daily Slips */
+.viewSlipsContainer {
+    flex: 0 0 21%;
+    border: 1px solid black;
+    padding: 8px;
+    margin: 16px;
+}
+
+.viewSlipsRow {
+    display: flex;
+    gap: 8px;
+}
+
+.viewSlipsPrimaryText {
+    font-weight: bold;
+    font-size: 16px;
+    overflow: hidden;
+}
+
+.viewSlipsSecondaryText {
+    font-weight: bold;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+.viewSlipsCaptionText {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.printSlipsContainer {
+    flex: 0 0 21%;
+    /* height: 500px; */
+    border: 1px solid black;
+    padding: 8px;
+    margin: 5px;
+}
+
+.printSlipsPageBreak {
+    page-break-after: always;
+}
+
+.slideIn {
+    margin-top: -225px;
+    opacity: 0;
+    transition-property: margin-top, opacity;
+    transition-duration: 0.4s;
+}
+
+.centerInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* equipment page */
+.accordionTitle {
+    color: "teal";
+}
+
+.worksheetDate {
+    margin-left: 8px;
+    font-size: 18px;
+}
+
+.worksheetBorder {
+    border: 1px solid black;
+}
+
+.worksheetTitle {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 8px;
+    margin-top: 15px;
+    font-size: 22px;
+    color: teal;
+}
+
+.worksheetContainer {
+    margin: 16px;
+}
+
+.searchBarLabel {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+    color: teal;
+    font-weight: bold;
+    font-size: 28px;
+    overflow: hidden;
+}
+
+.tableHeaderText {
+    font-size: 24px;
+    color: black;
+}
+
+.printTableHeaderText {
+    font-size: 14px;
+    color: black;
+}
+
+.tableCellText {
+    font-size: 22px;
+    color: black;
+}
+
+.printTableCellText {
+    font-size: 12px;
+    color: black;
+}
+
+.pageHeaderText {
+    font-size: 28px;
+    color: black;
+}
+
+.printPageHeaderText {
+    font-size: 20px;
+    color: black;
+}
+
+.pageCaptionText {
+    font-size: 16px;
+    color: black;
+}
+
+.printPageCaptionText {
+    font-size: 12px;
+    color: black;
+}
+
+.zoomRegular {
+    zoom: 100%;
+}
+
+@keyframes modalopen {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes toastInLeft {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translate(0%);
+    }
+}
+
+@media only screen and (max-width: 1500px) {
+    .homepageTopRow {
+        display: flex;
+    }
+
+    .homepageTopLeft {
+        flex: 6;
+    }
+
+    .homepageTopMiddle {
+        flex: 6;
+    }
+
+    .homepageTopRight {
+        flex: 6;
+    }
+
+    .homepageBottomRight {
+        flex: 6;
+    }
+
+    .homepageBottomLeft {
+        display: none;
+    }
+
+
+}
+
+@media only screen and (max-width: 600px) {
+    .topbarLeft {
+        flex: 10;
+    }
+
+    .topbarCenter {
+        display: none;
+    }
+
+    .topbarRight {
+        display: none;
+    }
+
+    .homepageTopRow {
+        flex-direction: column;
+    }
+
+    .homepageTopLeft {
+        flex: 12;
+    }
+
+    .homepageTopMiddle {
+        flex: 12;
+    }
+
+    .homepageTopRight {
+        flex: 12;
+    }
+
+    .homepageBottomLeft {
+        display: none;
+    }
+
+    .homepageBottomRight {
+        flex: 12;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .buttonBarFullWidth {
+        flex-direction: column;
+    }
+
+    .buttonBarStack {
+        margin-top: 8px;
+    }
+}
+
+@media print {
+    .noPrint {
+        display: none;
+    }
+}

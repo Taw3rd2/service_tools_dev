@@ -1,0 +1,55 @@
+.accordion {
+    border-radius: 5px;
+    background: teal;
+}
+
+.accordion-visible {
+    background: teal;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid #474d9b;
+    ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    z-index: 10;
+}
+
+.accordion-visible span {
+    padding: 15px 0;
+    font-size: 20px;
+}
+
+.accordion-visible img {
+    width: 20px;
+    transform: rotate(-90deg);
+    transition: transform 0.2s ease-in-out;
+}
+
+.accordion-visible img.active {
+    transform: rotate(0deg)
+}
+
+.accordion-toggle {
+    pointer-events: none;
+    height: 0px;
+    font-size: 18px;
+    opacity: 0;
+    transition:
+        opacity 0.3s ease-in-out,
+        height 0.3s 0.3s ease-in-out;
+    color: #333;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.animated {
+    opacity: 1;
+    transition:
+        height 0.3s ease-in-out,
+        opacity 0.3s 0.3s ease-in-out;
+    pointer-events: all;
+}

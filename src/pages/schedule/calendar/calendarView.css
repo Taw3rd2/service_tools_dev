@@ -1,0 +1,13 @@
+.fc-daygrid-day-top {
+  display: flex;
+  flex-direction: row;
+}
+
+.fc-daygrid-day-number {
+  width: 100%;
+}
+
+.fc-h-event {
+  border: 4px solid var(--fc-event-border-color);
+  cursor: pointer;
+}
