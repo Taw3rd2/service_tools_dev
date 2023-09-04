@@ -10,14 +10,19 @@ import EquipmentPicker from "../../equipment_picker/EquipmentPicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
-import { InputAdornment, TextField, Typography } from "@mui/material";
-import { Close, AddCircleOutline } from "@mui/icons-material";
+import { Button, InputAdornment, TextField, Typography } from "@mui/material";
+import { Close, AddCircleOutline, ListAlt } from "@mui/icons-material";
 import { getFormattedDateAndTime } from "../../../utilities/dateUtils";
 
 import "../../../global_style/style.css";
 import IncrementDigit from "./IncrementDigit";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
-const CreateMaintenanceContent = ({ customer, closeModalTwo }) => {
+const CreateMaintenanceContent = ({
+  customer,
+  closeModalTwo,
+  openMaintenanceMaterialList,
+}) => {
   const { dispatch } = useContext(ToastContext);
 
   //list of the customers equipment
@@ -109,8 +114,8 @@ const CreateMaintenanceContent = ({ customer, closeModalTwo }) => {
         handleCheckChange={handleCheckChange}
       />
       <form autoComplete="new password" onSubmit={submitNewMaintenance}>
-        <div className="row" style={{ marginTop: "16px" }}>
-          <div className="tripleRowInput">
+        <Grid container spacing={1.5} sx={{ marginTop: "16px" }}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <TextField
               label="M-Number"
               variant="outlined"
@@ -120,8 +125,8 @@ const CreateMaintenanceContent = ({ customer, closeModalTwo }) => {
               onChange={handleMaintenanceChange("mNumber")}
               required
             />
-          </div>
-          <div className="tripleRowInput">
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <TextField
               label="Sale Price"
               variant="outlined"
@@ -136,8 +141,8 @@ const CreateMaintenanceContent = ({ customer, closeModalTwo }) => {
               }}
               required
             />
-          </div>
-          <div className="tripleRowInput">
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Sale Date"
@@ -152,49 +157,59 @@ const CreateMaintenanceContent = ({ customer, closeModalTwo }) => {
                 )}
               />
             </LocalizationProvider>
-          </div>
-        </div>
-        <div className="row">
-          <div className="doubleRowInput">
-            <div className="row">
-              <div className="doubleRowInput">
-                <IncrementDigit
-                  value={maintenanceValues.numberOfYears}
-                  setValue={(newValue) =>
-                    handleMaintenanceDateChange("numberOfYears", newValue)
-                  }
-                  label={"Years"}
-                />
-              </div>
-              <div className="doubleRowInput">
-                <IncrementDigit
-                  value={maintenanceValues.numberOfVisits}
-                  setValue={(newValue) =>
-                    handleMaintenanceDateChange("numberOfVisits", newValue)
-                  }
-                  label={"Visits"}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="doubleRowInput">
-            <div className="buttonBar">
-              <button type="submit" className="standardButton">
-                <AddCircleOutline />
-                <span className="iconSeperation">Submit New Maintenance</span>
-              </button>
-              <button
-                type="button"
-                className="standardButton"
-                onClick={() => closeModalTwo()}
-              >
-                <Close />
-                <span className="iconSeperation">Close</span>
-              </button>
-            </div>
-          </div>
-        </div>
+          </Grid>
+          <Grid
+            xs={12}
+            sm={12}
+            md={12}
+            lg={6}
+            display="flex"
+            justifyContent="space-evenly"
+          >
+            <IncrementDigit
+              value={maintenanceValues.numberOfYears}
+              setValue={(newValue) =>
+                handleMaintenanceDateChange("numberOfYears", newValue)
+              }
+              label={"Years"}
+            />
 
+            <IncrementDigit
+              value={maintenanceValues.numberOfVisits}
+              setValue={(newValue) =>
+                handleMaintenanceDateChange("numberOfVisits", newValue)
+              }
+              label={"Visits"}
+            />
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6} sx={{ marginTop: "26px" }}>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<ListAlt />}
+              onClick={() => openMaintenanceMaterialList(customer.id)}
+            >
+              Material
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              startIcon={<AddCircleOutline />}
+              sx={{ marginLeft: "8px" }}
+            >
+              Add Maintenance
+            </Button>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<Close />}
+              onClick={() => closeModalTwo()}
+              sx={{ marginLeft: "8px" }}
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
         {equipmentError && (
           <div className="row">
             <div className="singleRowInput">

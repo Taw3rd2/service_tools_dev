@@ -19,7 +19,7 @@ import {
   getDateFromString,
   getUnixFromDate,
 } from "../../../utilities/dateUtils";
-import { AddCircleOutline, Close, ListAlt } from "@mui/icons-material";
+import { AddCircleOutline, Close } from "@mui/icons-material";
 import { collection } from "firebase/firestore";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
@@ -28,7 +28,6 @@ const CustomerEquipmentList = ({
   closeModalOne,
   openCreateCustomerEquipment,
   openCustomerEquipmentDetails,
-  openMaintenanceMaterialList,
 }) => {
   const equipment = useSyncedCollection(
     collection(db, "customers", customer.id, "Equipment")
@@ -117,14 +116,6 @@ const CustomerEquipmentList = ({
         lg={12}
         sx={{ display: "flex", justifyContent: "end", marginTop: "8px" }}
       >
-        <Button
-          variant="outlined"
-          type="button"
-          startIcon={<ListAlt />}
-          onClick={() => openMaintenanceMaterialList()}
-        >
-          Maintenance Material
-        </Button>
         <Button
           variant="outlined"
           type="button"

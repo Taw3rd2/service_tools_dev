@@ -402,7 +402,6 @@ const HomePage = () => {
         customer={client}
         openCreateCustomerEquipment={openCreateCustomerEquipment}
         openCustomerEquipmentDetails={openCustomerEquipmentDetails}
-        openMaintenanceMaterialList={openMaintenanceMaterialList}
       />
     );
   };
@@ -492,10 +491,14 @@ const HomePage = () => {
   };
 
   const openCreateMaintenance = () => {
-    openModalTwo(
+    openModalOne(
       "45%",
       "Create New Maintenance",
-      <CreateMaintenance customer={client} closeModalTwo={closeModalTwo} />
+      <CreateMaintenance
+        customer={client}
+        closeModalTwo={closeModalOne}
+        openMaintenanceMaterialList={openMaintenanceMaterialList}
+      />
     );
   };
 
@@ -533,20 +536,22 @@ const HomePage = () => {
       "80%",
       "Maintenance List",
       <MaintenanceList
+        closeModalOne={closeModalOne}
         customer={client}
         openMaintenanceDetails={openMaintenanceDetails}
-        closeModalOne={closeModalOne}
+        openMaintenanceMaterialList={openMaintenanceMaterialList}
       />
     );
   };
 
-  const openMaintenanceMaterialList = () => {
+  const openMaintenanceMaterialList = (custId) => {
+    //possibly set the current customer here?
     openModalTwo(
       "60%",
       "Maintenance Material",
       <MaintenanceMaterialList
         closeModalTwo={closeModalTwo}
-        customer={client}
+        customerId={custId}
       />
     );
   };

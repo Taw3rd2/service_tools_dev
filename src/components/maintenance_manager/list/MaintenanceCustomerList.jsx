@@ -27,8 +27,13 @@ import BasicSearchBar from "../../basic_components/BasicSearchBar";
 //import MaintenanceExport from "../../export_to_excel/MaintenanceExport";
 import EquipmentTableBody from "./components/EquipmentTableBody";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
-const MaintenanceCustomerList = ({ openMaintenanceDetails, closeModalOne }) => {
+const MaintenanceCustomerList = ({
+  closeModalOne,
+  openMaintenanceDetails,
+  openMaintenanceMaterialList,
+}) => {
   const maintenance = useSyncedCollection(collection(db, "maintenance"));
 
   const [searchableMaintenance, setSearchableMaintenance] =
@@ -89,26 +94,26 @@ const MaintenanceCustomerList = ({ openMaintenanceDetails, closeModalOne }) => {
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                <div className="row">
-                  <div className="doubleRowInput">
+                <Grid container spacing={1.5}>
+                  <Grid
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
                     <Typography variant="h6" gutterBottom component="div">
                       Maintenance
                     </Typography>
-                  </div>
-                  <div className="doubleRowInput">
-                    <button
+                    <Button
+                      variant="contained"
                       type="button"
-                      className="standardButton"
-                      style={{ marginLeft: "auto" }}
-                      onClick={() => closeModalOne()}
+                      startIcon={<List />}
+                      onClick={() =>
+                        openMaintenanceMaterialList(row.customerId)
+                      }
                     >
-                      <List />
-                      <span className="iconSeperation">
-                        Maintnenance Material List
-                      </span>
-                    </button>
-                  </div>
-                </div>
+                      Maintenance Material List
+                    </Button>
+                  </Grid>
+                </Grid>
 
                 <Table
                   size="small"
@@ -206,7 +211,7 @@ const MaintenanceCustomerList = ({ openMaintenanceDetails, closeModalOne }) => {
         {/* <MaintenanceExport maintenance={maintenance} /> */}
         <Button
           size="large"
-          variant="outlined"
+          variant="contained"
           startIcon={<Close />}
           onClick={() => closeModalOne()}
         >

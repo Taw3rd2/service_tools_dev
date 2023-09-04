@@ -68,6 +68,7 @@ function App() {
             },
             primary: {
               main: "#007f7f",
+              //main: "#4287f5",
             },
             secondary: {
               main: "#f50057",

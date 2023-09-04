@@ -88,14 +88,6 @@ const Topbar = ({ authUser, colorMode }) => {
         {(authUser !== null && authUser.displayName) ||
         (authUser !== null && authUser.email) ? (
           links.map((link) => (
-            // <Button
-            //   variant="outlined"
-            //   startIcon={link.icon}
-            //   key={link.key}
-            //   onClick={() => navigate(link.path)}
-            // >
-            //   {link.name}
-            // </Button>
             <button
               key={link.key}
               onClick={() => navigate(link.path)}

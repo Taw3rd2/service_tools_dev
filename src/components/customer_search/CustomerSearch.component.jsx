@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Typography,
 } from "@mui/material";
 
 import CustomerAutocomplete from "./CustomerAutocomplete.component";
@@ -32,9 +33,9 @@ const CustomerSearch = ({
   return (
     <Grid container spacing={1.5}>
       <Grid xs={12} display="flex" flexDirection="column" alignItems="center">
-        <div className="searchCustomers">
+        <Typography variant="h4">
           Search {customers.length} Customers
-        </div>
+        </Typography>
       </Grid>
       <Grid
         xs={12}
