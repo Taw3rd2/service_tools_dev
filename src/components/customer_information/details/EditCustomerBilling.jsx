@@ -94,7 +94,7 @@ const EditCustomerBilling = ({ customer, closeModalOne }) => {
   return (
     <form onSubmit={submitBillingChanges} autoComplete="new-password">
       <Grid container spacing={1.5}>
-        <Grid xs={12} sm={12} md={12} lg={6}>
+        <Grid xs={12} sm={12} md={12} lg={6} sx={{ marginTop: "6px" }}>
           <TextField
             value={customerValues.billingorg}
             label="Organization Name"
@@ -156,7 +156,7 @@ const EditCustomerBilling = ({ customer, closeModalOne }) => {
         <Grid xs={12} sm={12} md={12} lg={4}></Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="submit"
             startIcon={<ArrowUpward />}
             fullWidth
@@ -166,7 +166,7 @@ const EditCustomerBilling = ({ customer, closeModalOne }) => {
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             startIcon={<Close />}
             onClick={() => closeModalOne()}

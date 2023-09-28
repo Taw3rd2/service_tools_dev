@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { db, useSyncedCollection } from "../../../../firebase/firestore.utils";
 import { Add, Close, PostAdd } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { Button } from "@mui/material";
 
 const AddEquipmentToJob = ({
   additions,
@@ -197,38 +199,43 @@ const AddEquipmentToJob = ({
           Would you like to add the equipment and pre defined items to the Job?
         </li>
       </ul>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => {
-            loadEquipmentMaterialLaborAdditions();
-          }}
-        >
-          <PostAdd />
-          <span className="iconSeperation">
-            <strong>YES</strong>, add the equipment and items.
-          </span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => loadEquipmentOnly()}
-        >
-          <Add />
-          <span className="iconSeperation">
-            <strong>NO</strong>, Just add the Equipment.
-          </span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid container spacing={1.5}>
+        <Grid xs={12}>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<PostAdd />}
+            onClick={() => {
+              loadEquipmentMaterialLaborAdditions();
+            }}
+            fullWidth
+          >
+            Yes add items and equipment
+          </Button>
+        </Grid>
+        <Grid xs={12}>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Add />}
+            onClick={() => loadEquipmentOnly()}
+            fullWidth
+          >
+            No just add the equipment selected
+          </Button>
+        </Grid>
+        <Grid xs={12}>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+            fullWidth
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

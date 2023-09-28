@@ -3,6 +3,7 @@ import { toCurrency } from "../../../../utilities/currencyUtils";
 
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -14,13 +15,15 @@ import {
 import "../../../../global_style/style.css";
 import { Add, DeleteForever, Edit } from "@mui/icons-material";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+
+import "../../../../global_style/style.css";
 
 const LaborRateList = ({ openLaborRateDetails, openDeleteLaborRate }) => {
   const laborRate = useSyncedCollection(collection(db, "laborRate"));
 
   return (
-    <div className="settingsCard">
-      <div className="settingsCardTitle">Labor Rate</div>
+    <div className="sizeAdjustment">
       <TableContainer
         component={Paper}
         sx={{ overflow: "auto", maxHeight: 275 }}
@@ -63,51 +66,62 @@ const LaborRateList = ({ openLaborRateDetails, openDeleteLaborRate }) => {
                 .sort((a, b) => a.rate - b.rate)
                 .map((labRate, index) => (
                   <TableRow key={labRate.id} sx={{ cursor: "pointer" }}>
-                    <TableCell align="left" sx={{ fontSize: 20 }}>
+                    <TableCell
+                      align="left"
+                      padding="none"
+                      sx={{ fontSize: 20 }}
+                    >
                       {index + 1}
                     </TableCell>
-                    <TableCell align="left" sx={{ fontSize: 20 }}>
+                    <TableCell
+                      align="left"
+                      padding="none"
+                      sx={{ fontSize: 20 }}
+                    >
                       {labRate.rateDescription}
                     </TableCell>
-                    <TableCell align="center" sx={{ fontSize: 20 }}>
+                    <TableCell
+                      align="center"
+                      padding="none"
+                      sx={{ fontSize: 20 }}
+                    >
                       {toCurrency(labRate.rate / 100)}
                     </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        startIcon={<Edit />}
-                        onClick={() => openLaborRateDetails(labRate)}
-                      >
-                        Edit
-                      </Button>
+                    <TableCell align="center" padding="none">
+                      <IconButton onClick={() => openLaborRateDetails(labRate)}>
+                        <Edit />
+                      </IconButton>
                     </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        startIcon={<DeleteForever />}
+                    <TableCell align="center" padding="none">
+                      <IconButton
                         onClick={() => openDeleteLaborRate(labRate)}
-                        style={{ color: "red" }}
+                        color="error"
                       >
-                        Delete
-                      </Button>
+                        <DeleteForever />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => openLaborRateDetails()}
-        >
-          <Add />
-          <span className="iconSeperation">Add Labor Rate</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Add />}
+            onClick={() => openLaborRateDetails()}
+            sx={{ marginTop: "8px" }}
+          >
+            Add Labor Rate
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

@@ -76,21 +76,46 @@ const EditSingleField = ({
       style={{ padding: "16px" }}
     >
       {fieldKey === "equipmentInstallDate" ? (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            label={fieldName}
-            fullWidth
-            value={val}
-            onChange={(newValue) => {
-              handleDateChange(newValue);
-            }}
-            color="primary"
-            required
-            renderInput={(params) => (
-              <TextField {...params} sx={{ width: "100%" }} />
-            )}
-          />
-        </LocalizationProvider>
+        <Grid container spacing={1.5}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label={fieldName}
+                fullWidth
+                value={val}
+                onChange={(newValue) => {
+                  handleDateChange(newValue);
+                }}
+                color="primary"
+                required
+                renderInput={(params) => (
+                  <TextField {...params} sx={{ width: "100%" }} />
+                )}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Button
+              type="submit"
+              variant="contained"
+              startIcon={<ArrowUpward />}
+              fullWidth
+            >
+              Update
+            </Button>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Button
+              type="button"
+              variant="contained"
+              startIcon={<Close />}
+              onClick={() => closeEditSingleField()}
+              fullWidth
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       ) : (
         <Grid container spacing={1.5}>
           <Grid xs={12} sm={12} md={12} lg={12}>
@@ -107,7 +132,7 @@ const EditSingleField = ({
           <Grid xs={12} sm={12} md={12} lg={6}>
             <Button
               type="submit"
-              variant="outlined"
+              variant="contained"
               startIcon={<ArrowUpward />}
               fullWidth
             >
@@ -117,7 +142,7 @@ const EditSingleField = ({
           <Grid xs={12} sm={12} md={12} lg={6}>
             <Button
               type="button"
-              variant="outlined"
+              variant="contained"
               startIcon={<Close />}
               onClick={() => closeEditSingleField()}
               fullWidth

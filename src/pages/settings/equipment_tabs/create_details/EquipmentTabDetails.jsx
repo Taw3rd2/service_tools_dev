@@ -7,10 +7,11 @@ import {
 } from "../../../../firebase/firestore.utils";
 import { ToastContext } from "../../../../context/toastContext";
 
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import "../../../../global_style/style.css";
 import { Add, ArrowUpward, Close } from "@mui/icons-material";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const EquipmentTabDetails = ({ equipmentTab, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -98,29 +99,31 @@ const EquipmentTabDetails = ({ equipmentTab, closeModalOne }) => {
           />
         </div>
       </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          {equipmentTab !== undefined ? (
-            <>
-              <ArrowUpward />
-              <span className="iconSeperation">Update</span>
-            </>
-          ) : (
-            <>
-              <Add />
-              <span className="iconSeperation">Add</span>
-            </>
-          )}
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="submit"
+            startIcon={equipmentTab !== undefined ? <ArrowUpward /> : <Add />}
+          >
+            {equipmentTab !== undefined ? "Update" : "Add"}
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

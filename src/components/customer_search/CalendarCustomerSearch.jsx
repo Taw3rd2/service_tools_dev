@@ -37,32 +37,18 @@ const CalendarCustomerSearch = ({
   return (
     <>
       <Autocomplete
-        id="search-box"
-        options={groupedCustomers.sort(
-          (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
-        )}
-        filterOptions={filterOptions}
+        clearOnEscape
         disablePortal
-        onChange={(event, value) => handleCustomerSelected(value)}
-        // groupBy={(customers) => customers.firstLetter}
+        filterOptions={filterOptions}
+        getOptionLabel={(option) => option.lastname}
+        id="search-box"
         isOptionEqualToValue={(option, value) =>
           option.lastname === value.lastname
         }
-        getOptionLabel={(option) => option.lastname}
-        renderOption={(props, option) => (
-          <Grid2 container style={{ fontSize: 18 }} {...props} key={option.id}>
-            <Grid2 xs={12}>
-              <Typography noWrap>
-                {option.lastname} {option.firstname}
-              </Typography>
-            </Grid2>
-            <Grid2 xs={12}>
-              <Typography noWrap style={{ color: "red" }}>
-                {option.city}
-              </Typography>
-            </Grid2>
-          </Grid2>
+        options={groupedCustomers.sort(
+          (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
         )}
+        onChange={(event, value) => handleCustomerSelected(value)}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -71,10 +57,25 @@ const CalendarCustomerSearch = ({
             autoFocus
           />
         )}
+        renderOption={(props, option) => (
+          <Grid2 container style={{ fontSize: 18 }} {...props} key={option.id}>
+            <Grid2 xs={12}>
+              <Typography noWrap>
+                {option.lastname} {option.firstname}
+              </Typography>
+            </Grid2>
+            <Grid2 xs={12}>
+              <Typography noWrap style={{ color: "orange" }}>
+                {option.city}
+              </Typography>
+            </Grid2>
+          </Grid2>
+        )}
+        style={{ marginTop: "8px", minWidth: "400px", minHeight: "425px" }}
       />
       <div style={{ display: "flex", justifyContent: "end" }}>
         <Button
-          variant="outlined"
+          variant="contained"
           startIcon={<Close />}
           onClick={() => closeModalOne()}
           sx={{ marginTop: "8px" }}

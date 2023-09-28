@@ -1,8 +1,12 @@
+import { useTheme } from "@mui/material";
 import { Add, DeleteForever } from "@mui/icons-material";
 import { Button, IconButton, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const Contact = ({ customerValues, setCustomerValues }) => {
+  const theme = useTheme();
+  const borderColor = theme.palette.primary.main;
+  const borderTheme = `1px solid ${borderColor}`;
   const handleAdd = () => {
     const contactsArray = [...customerValues.contacts];
     contactsArray.push({
@@ -35,10 +39,10 @@ const Contact = ({ customerValues, setCustomerValues }) => {
             <Grid
               container
               spacing={1}
-              border="1px solid rgba(0, 128, 128, .4)"
+              border={borderTheme}
               sx={{ margin: "0px", padding: "4px" }}
             >
-              <Grid container xs={12} md={10}>
+              <Grid container xs={12} md={10} sx={{ marginTop: "2px" }}>
                 <Grid xs={12} md={6}>
                   <TextField
                     label="Contact Name"

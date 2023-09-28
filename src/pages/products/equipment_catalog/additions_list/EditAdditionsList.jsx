@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ToastContext } from "../../../../context/toastContext";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import { Add, ArrowUpward, Close, DeleteForever } from "@mui/icons-material";
-import { TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "../../../../global_style/style.css";
 import { toCurrency } from "../../../../utilities/currencyUtils";
@@ -153,20 +153,7 @@ const EditAdditionsList = ({
         editableServicesList
           .sort((a, b) => a.partNumber.localeCompare(b.partNumber))
           .map((service, index) => (
-            <TableRow
-              key={index}
-              sx={
-                index % 2
-                  ? {
-                      background: "#e8eded",
-                      cursor: "pointer",
-                    }
-                  : {
-                      background: "white",
-                      cursor: "pointer",
-                    }
-              }
-            >
+            <TableRow key={index}>
               <TableCell sx={{ display: "flex", justifyContent: "center" }}>
                 <QuantityControl
                   listOfItems={editableServicesList}
@@ -185,7 +172,7 @@ const EditAdditionsList = ({
               </TableCell>
               <TableCell align="center">
                 <DeleteForever
-                  sx={{ color: "teal" }}
+                  color="error"
                   onClick={() => {
                     removeArrayItem(index);
                   }}
@@ -208,25 +195,26 @@ const EditAdditionsList = ({
   const additionalButtons = (
     <>
       {pickerButtonActive ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => openWorksheetAdditionsPicker()}
+          sx={{ margin: "8px" }}
         >
-          <Add />
-          <span className="iconSeperation">Add New Additions</span>
-        </button>
+          Add New Additions
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
+          onClick={() => openWorksheetAdditionsPicker()}
+          sx={{ margin: "8px" }}
           disabled
         >
-          <Add />
-          <span className="iconSeperation">Save to add more</span>
-        </button>
+          Save to add more
+        </Button>
       )}
     </>
   );
@@ -244,32 +232,34 @@ const EditAdditionsList = ({
       />
       <div className="buttonBar">
         {pickerButtonActive ? (
-          <button
+          <Button
+            variant="contained"
             type="button"
-            className="standardButton"
+            startIcon={<ArrowUpward />}
             onClick={() => saveServicesToEquipment()}
           >
-            <ArrowUpward />
-            <span className="iconSeperation">Save Changes</span>
-          </button>
+            Save Changes
+          </Button>
         ) : (
-          <button
+          <Button
+            variant="contained"
             type="button"
-            className="standardGoButton"
+            startIcon={<ArrowUpward />}
             onClick={() => saveServicesToEquipment()}
+            color="success"
           >
-            <ArrowUpward />
-            <span className="iconSeperation">Save Changes</span>
-          </button>
+            Save Changes
+          </Button>
         )}
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
+          startIcon={<Close />}
           onClick={() => closeModalOne()}
+          sx={{ marginLeft: "8px" }}
         >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
+          Close
+        </Button>
       </div>
     </div>
   );

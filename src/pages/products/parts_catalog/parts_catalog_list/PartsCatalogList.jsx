@@ -7,8 +7,6 @@ import { styled } from "@mui/material/styles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "teal",
-    color: "white",
     fontSize: 18,
   },
 }));
@@ -76,27 +74,29 @@ const PartsCatalogList = ({
   const additionalButtons = (
     <>
       <Button
-        variant="outlined"
+        variant="contained"
         startIcon={<BorderAll />}
         onClick={() =>
           alert("will open a file rename window then save to Excel Sheey")
         }
         sx={{ margin: "8px" }}
         size="large"
+        disabled
       >
         Export to Excel
       </Button>
       <Button
-        variant="outlined"
+        variant="contained"
         startIcon={<Storage />}
         onClick={() => alert("will open ther inventory container window")}
         sx={{ margin: "8px" }}
         size="large"
+        disabled
       >
         Inventory Containers
       </Button>
       <Button
-        variant="outlined"
+        variant="contained"
         startIcon={<Add />}
         onClick={() => openCreatePart()}
         sx={{ margin: "8px" }}

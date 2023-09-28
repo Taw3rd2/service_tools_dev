@@ -15,7 +15,6 @@ export const darkTheme = createTheme({
 
 export const lightTheme = createTheme({
   palette: {
-    //mode: "dark",
     primary: {
       main: "#007f7f",
     },
@@ -75,7 +74,7 @@ export const redBodyTableCell = {
   overflow: "hidden",
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
-  color: "red",
+  color: "orange",
 };
 
 export const greenBodyTableCell = {

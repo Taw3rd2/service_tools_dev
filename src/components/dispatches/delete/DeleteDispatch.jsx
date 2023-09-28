@@ -6,7 +6,7 @@ import { getFormattedExactTime } from "../../../utilities/dateUtils";
 import { Close, DeleteForever } from "@mui/icons-material";
 import "../../../global_style/style.css";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 const DeleteDispatch = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
@@ -75,7 +75,9 @@ const DeleteDispatch = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
   return (
     <Grid container spacing={1.5}>
       <Grid xs={12}>
-        <div className="deleteWarningText">Unrecoverable Delete!</div>
+        <Typography variant="h5" color="orange">
+          Unrecoverable Delete!
+        </Typography>
       </Grid>
       <Grid xs={12}>
         <ul>
@@ -98,7 +100,7 @@ const DeleteDispatch = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={6}>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           color="error"
           startIcon={<DeleteForever />}
@@ -111,7 +113,7 @@ const DeleteDispatch = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={6}>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           startIcon={<Close />}
           size="large"

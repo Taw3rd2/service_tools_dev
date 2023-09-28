@@ -6,14 +6,13 @@ import {
   Add,
   Edit,
   EmojiEvents,
-  Flag,
   HistoryEdu,
   Hvac,
   List,
 } from "@mui/icons-material";
 
 import "../../../global_style/style.css";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import ContactCard from "../fields/ContactCard";
 
@@ -68,27 +67,31 @@ const NoServiceCustomer = ({
     return <Spinner />;
   } else {
     return (
-      <div
-        style={{
-          flexGrow: 1,
-          border: "1px solid teal",
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          border: 1,
+          borderColor: "primary.main",
+          maxHeight: "725px",
+          overflow: "auto",
         }}
       >
-        <div className="noServiceTitle">
-          <div>
-            <Flag />
-          </div>
-          <div>No Service</div>
-          <div>
-            <Flag />
-          </div>
-        </div>
-        {customer.billingiscommercial && (
-          <div className="noServiceTitle">Commercial</div>
-        )}
+        <Typography
+          variant="h4"
+          sx={{ display: "flex", justifyContent: "center", color: "red" }}
+        >
+          No Service
+        </Typography>
 
-        <div className="row" style={{ margin: "8px" }}>
-          <div className="doubleRowInput">
+        <Typography
+          variant="h4"
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          {customer.billingiscommercial && <div>Commercial</div>}
+        </Typography>
+
+        <Grid container spacing={1.5} sx={{ margin: "4px" }}>
+          <Grid xs={12} sm={12} md={12} lg={6}>
             <MainField
               title={"Customer Information"}
               name={`${customer.firstname} ${customer.lastname}`}
@@ -96,8 +99,8 @@ const NoServiceCustomer = ({
               address2={`${customer.city},${customer.state} ${customer.zip}`}
               business={false}
             />
-          </div>
-          <div className="doubleRowInput">
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
             {customer.billingorg && (
               <MainField
                 title={"Billing Information"}
@@ -107,11 +110,8 @@ const NoServiceCustomer = ({
                 business={true}
               />
             )}
-          </div>
-        </div>
-
-        <div className="row" style={{ margin: "8px" }}>
-          <div className="doubleRowInput">
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
             <Typography variant="caption">Contacts</Typography>
             <div style={{ maxHeight: "375px", overflowY: "auto" }}>
               {customer.contacts && customer.contacts.length > 0
@@ -120,9 +120,8 @@ const NoServiceCustomer = ({
                   ))
                 : null}
             </div>
-          </div>
-
-          <div className="doubleRowInput">
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
             <Typography variant="caption">Commercial Contacts</Typography>
             <div style={{ maxHeight: "375px", overflowY: "auto" }}>
               {customer.commercialContacts &&
@@ -132,13 +131,13 @@ const NoServiceCustomer = ({
                   ))
                 : null}
             </div>
-          </div>
-        </div>
-        <Grid container spacing={2} sx={{ margin: "2px" }}>
-          <Grid xs={4}>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1} sx={{ margin: "2px", marginTop: "16px" }}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<Edit />}
               onClick={() => openEditCustomerDetails()}
               fullWidth
@@ -146,10 +145,10 @@ const NoServiceCustomer = ({
               Edit Customer
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<Hvac />}
               onClick={() => openCustomerEquipmentList()}
               fullWidth
@@ -157,10 +156,10 @@ const NoServiceCustomer = ({
               Equipment
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               color="success"
               startIcon={<Add />}
               onClick={() => openCreateDispatch()}
@@ -170,10 +169,10 @@ const NoServiceCustomer = ({
               Create Dispatch
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<Edit />}
               onClick={() => openEditCustomerBilling()}
               fullWidth
@@ -181,10 +180,10 @@ const NoServiceCustomer = ({
               Edit Billing
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<Add />}
               onClick={() => routeToPartsQuoteCreator()}
               fullWidth
@@ -193,10 +192,10 @@ const NoServiceCustomer = ({
               Parts Quote
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<HistoryEdu />}
               onClick={() => openDispatchHistory()}
               fullWidth
@@ -204,10 +203,10 @@ const NoServiceCustomer = ({
               Dispatch History
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<Add />}
               onClick={() => openCreateMaintenance()}
               fullWidth
@@ -215,10 +214,10 @@ const NoServiceCustomer = ({
               Maintenance
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<List />}
               onClick={() => openPartsQuoteList()}
               fullWidth
@@ -226,10 +225,10 @@ const NoServiceCustomer = ({
               Quote History
             </Button>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               startIcon={<EmojiEvents />}
               onClick={() => openWarrantyList()}
               fullWidth
@@ -238,7 +237,7 @@ const NoServiceCustomer = ({
             </Button>
           </Grid>
         </Grid>
-      </div>
+      </Box>
     );
   }
 };

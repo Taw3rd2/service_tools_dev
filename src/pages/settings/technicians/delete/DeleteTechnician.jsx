@@ -7,6 +7,8 @@ import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 
 import { Close, DeleteForever } from "@mui/icons-material";
 import "../../../../global_style/style.css";
+import { Button, Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const DeleteTechnician = ({ technician, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -42,30 +44,41 @@ const DeleteTechnician = ({ technician, closeModalOne }) => {
   };
   return (
     <div className="container">
-      <div className="deleteWarningText">Unrecoverable Delete!</div>
+      <Typography variant="h5" color="orange">
+        Unrecoverable Delete!
+      </Typography>
       <ul>
         <li>
           This includes <strong>{technician.name}</strong>
         </li>
       </ul>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="deleteButton"
-          onClick={() => removeTechnician()}
-        >
-          <DeleteForever />
-          <span className="iconSeperation">Confirm Delete</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<DeleteForever />}
+            onClick={() => removeTechnician()}
+            color="error"
+          >
+            Confirm Delete
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

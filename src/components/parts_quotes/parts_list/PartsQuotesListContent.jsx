@@ -19,11 +19,7 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 
-import {
-  defaultTableButton,
-  defaultBodyTableCell,
-  getDefaultHeadTableCell,
-} from "../../../theme/Theme";
+import { defaultBodyTableCell } from "../../../theme/Theme";
 
 const PartsQuotesListContent = ({ customer, closeBasicModal }) => {
   const quoteList = useSyncedCollection(
@@ -73,15 +69,9 @@ const PartsQuotesListContent = ({ customer, closeBasicModal }) => {
             >
               <TableHead>
                 <TableRow>
-                  <TableCell align="center" sx={getDefaultHeadTableCell(150)}>
-                    Date Started
-                  </TableCell>
-                  <TableCell align="center" sx={getDefaultHeadTableCell(150)}>
-                    Equipment
-                  </TableCell>
-                  <TableCell align="center" sx={getDefaultHeadTableCell(150)}>
-                    Date Quoted
-                  </TableCell>
+                  <TableCell align="center">Date Started</TableCell>
+                  <TableCell align="center">Equipment</TableCell>
+                  <TableCell align="center">Date Quoted</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -120,11 +110,10 @@ const PartsQuotesListContent = ({ customer, closeBasicModal }) => {
         direction="row"
       >
         <Button
-          variant="outlined"
-          color="primary"
+          variant="contained"
           startIcon={<Close />}
-          sx={defaultTableButton}
           onClick={() => closeBasicModal()}
+          sx={{ marginTop: "8px" }}
         >
           Close
         </Button>

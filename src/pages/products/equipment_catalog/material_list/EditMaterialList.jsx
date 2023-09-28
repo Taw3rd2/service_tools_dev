@@ -9,7 +9,7 @@ import { ToastContext } from "../../../../context/toastContext";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import { Add, ArrowUpward, Close, DeleteForever } from "@mui/icons-material";
 import QuantityControl from "../../../../components/quantity_control/QuantityControl";
-import { TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "../../../../global_style/style.css";
 import { toCurrency } from "../../../../utilities/currencyUtils";
@@ -162,20 +162,7 @@ const EditMaterialList = ({
         editableMaterialList
           .sort((a, b) => a.partNumber.localeCompare(b.partNumber))
           .map((part, index) => (
-            <TableRow
-              key={index}
-              sx={
-                index % 2
-                  ? {
-                      background: "white",
-                      cursor: "pointer",
-                    }
-                  : {
-                      background: "#e8eded",
-                      cursor: "pointer",
-                    }
-              }
-            >
+            <TableRow key={index}>
               <TableCell sx={{ display: "flex", justifyContent: "center" }}>
                 <QuantityControl
                   listOfItems={editableMaterialList}
@@ -200,7 +187,7 @@ const EditMaterialList = ({
               <TableCell align="left">{part.partDataDate}</TableCell>
               <TableCell align="center">
                 <DeleteForever
-                  sx={{ color: "teal" }}
+                  color="error"
                   onClick={() => {
                     removeArrayItem(index);
                   }}
@@ -225,25 +212,25 @@ const EditMaterialList = ({
   const additionalButtons = (
     <>
       {pickerButtonActive ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => openWorksheetMaterialPicker()}
+          sx={{ margin: "8px" }}
         >
-          <Add />
-          <span className="iconSeperation">Add New Parts</span>
-        </button>
+          Add Material From The Parts Catalog
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
+          sx={{ margin: "8px" }}
           disabled
         >
-          <Add />
-          <span className="iconSeperation">Add New Parts</span>
-        </button>
+          Add Material From The Parts Catalog
+        </Button>
       )}
     </>
   );
@@ -261,33 +248,34 @@ const EditMaterialList = ({
       />
       <div className="buttonBar">
         {pickerButtonActive ? (
-          <button
+          <Button
+            variant="contained"
             type="button"
-            className="standardButton"
+            startIcon={<ArrowUpward />}
             onClick={() => saveMaterialToEquipment()}
           >
-            <ArrowUpward />
-            <span className="iconSeperation">Save Changes</span>
-          </button>
+            Save Changes
+          </Button>
         ) : (
-          <button
+          <Button
+            variant="contained"
             type="button"
-            className="standardGoButton"
+            startIcon={<ArrowUpward />}
             onClick={() => saveMaterialToEquipment()}
+            color="success"
           >
-            <ArrowUpward />
-            <span className="iconSeperation">Save Changes</span>
-          </button>
+            Save Changes
+          </Button>
         )}
-
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
+          startIcon={<Close />}
           onClick={() => closeModalOne()}
+          sx={{ marginLeft: "8px" }}
         >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
+          Close
+        </Button>
       </div>
     </div>
   );

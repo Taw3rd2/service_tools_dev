@@ -1,10 +1,24 @@
+import { Box, Typography } from "@mui/material";
 import "../../../global_style/style.css";
 
 const NoCustomerLoaded = () => {
   return (
-    <div className="containerRow">
-      <p className="textTeal">No Customer Loaded</p>
-    </div>
+    <Box
+      sx={{
+        bgcolor: "background.paper",
+        border: 1,
+        borderColor: "primary.main",
+        maxHeight: "725px",
+        overflow: "auto",
+      }}
+    >
+      <Typography
+        variant="body1"
+        sx={{ display: "flex", justifyContent: "center" }}
+      >
+        No Customer Loaded
+      </Typography>
+    </Box>
   );
 };
 

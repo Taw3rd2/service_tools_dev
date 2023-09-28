@@ -5,30 +5,24 @@ import { db, useSyncedCollection } from "../../firebase/firestore.utils";
 import { useNavigate } from "react-router-dom";
 
 import Calendar from "./calendar/Calendar.view";
-import CalendarSpinner from "../../components/spinner/CalendarSpinner";
 import Toast from "../../components/basic_components/toast/Toast";
 
-import { IconButton, Tab, Tabs } from "@mui/material";
+import { CircularProgress, IconButton, Tab, Tabs } from "@mui/material";
 import { getFormattedDate } from "../../utilities/dateUtils";
 
 import "../../global_style/style.css";
 import { Print } from "@mui/icons-material";
 import CalendarCustomerSearch from "../../components/customer_search/CalendarCustomerSearch";
 
-//Modals
-const ModalOne = lazy(() =>
-  import("../../components/basic_components/modal_one/ModalOne")
+//Material Modal
+const MaterialModal = lazy(() =>
+  import("../../components/basic_components/material_modal/MaterialModal")
 );
-const ModalTwo = lazy(() =>
-  import("../../components/basic_components/modal_two/ModalTwo")
-);
-const ModalThree = lazy(() =>
-  import("../../components/basic_components/modal_three/ModalThree")
-);
-const CustomerSearchModal = lazy(() =>
-  import("../../components/customer_search/customerSearchModal")
-);
+
 //Dispatch
+const CancelDispatch = lazy(() =>
+  import("../../components/dispatches/cancel_dispatch/CancelDispatch")
+);
 const CreateDispatch = lazy(() =>
   import("../../components/dispatches/create_dispatch/CreateDispatch")
 );
@@ -95,79 +89,64 @@ const Schedule = () => {
     setTabValue(newTabValue);
   };
 
-  //Modal One
+  //ModalOne
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
   };
 
-  //Modal Two
+  //ModalTwo
   const [isModalTwoOpen, setModalTwoOpen] = useState(false);
-  const [modalTwoSize, setModalTwoSize] = useState("45%");
-  const [modalTwoTitle, setModalTwoTitle] = useState("Modal One");
   const [modalTwoContent, setModalTwoContent] = useState(
     <div>Modal Two Content</div>
   );
-  const openModalTwo = (size, title, content) => {
-    setModalTwoSize(size);
-    setModalTwoTitle(title);
+  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
+  const [modalTwoWidth, setModalTwoWidth] = useState("sm");
+  const openModalTwo = (content, title, width) => {
     setModalTwoContent(content);
+    setModalTwoTitle(title);
+    setModalTwoWidth(width);
     setModalTwoOpen(true);
   };
   const closeModalTwo = () => {
-    setModalTwoSize("45%");
-    setModalTwoTitle("Modal Two");
     setModalTwoContent(<div>Modal Two Content</div>);
+    setModalTwoTitle("Modal Two");
+    setModalTwoWidth("sm");
     setModalTwoOpen(false);
   };
 
-  //Modal Three
+  //ModalThree
   const [isModalThreeOpen, setModalThreeOpen] = useState(false);
-  const [modalThreeSize, setModalThreeSize] = useState("45%");
-  const [modalThreeTitle, setModalThreeTitle] = useState("Modal Three");
   const [modalThreeContent, setModalThreeContent] = useState(
     <div>Modal Three Content</div>
   );
-  const openModalThree = (size, title, content) => {
-    setModalThreeSize(size);
-    setModalThreeTitle(title);
+  const [modalThreeTitle, setModalThreeTitle] = useState("Modal Three");
+  const [modalThreeWidth, setModalThreeWidth] = useState("sm");
+  const openModalThree = (content, title, width) => {
     setModalThreeContent(content);
+    setModalThreeTitle(title);
+    setModalThreeWidth(width);
     setModalThreeOpen(true);
   };
   const closeModalThree = () => {
-    setModalThreeSize("45%");
-    setModalThreeTitle("Modal Two");
     setModalThreeContent(<div>Modal Three Content</div>);
+    setModalThreeTitle("Modal Three");
+    setModalThreeWidth("sm");
     setModalThreeOpen(false);
-  };
-
-  //Customer Search Modal
-  const [isCustomerSearchModalOpen, setCustomerSearchModalOpen] =
-    useState(false);
-  const [customerSearchModalContent, setCustomerSearchContent] = useState(
-    <div>Customer Search Content</div>
-  );
-  const openCustomerSearchModal = (content) => {
-    setCustomerSearchContent(content);
-    setCustomerSearchModalOpen(true);
-  };
-  const closeCustomerSearchModal = () => {
-    setCustomerSearchContent(<div>Customer Search Content</div>);
-    setCustomerSearchModalOpen(false);
   };
 
   const routeToPrintOneSlip = (selectedDispatch) => {
@@ -183,136 +162,157 @@ const Schedule = () => {
 
   const openDispatchDetails = (selectedDispatch) => {
     openModalOne(
-      "25%",
+      <DispatchDetails
+        closeModalOne={closeModalOne}
+        openCancelDispatch={openCancelDispatch}
+        openDeleteDispatch={openDeleteDispatch}
+        openJobCompleted={openJobCompleted}
+        openSameTech={openSameTech}
+        selectedDispatch={selectedDispatch}
+      />,
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>Dispatch Details</div>
         <IconButton
           size="small"
-          style={{ marginLeft: "auto", marginRight: "8px", color: "teal" }}
+          color="primary"
+          style={{ marginLeft: "auto", marginRight: "8px" }}
           onClick={() => routeToPrintOneSlip(selectedDispatch)}
         >
           <Print fontSize="large" />
         </IconButton>
       </div>,
-      <DispatchDetails
+      "sm"
+    );
+  };
+
+  const openCancelDispatch = (selectedDispatch) => {
+    openModalTwo(
+      <CancelDispatch
         selectedDispatch={selectedDispatch}
         closeModalOne={closeModalOne}
-        openJobCompleted={openJobCompleted}
-        openSameTech={openSameTech}
-        openDeleteDispatch={openDeleteDispatch}
+        closeModalTwo={closeModalTwo}
       />
     );
   };
 
   const openDeleteDispatch = (selectedDispatch) => {
     openModalTwo(
-      "20%",
-      "Delete Dispatch",
       <DeleteDispatch
         selectedDispatch={selectedDispatch}
         closeModalOne={closeModalOne}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Delete Dispatch",
+      "sm"
     );
   };
 
   const openJobCompleted = () => {
     openModalTwo(
-      "20%",
+      <JobComplete closeModalTwo={closeModalTwo} />,
       "Invalid",
-      <JobComplete closeModalTwo={closeModalTwo} />
+      "20%"
     );
   };
 
   const openSameTech = () => {
-    openModalTwo("20%", "Invalid", <SameTech closeModalTwo={closeModalTwo} />);
+    openModalTwo(<SameTech closeModalTwo={closeModalTwo} />, "Invalid", "sm");
   };
 
   const openDailyOptionsMenu = (date) => {
     openModalOne(
-      "15%",
-      `Daily Options for ${getFormattedDate(date)}`,
       <DailyOptionsMenu
         closeModalOne={closeModalOne}
         closeModalTwo={closeModalTwo}
         calendarDateSelected={date}
         openDayLabelEditor={openDayLabelEditor}
-      />
+      />,
+      `Daily Options for ${getFormattedDate(date)}`,
+      "sm"
     );
   };
 
   const openDayLabelEditor = (date) => {
     openModalTwo(
-      "30%",
-      `Day Labels for ${getFormattedDate(date)}`,
       <DayLabelEditor
         closeModalTwo={closeModalTwo}
         openAddDayLabel={openAddDayLabel}
         openDeleteDayLabel={openDeleteDayLabel}
         openEditDayLabel={openEditDayLabel}
         calendarDateSelected={date}
-      />
+      />,
+      `Day Labels for ${getFormattedDate(date)}`,
+      "md"
     );
   };
 
   const openAddDayLabel = (date) => {
     openModalThree(
-      "25%",
-      `Add Label for ${getFormattedDate(date)}`,
       <AddDayLabel
         closeModalThree={closeModalThree}
         calendarDateSelected={date}
-      />
+      />,
+      `Add Label for ${getFormattedDate(date)}`,
+      "sm"
     );
   };
 
   const openDeleteDayLabel = (dayLabel) => {
     openModalThree(
-      "25%",
-      "Delete Day Label",
       <DeleteDayLabel
         closeModalThree={closeModalThree}
         selectedDayLabel={dayLabel}
-      />
+      />,
+      "Delete Day Label",
+      "sm"
     );
   };
 
   const openEditDayLabel = (date, dayLabel) => {
     openModalThree(
-      "25%",
-      "Edit Day Label",
       <EditDayLabel
         closeModalThree={closeModalThree}
         calendarDateSelected={date}
         selectedDayLabel={dayLabel}
-      />
+      />,
+      "Edit Day Label",
+      "sm"
     );
   };
 
   const openCreateDispatch = (customer, date) => {
     openModalTwo(
-      "25%",
-      "Create Dispatch",
       <CreateDispatch
         customer={customer}
         date={date}
         closeModalOne={closeModalTwo}
-      />
+      />,
+      "Create Dispatch",
+      "sm"
     );
   };
 
   const openCalendarCustomerSearch = (date) => {
-    openCustomerSearchModal(
+    openModalOne(
       <CalendarCustomerSearch
-        openCreateDispatch={openCreateDispatch}
-        closeModalOne={closeCustomerSearchModal}
+        closeModalOne={closeModalOne}
         date={date}
-      />
+        openCreateDispatch={openCreateDispatch}
+      />,
+      "Customer Search",
+      "sm"
     );
+    // openCustomerSearchModal(
+    //   <CalendarCustomerSearch
+    //     openCreateDispatch={openCreateDispatch}
+    //     closeModalOne={closeCustomerSearchModal}
+    //     date={date}
+    //   />
+    // );
   };
 
   return (
-    <div className="schedulePage">
+    <div className="sizeAdjustment">
       <Toast />
       <div style={{ borderBottom: 2, borderColor: "divider" }}>
         <Tabs
@@ -345,40 +345,35 @@ const Schedule = () => {
         />
       </TabPanel>
       {isModalOneOpen && (
-        <Suspense fallback={<CalendarSpinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalOneOpen}
+            closeModal={closeModalOne}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
           />
         </Suspense>
       )}
       {isModalTwoOpen && (
-        <Suspense fallback={<CalendarSpinner />}>
-          <ModalTwo
-            modalTwoSize={modalTwoSize}
-            modalTwoTitle={modalTwoTitle}
-            modalTwoContent={modalTwoContent}
-            closeModalTwo={closeModalTwo}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalTwoOpen}
+            closeModal={closeModalTwo}
+            modalContent={modalTwoContent}
+            modalTitle={modalTwoTitle}
+            modalWidth={modalTwoWidth}
           />
         </Suspense>
       )}
       {isModalThreeOpen && (
-        <Suspense fallback={<CalendarSpinner />}>
-          <ModalThree
-            modalThreeSize={modalThreeSize}
-            modalThreeTitle={modalThreeTitle}
-            modalThreeContent={modalThreeContent}
-            closeModalThree={closeModalThree}
-          />
-        </Suspense>
-      )}
-      {isCustomerSearchModalOpen && (
-        <Suspense fallback={<CalendarSpinner />}>
-          <CustomerSearchModal
-            customerSearchModalContent={customerSearchModalContent}
-            closeCustomerSearchModal={closeCustomerSearchModal}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalThreeOpen}
+            closeModal={closeModalThree}
+            modalContent={modalThreeContent}
+            modalTitle={modalThreeTitle}
+            modalWidth={modalThreeWidth}
           />
         </Suspense>
       )}

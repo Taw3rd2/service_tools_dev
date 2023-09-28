@@ -10,11 +10,9 @@ import {
   TableHead,
   TableContainer,
   TableRow,
+  Button,
 } from "@mui/material";
-import {
-  defaultBodyTableCell,
-  getDefaultHeadTableCell,
-} from "../../../theme/Theme";
+import { defaultBodyTableCell } from "../../../theme/Theme";
 
 const DispatchList = ({ customer, openDispatchDetails, closeModalOne }) => {
   const dispatchQuery = query(
@@ -29,24 +27,12 @@ const DispatchList = ({ customer, openDispatchDetails, closeModalOne }) => {
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Date
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Issue
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Job Number
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Tech Lead
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Tech Assisting
-              </TableCell>
-              <TableCell align="left" sx={getDefaultHeadTableCell(150)}>
-                Notes
-              </TableCell>
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Issue</TableCell>
+              <TableCell align="center">Job Number</TableCell>
+              <TableCell align="center">Tech Lead</TableCell>
+              <TableCell align="center">Tech Assisting</TableCell>
+              <TableCell align="left">Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -76,7 +62,7 @@ const DispatchList = ({ customer, openDispatchDetails, closeModalOne }) => {
                       {item.techHelper}
                     </TableCell>
                     <TableCell align="left" sx={defaultBodyTableCell}>
-                      {item.notes}
+                      {item.status}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -85,14 +71,14 @@ const DispatchList = ({ customer, openDispatchDetails, closeModalOne }) => {
       </TableContainer>
 
       <div className="buttonBar">
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
           onClick={() => closeModalOne()}
+          startIcon={<Close />}
         >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
+          Close
+        </Button>
       </div>
     </div>
   );

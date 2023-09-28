@@ -1,18 +1,10 @@
 import { lazy, Suspense, useState } from "react";
-import { Tab, Tabs } from "@mui/material";
+import { CircularProgress, Tab, Tabs } from "@mui/material";
 import { db, useSyncedCollection } from "../../../firebase/firestore.utils";
 import PartsCatalogList from "./parts_catalog_list/PartsCatalogList";
 import BasicSearchBar from "../../../components/basic_components/BasicSearchBar";
-import Spinner from "../../../components/spinner/Spinner";
 import Toast from "../../../components/basic_components/toast/Toast";
 import { collection } from "firebase/firestore";
-
-const ModalOne = lazy(() =>
-  import("../../../components/basic_components/modal_one/ModalOne")
-);
-const ModalTwo = lazy(() =>
-  import("../../../components/basic_components/modal_two/ModalTwo")
-);
 
 const CreateNewPart = lazy(() => import("./create_part/CreatePart"));
 const PartDetails = lazy(() => import("./part_details/PartDetails"));
@@ -25,6 +17,11 @@ const DeleteCrossReference = lazy(() =>
 );
 const EditCrossReference = lazy(() =>
   import("./edit_cross_reference/EditCrossReference")
+);
+
+//Material Modal
+const MaterialModal = lazy(() =>
+  import("../../../components/basic_components/material_modal/MaterialModal")
 );
 
 function PartsTabPanel(props) {
@@ -90,51 +87,49 @@ const PartsCatalog = () => {
     setTabValue(newTabValue);
   };
 
-  //Modal One
+  //ModalOne
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
   };
 
-  //Modal Two
+  //ModalTwo
   const [isModalTwoOpen, setModalTwoOpen] = useState(false);
-  const [modalTwoSize, setModalTwoSize] = useState("45%");
-  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
   const [modalTwoContent, setModalTwoContent] = useState(
     <div>Modal Two Content</div>
   );
-  const openModalTwo = (size, title, content) => {
-    setModalTwoSize(size);
-    setModalTwoTitle(title);
+  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
+  const [modalTwoWidth, setModalTwoWidth] = useState("sm");
+  const openModalTwo = (content, title, width) => {
     setModalTwoContent(content);
+    setModalTwoTitle(title);
+    setModalTwoWidth(width);
     setModalTwoOpen(true);
   };
   const closeModalTwo = () => {
-    setModalTwoSize("45%");
-    setModalTwoTitle("Modal Two");
     setModalTwoContent(<div>Modal Two Content</div>);
+    setModalTwoTitle("Modal Two");
+    setModalTwoWidth("sm");
     setModalTwoOpen(false);
   };
 
   //Part Details
   const openPartDetails = (part) => {
     openModalOne(
-      "800px",
-      "Part Details",
       <PartDetails
         part={part}
         openDeletePart={openDeletePart}
@@ -142,69 +137,71 @@ const PartsCatalog = () => {
         openDeleteCrossReference={openDeleteCrossReference}
         openEditCrossReference={openEditCrossReference}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Part Details",
+      "lg"
     );
   };
 
   //Create Part
   const openCreatePart = () => {
     openModalOne(
-      "40%",
+      <CreateNewPart closeModalOne={closeModalOne} />,
       "Create Part",
-      <CreateNewPart closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   //Delete Part
   const openDeletePart = (part) => {
     openModalTwo(
-      "20%",
-      "Delete Part",
       <DeletePart
         partToDelete={part}
         closeModalOne={closeModalOne}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Delete Part",
+      "sm"
     );
   };
 
   //Create Cross Reference
   const openCreateCrossReference = (part) => {
     openModalTwo(
-      "40%",
+      <CreateCrossReference part={part} closeModalTwo={closeModalTwo} />,
       "Create Cross Reference",
-      <CreateCrossReference part={part} closeModalTwo={closeModalTwo} />
+      "sm"
     );
   };
 
   //Delete Cross Reference
   const openDeleteCrossReference = (part, crossReferenceIndex) => {
     openModalTwo(
-      "20%",
-      "Delete Cross Reference",
       <DeleteCrossReference
         part={part}
         crossReferenceIndex={crossReferenceIndex}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Delete Cross Reference",
+      "sm"
     );
   };
 
   //Edit Cross Reference
   const openEditCrossReference = (part, crossReferenceIndex) => {
     openModalTwo(
-      "40%",
-      "Edit Cross Reference",
       <EditCrossReference
         part={part}
         crossReferenceIndex={crossReferenceIndex}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Edit Cross Reference",
+      "sm"
     );
   };
 
   return (
-    <div className="partsCatalogPage">
+    <div className="sizeAdjustment">
       <Toast />
       <div style={{ borderBottom: 2, borderColor: "divider" }}>
         <Tabs
@@ -285,22 +282,24 @@ const PartsCatalog = () => {
       <p>Start Inventory Containers</p>
       <p>ability to export to excel</p>
       {isModalOneOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalOneOpen}
+            closeModal={closeModalOne}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
           />
         </Suspense>
       )}
       {isModalTwoOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalTwo
-            modalTwoSize={modalTwoSize}
-            modalTwoTitle={modalTwoTitle}
-            modalTwoContent={modalTwoContent}
-            closeModalTwo={closeModalTwo}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalTwoOpen}
+            closeModal={closeModalTwo}
+            modalContent={modalTwoContent}
+            modalTitle={modalTwoTitle}
+            modalWidth={modalTwoWidth}
           />
         </Suspense>
       )}

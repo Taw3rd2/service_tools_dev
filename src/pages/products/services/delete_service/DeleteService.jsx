@@ -7,6 +7,8 @@ import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 
 import { Close, DeleteForever } from "@mui/icons-material";
 import "../../../../global_style/style.css";
+import { Button, Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const DeleteService = ({ serviceToDelete, closeModalOne, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
@@ -44,30 +46,41 @@ const DeleteService = ({ serviceToDelete, closeModalOne, closeModalTwo }) => {
 
   return (
     <div className="container">
-      <div className="deleteWarningText">Unrecoverable Delete!</div>
+      <Typography variant="h5" color="orange">
+        Unrecoverable Delete!
+      </Typography>
       <ul>
         <li>
           This includes <strong>{serviceToDelete.partNumber}</strong>
         </li>
       </ul>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="deleteButton"
-          onClick={() => removeService()}
-        >
-          <DeleteForever />
-          <span className="iconSeperation">Confirm Delete</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<DeleteForever />}
+            onClick={() => removeService()}
+            color="error"
+          >
+            Confirm Delete
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalTwo()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

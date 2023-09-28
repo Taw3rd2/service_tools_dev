@@ -7,6 +7,7 @@ import {
 } from "../../../../firebase/firestore.utils";
 import { ArrowUpward, Close } from "@mui/icons-material";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -19,6 +20,7 @@ import {
 } from "../../../../utilities/currencyUtils";
 import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const AddLaborToEquipment = ({ selectedEquipmentId, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
@@ -130,7 +132,7 @@ const AddLaborToEquipment = ({ selectedEquipmentId, closeModalTwo }) => {
 
   return (
     <form onSubmit={submitLabor} autoComplete="new password">
-      <div className="row">
+      <div className="row" style={{ marginTop: "6px" }}>
         <div className="tripleRowInput">
           <FormControl fullWidth>
             <InputLabel id="labor-rate-selector">Select Labor Type</InputLabel>
@@ -173,20 +175,27 @@ const AddLaborToEquipment = ({ selectedEquipmentId, closeModalTwo }) => {
           />
         </div>
       </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          <ArrowUpward />
-          <span className="iconSeperation">Submit</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button variant="contained" type="submit" startIcon={<ArrowUpward />}>
+            Submit
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalTwo()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

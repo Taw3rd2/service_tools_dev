@@ -1,82 +1,10 @@
-/* topbar */
-.topbarContainer {
-    height: 65px;
-    width: 100%;
-    background-color: teal;
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 999;
+/* global */
+.sizeAdjustment {
+    zoom: 80% !important;
 }
 
-.topbarLeft {
-    flex: 4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.topbarCenter {
-    flex: 4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.topbarRight {
-    flex: 4;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    color: white;
-}
-
-.topbarLogo {
-    font-size: 28px;
-    font-weight: bold;
-    color: white;
-}
-
-.topbarButtonLink {
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: 500;
-    margin-right: 20px;
-    cursor: pointer;
-    /* color: teal; */
-}
-
-.topbarUser {
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.topbarDropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.topbarDropdownContent {
-    display: block;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    overflow: auto;
-    border-radius: 5px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    text-align: center;
-    border: 1px solid teal;
-}
-
-.topbarDropdownLink {
-    color: teal;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    cursor: pointer;
+.sizeRegular {
+    zoom: 100% !important;
 }
 
 /* loading spinner */
@@ -183,11 +111,6 @@
 
 
 /* homePage */
-.homePage {
-    width: 100%;
-    height: auto;
-}
-
 .homepageTopRow {
     display: flex;
 }
@@ -736,10 +659,6 @@
 .printPageCaptionText {
     font-size: 12px;
     color: black;
-}
-
-.zoomRegular {
-    zoom: 100%;
 }
 
 @keyframes modalopen {

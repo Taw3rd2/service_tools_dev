@@ -1,17 +1,13 @@
 import { collection } from "firebase/firestore";
 import { Suspense, lazy, useState } from "react";
-import { Tab, Tabs } from "@mui/material";
+import { CircularProgress, Tab, Tabs } from "@mui/material";
 import { db, useSyncedCollection } from "../../../firebase/firestore.utils";
 import ServicesCatalogList from "./services_catalog_list/ServicesCatalogList";
 import BasicSearchBar from "../../../components/basic_components/BasicSearchBar";
-import Spinner from "../../../components/spinner/Spinner";
 import Toast from "../../../components/basic_components/toast/Toast";
 
-const ModalOne = lazy(() =>
-  import("../../../components/basic_components/modal_one/ModalOne")
-);
-const ModalTwo = lazy(() =>
-  import("../../../components/basic_components/modal_two/ModalTwo")
+const MaterialModal = lazy(() =>
+  import("../../../components/basic_components/material_modal/MaterialModal")
 );
 
 const CreateService = lazy(() => import("./create_service/CreateService"));
@@ -78,83 +74,83 @@ const ServicesCatalog = () => {
     setTabValue(newTabValue);
   };
 
-  //Modal One
+  //ModalOne
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
   };
 
-  //Modal Two
+  //ModalTwo
   const [isModalTwoOpen, setModalTwoOpen] = useState(false);
-  const [modalTwoSize, setModalTwoSize] = useState("45%");
-  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
   const [modalTwoContent, setModalTwoContent] = useState(
     <div>Modal Two Content</div>
   );
-  const openModalTwo = (size, title, content) => {
-    setModalTwoSize(size);
-    setModalTwoTitle(title);
+  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
+  const [modalTwoWidth, setModalTwoWidth] = useState("sm");
+  const openModalTwo = (content, title, width) => {
     setModalTwoContent(content);
+    setModalTwoTitle(title);
+    setModalTwoWidth(width);
     setModalTwoOpen(true);
   };
   const closeModalTwo = () => {
-    setModalTwoSize("45%");
-    setModalTwoTitle("Modal Two");
     setModalTwoContent(<div>Modal Two Content</div>);
+    setModalTwoTitle("Modal Two");
+    setModalTwoWidth("sm");
     setModalTwoOpen(false);
   };
 
   //Create Service
   const openCreateService = () => {
     openModalOne(
-      "40%",
+      <CreateService closeModalOne={closeModalOne} />,
       "Create Service",
-      <CreateService closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   //Delete Service
   const openDeleteService = (service) => {
     openModalTwo(
-      "20%",
-      "Delete Service",
       <DeleteService
         serviceToDelete={service}
         closeModalOne={closeModalOne}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Delete Service",
+      "sm"
     );
   };
 
   //Service Details
   const openServiceDetails = (service) => {
     openModalOne(
-      "35%",
-      "Service Details",
       <ServiceDetails
         service={service}
         openDeleteService={openDeleteService}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Service Details",
+      "sm"
     );
   };
 
   return (
-    <div className="servicesPage">
+    <div className="sizeAdjustment">
       <Toast />
       <div style={{ borderBottom: 2, borderColor: "divider" }}>
         <Tabs
@@ -231,22 +227,24 @@ const ServicesCatalog = () => {
             </ServicesTabPanel>
           ))}
       {isModalOneOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModal={closeModalOne}
+            isModalOpen={isModalOneOpen}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
           />
         </Suspense>
       )}
       {isModalTwoOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalTwo
-            modalTwoSize={modalTwoSize}
-            modalTwoTitle={modalTwoTitle}
-            modalTwoContent={modalTwoContent}
-            closeModalTwo={closeModalTwo}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModalT={closeModalTwo}
+            isModalOpen={isModalTwoOpen}
+            modalContent={modalTwoContent}
+            modalTitle={modalTwoTitle}
+            modalWidth={modalTwoWidth}
           />
         </Suspense>
       )}

@@ -22,7 +22,7 @@ const PrintOneSlip = () => {
   dispatches.push(customerAndDispatch);
 
   return (
-    <>
+    <div className="sizeAdjustment">
       <div
         style={{
           display: "flex",
@@ -56,7 +56,7 @@ const PrintOneSlip = () => {
           <ViewDailySlip key={index} printData={printData} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

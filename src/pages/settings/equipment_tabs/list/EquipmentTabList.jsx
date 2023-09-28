@@ -2,6 +2,7 @@ import { db, useSyncedCollection } from "../../../../firebase/firestore.utils";
 
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -13,6 +14,9 @@ import {
 import "../../../../global_style/style.css";
 import { Add, DeleteForever, Edit } from "@mui/icons-material";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+
+import "../../../../global_style/style.css";
 
 const EquipmentTabList = ({
   openEquipmentTabDetails,
@@ -21,8 +25,7 @@ const EquipmentTabList = ({
   const equipmentTabs = useSyncedCollection(collection(db, "equipmentTabs"));
 
   return (
-    <div className="settingsCard">
-      <div className="settingsCardTitle">Equipment Tabs</div>
+    <div className="sizeAdjustment">
       <TableContainer
         component={Paper}
         sx={{ overflow: "auto", maxHeight: 275 }}
@@ -58,48 +61,47 @@ const EquipmentTabList = ({
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((tab, index) => (
                 <TableRow key={tab.id} sx={{ cursor: "pointer" }}>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {index + 1}
                   </TableCell>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {tab.name}
                   </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<Edit />}
-                      onClick={() => openEquipmentTabDetails(tab)}
-                    >
-                      Edit
-                    </Button>
+                  <TableCell align="center" padding="none">
+                    <IconButton onClick={() => openEquipmentTabDetails(tab)}>
+                      <Edit />
+                    </IconButton>
                   </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<DeleteForever />}
+                  <TableCell align="center" padding="none">
+                    <IconButton
                       onClick={() => openDeleteEquipmentTab(tab)}
-                      style={{ color: "red" }}
+                      color="error"
                     >
-                      Delete
-                    </Button>
+                      <DeleteForever />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => openEquipmentTabDetails()}
-        >
-          <Add />
-          <span className="iconSeperation">Add Equipment Tab</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Add />}
+            onClick={() => openEquipmentTabDetails()}
+            sx={{ marginTop: "8px" }}
+          >
+            Add A Equipment Tab
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

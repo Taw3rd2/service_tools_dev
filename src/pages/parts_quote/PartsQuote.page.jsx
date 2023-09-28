@@ -17,23 +17,19 @@ import PartsQuotePartsList from "../../components/parts_quotes/parts_list/PartsQ
 import Labor from "../../components/parts_quotes/details/Labor";
 import Shipping from "../../components/parts_quotes/details/Shipping";
 import Totals from "../../components/parts_quotes/details/Totals";
-import Spinner from "../../components/spinner/Spinner";
 
 import MainField from "../../components/customer_information/fields/MainField";
 import ContactCard from "../../components/customer_information/fields/ContactCard";
 import PartDetails from "../../components/parts_quotes/details/PartDetails";
 import DeletePartsQuote from "../../components/parts_quotes/delete/DeletePartsQuote";
 
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { Add, Close, DeleteForever, Save } from "@mui/icons-material";
 import { getFormattedDateAndTime } from "../../utilities/dateUtils";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
-const ModalOne = lazy(() =>
-  import("../../components/basic_components/modal_one/ModalOne")
-);
+import MaterialModal from "../../components/basic_components/material_modal/MaterialModal";
 const AddPartToList = lazy(() =>
   import("../../components/parts_quotes/parts_list/AddPartToList")
 );
@@ -46,22 +42,24 @@ const PartsQuote = () => {
   const { dispatch } = useContext(ToastContext);
   const navigate = useNavigate();
 
+  //Modal One3
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
+
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
   };
 
@@ -152,40 +150,40 @@ const PartsQuote = () => {
 
   const openAddPartToList = () => {
     openModalOne(
-      "40%",
-      "Add Material To Quote",
       <AddPartToList
         closeModalOne={closeModalOne}
         quoteValues={quoteValues}
         setQuoteValues={setQuoteValues}
-      />
+      />,
+      "Add Material To Quote",
+      "md"
     );
   };
 
   const openPartDetails = (currentPart, partIndex) => {
     openModalOne(
-      "40%",
-      "Part Details",
       <PartDetails
         closeModalOne={closeModalOne}
         part={currentPart}
         partIndex={partIndex}
         quoteValues={quoteValues}
         setQuoteValues={setQuoteValues}
-      />
+      />,
+      "Part Details",
+      "sm"
     );
   };
 
   const openDeletePartsQuote = (quote) => {
     openModalOne(
-      "20%",
-      "Delete Parts Quote",
       <DeletePartsQuote
         closeModalOne={closeModalOne}
         customer={customer}
         quote={quote}
         routeToHomepage={routeToHomepage}
-      />
+      />,
+      "Delete Parts Quote",
+      "sm"
     );
   };
 
@@ -325,15 +323,15 @@ const PartsQuote = () => {
   };
 
   return (
-    <div className="pageContainer">
+    <div className="sizeAdjustment">
       <Toast />
       <div className="row">
         <div className="doubleRowInput">
           <div className="row">
             <div className="doubleRowInput">
-              <div className="columnHeaderText" style={{ marginBottom: "8px" }}>
+              <Typography variant="h5" sx={{ marginBottom: "8px" }}>
                 Customer Information
-              </div>
+              </Typography>
               {customer.iscommercial ? (
                 <MainField
                   title={"Customer Information"}
@@ -458,7 +456,7 @@ const PartsQuote = () => {
       <Grid container spacing={1.5}>
         <Grid xs={12} sx={{ display: "flex", justifyContent: "end" }}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             color="error"
             startIcon={<DeleteForever />}
@@ -468,7 +466,7 @@ const PartsQuote = () => {
             Delete
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             startIcon={<Add />}
             onClick={() => openAddPartToList()}
@@ -477,7 +475,7 @@ const PartsQuote = () => {
             Add Material
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             startIcon={<Save />}
             onClick={() => saveQuote()}
@@ -486,7 +484,7 @@ const PartsQuote = () => {
             Save
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             startIcon={<Close />}
             onClick={() => routeToHomepage()}
@@ -497,12 +495,13 @@ const PartsQuote = () => {
         </Grid>
       </Grid>
       {isModalOneOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalOneOpen}
+            closeModal={closeModalOne}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
           />
         </Suspense>
       )}

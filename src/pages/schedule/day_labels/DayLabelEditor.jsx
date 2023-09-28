@@ -1,6 +1,7 @@
 import { db, useSyncedCollection } from "../../../firebase/firestore.utils";
 
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import "../../../global_style/style.css";
 import { isEqual } from "date-fns";
 import { Add, Close, DeleteForever, Edit } from "@mui/icons-material";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const DayLabelEditor = ({
   closeModalTwo,
@@ -58,50 +60,59 @@ const DayLabelEditor = ({
                       {label.locationName}
                     </TableCell>
                     <TableCell align="center">
-                      <button
+                      <Button
+                        variant="contained"
                         type="button"
-                        className="standardButton"
+                        startIcon={<Edit />}
                         onClick={() =>
                           openEditDayLabel(calendarDateSelected, label)
                         }
                       >
-                        <Edit />
-                        <span className="iconSeperation">Edit</span>
-                      </button>
+                        Edit
+                      </Button>
                     </TableCell>
                     <TableCell align="center">
-                      <button
+                      <Button
+                        variant="contained"
                         type="button"
-                        className="deleteButton"
+                        startIcon={<DeleteForever />}
                         onClick={() => openDeleteDayLabel(label)}
+                        color="error"
                       >
-                        <DeleteForever />
-                        <span className="iconSeperation">Delete</span>
-                      </button>
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => openAddDayLabel(calendarDateSelected)}
-        >
-          <Add />
-          <span className="iconSeperation">Add Label</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ marginTop: "8px", display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Add />}
+            onClick={() => openAddDayLabel(calendarDateSelected)}
+          >
+            Add Label
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalTwo()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

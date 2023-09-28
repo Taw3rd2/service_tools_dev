@@ -8,6 +8,7 @@ import {
 
 import { ArrowUpward, Close } from "@mui/icons-material";
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -18,6 +19,7 @@ import {
 } from "@mui/material";
 import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const CreatePart = ({ closeModalOne }) => {
   const tabs = useSyncedCollection(collection(db, "tabs"));
@@ -114,7 +116,7 @@ const CreatePart = ({ closeModalOne }) => {
   return (
     <div>
       <form onSubmit={submitNewPart} autoComplete="new password">
-        <div className="row">
+        <div className="row" style={{ marginTop: "6px" }}>
           <div className="tripleRowInput">
             <TextField
               label="Dispatcher"
@@ -217,20 +219,31 @@ const CreatePart = ({ closeModalOne }) => {
             <p>* = required</p>
           </div>
         </div>
-        <div className="buttonBar">
-          <button type="submit" className="standardButton">
-            <ArrowUpward />
-            <span className="iconSeperation">Submit</span>
-          </button>
-          <button
-            type="button"
-            className="standardButton"
-            onClick={() => closeModalOne()}
-          >
-            <Close />
-            <span className="iconSeperation">Close</span>
-          </button>
-        </div>
+        <Grid
+          container
+          spacing={1.5}
+          sx={{ display: "flex", justifyContent: "end" }}
+        >
+          <Grid>
+            <Button
+              variant="contained"
+              type="submit"
+              startIcon={<ArrowUpward />}
+            >
+              Submit
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<Close />}
+              onClick={() => closeModalOne()}
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );

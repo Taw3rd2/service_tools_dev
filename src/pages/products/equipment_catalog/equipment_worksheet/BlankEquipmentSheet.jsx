@@ -9,6 +9,7 @@ import {
 import { stringPriceToNumber } from "../../../../utilities/currencyUtils";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -16,8 +17,10 @@ import {
   OutlinedInput,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { ArrowUpward, Clear } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const BlankEquipmentSheet = () => {
   const subCategories = useSyncedCollection(
@@ -103,7 +106,7 @@ const BlankEquipmentSheet = () => {
       <form autoComplete="new password" onSubmit={submitEquipment}>
         <div className="row">
           <div className="singleRowInput">
-            <div className="worksheetDate">Blank Equipment Steet</div>
+            <Typography variant="h5">Blank Equipment Sheet</Typography>
           </div>
         </div>
         <div className="row">
@@ -200,20 +203,29 @@ const BlankEquipmentSheet = () => {
             </div>
           </div>
           <div className="oneThirdRowInput">
-            <div className="buttonBarStack">
-              <button
-                type="button"
-                className="deleteButton"
-                onClick={() => clearFields()}
-              >
-                <Clear />
-                <span className="iconSeperation">Clear Fields</span>
-              </button>
-              <button type="submit" className="standardButton">
-                <ArrowUpward />
-                <span className="iconSeperation">Add New Equipment</span>
-              </button>
-            </div>
+            <Grid container spacing={1.5}>
+              <Grid xs={12}>
+                <Button
+                  variant="contained"
+                  type="button"
+                  startIcon={<Clear />}
+                  onClick={() => clearFields()}
+                  fullWidth
+                >
+                  Clear Fields
+                </Button>
+              </Grid>
+              <Grid xs={12}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  startIcon={<ArrowUpward />}
+                  fullWidth
+                >
+                  Add New Equipment
+                </Button>
+              </Grid>
+            </Grid>
           </div>
         </div>
       </form>

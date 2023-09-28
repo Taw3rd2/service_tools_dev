@@ -15,12 +15,14 @@ import {
 import { ArrowUpward, Close, DeleteForever } from "@mui/icons-material";
 import "../../../global_style/style.css";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   TextField,
 } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const CustomerNote = ({
   customer,
@@ -196,34 +198,44 @@ const CustomerNote = ({
         fullWidth
       />
 
-      <div className="buttonBar">
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ marginTop: "8px", display: "flex", justifyContent: "end" }}
+      >
         {selectedNote !== undefined && (
-          <button
-            type="button"
-            className="deleteButton"
-            onClick={() => openDeleteCustomerNote(selectedNote)}
-          >
-            <DeleteForever />
-            <span className="iconSeperation">Delete</span>
-          </button>
+          <Grid>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<DeleteForever />}
+              onClick={() => openDeleteCustomerNote(selectedNote)}
+            >
+              Delete
+            </Button>
+          </Grid>
         )}
-        <button
-          type="button"
-          className="standardButton"
-          onClick={(e) => submitNote(e)}
-        >
-          <ArrowUpward />
-          <span className="iconSeperation">Save Note</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+        <Grid>
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<ArrowUpward />}
+            onClick={(e) => submitNote(e)}
+          >
+            Save Note
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<Close />}
+            onClick={(e) => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

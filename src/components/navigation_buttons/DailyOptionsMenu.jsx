@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import { CalendarMonth, CalendarToday, Close } from "@mui/icons-material";
 import "../../global_style/style.css";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const DailyOptionsMenu = ({
   closeModalOne,
@@ -16,14 +17,14 @@ const DailyOptionsMenu = ({
   const technicians = useSyncedCollection(collection(db, "technicians"));
 
   return (
-    <div className="container">
-      <div className="buttonBarStack">
-        {technicians &&
-          technicians
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((tech) => (
+    <Grid container spacing={1.5}>
+      {technicians &&
+        technicians
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((tech) => (
+            <Grid xs={12}>
               <Button
-                variant="outlined"
+                variant="contained"
                 fullWidth
                 startIcon={<CalendarMonth />}
                 style={{
@@ -43,40 +44,30 @@ const DailyOptionsMenu = ({
               >
                 {`Print ${tech.name}'s Daily Slips`}
               </Button>
-              // <Link
-              //   key={tech.id}
-              //   to={{
-              //     pathname: `/print_daily_slips/${tech.id}`,
-              //   }}
-              //   state={{
-              //     techLead: `${tech.name}`,
-              //     date: calendarDateSelected,
-              //   }}
-              //   style={{ textDecoration: "none" }}
-              // >
-
-              // </Link>
-            ))}
-        <button
+            </Grid>
+          ))}
+      <Grid xs={12}>
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ backgroundColor: "teal", color: "white", marginLeft: 0 }}
+          startIcon={<CalendarToday />}
           onClick={() => openDayLabelEditor(calendarDateSelected)}
+          fullWidth
         >
-          <CalendarToday />
-          <span className="iconSeperation">Day Label Editor</span>
-        </button>
-        <button
+          Day Label Editor
+        </Button>
+      </Grid>
+      <Grid xs={12} sx={{ display: "flex", justifyContent: "end" }}>
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ backgroundColor: "teal", color: "white", marginLeft: 0 }}
+          startIcon={<Close />}
           onClick={() => closeModalOne()}
         >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
-    </div>
+          Close
+        </Button>
+      </Grid>
+    </Grid>
   );
 };
 

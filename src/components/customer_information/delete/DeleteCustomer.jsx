@@ -5,7 +5,7 @@ import { Close, DeleteForever } from "@mui/icons-material";
 import "../../../global_style/style.css";
 import { getFormattedDateAndTime } from "../../../utilities/dateUtils";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 const DeleteCustomer = ({
   customer,
@@ -42,7 +42,9 @@ const DeleteCustomer = ({
   return (
     <Grid container spacing={1.5}>
       <Grid xs={12}>
-        <div className="deleteWarningText">Unrecoverable Delete</div>
+        <Typography variant="h5" color="orange">
+          Unrecoverable Delete
+        </Typography>
       </Grid>
       <Grid xs={12}>
         <ul>
@@ -56,9 +58,8 @@ const DeleteCustomer = ({
       <Grid xs={12} sm={12} md={12} lg={6}>
         {customer !== undefined && (
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
-            size="large"
             color="error"
             startIcon={<DeleteForever />}
             fullWidth
@@ -79,9 +80,8 @@ const DeleteCustomer = ({
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={6}>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
-          size="large"
           startIcon={<Close />}
           fullWidth
           onClick={() => closeDelete()}

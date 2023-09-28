@@ -182,7 +182,13 @@ const CreateMaintenanceContent = ({
               label={"Visits"}
             />
           </Grid>
-          <Grid xs={12} sm={12} md={12} lg={6} sx={{ marginTop: "26px" }}>
+          <Grid
+            xs={12}
+            sm={12}
+            md={12}
+            lg={6}
+            sx={{ marginTop: "26px", textAlign: "right" }}
+          >
             <Button
               variant="contained"
               type="button"

@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Additions from "./Additions";
 
 const DefaultAdditions = ({
@@ -15,7 +15,7 @@ const DefaultAdditions = ({
     );
   } else {
     return (
-      <div style={{ margin: "8px", border: "1px solid black" }}>
+      <Box border style={{ margin: "8px" }}>
         <Typography variant="h5" ml={2}>
           Additions
         </Typography>
@@ -24,7 +24,7 @@ const DefaultAdditions = ({
           setAdditions={setAdditions}
           openAddAdditionsToJob={openAddAdditionsToJob}
         />
-      </div>
+      </Box>
     );
   }
 };

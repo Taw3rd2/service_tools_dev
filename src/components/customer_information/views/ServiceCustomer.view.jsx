@@ -10,7 +10,7 @@ import {
   Hvac,
   List,
 } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import ContactCard from "../fields/ContactCard";
 
@@ -66,25 +66,25 @@ const ServiceCustomer = ({
     return <Spinner />;
   } else {
     return (
-      <div
-        style={{
-          flexGrow: 1,
-          border: "1px solid teal",
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          border: 1,
+          borderColor: "primary.main",
           maxHeight: "725px",
           overflow: "auto",
         }}
       >
-        <div className="noServiceTitle">
-          {customer.billingiscommercial && (
-            <div className="noServiceTitle">Commercial</div>
-          )}
-        </div>
+        <Typography
+          variant="h4"
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          {customer.billingiscommercial && <div>Commercial</div>}
+        </Typography>
 
-        <div className="row" style={{ margin: "8px" }}>
-          <div className="doubleRowInput">
-            <Typography variant="caption" ml={1}>
-              Customer
-            </Typography>
+        <Grid container spacing={1.5} sx={{ margin: "4px" }}>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Typography variant="caption">Customer</Typography>
             <MainField
               title={"Customer Information"}
               name={`${customer.firstname} ${customer.lastname}`}
@@ -92,11 +92,9 @@ const ServiceCustomer = ({
               address2={`${customer.city},${customer.state} ${customer.zip}`}
               business={false}
             />
-          </div>
-          <div className="doubleRowInput">
-            <Typography variant="caption" ml={1}>
-              Commercial
-            </Typography>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Typography variant="caption">Commercial</Typography>
             {customer.billingorg ||
             customer.billingstreet ||
             customer.billingcity ||
@@ -110,14 +108,10 @@ const ServiceCustomer = ({
                 business={true}
               />
             ) : null}
-          </div>
-        </div>
+          </Grid>
 
-        <div className="row" style={{ margin: "8px" }}>
-          <div className="doubleRowInput">
-            <Typography variant="caption" ml={1}>
-              Contacts
-            </Typography>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Typography variant="caption">Contacts</Typography>
             <div style={{ maxHeight: "325px", overflowY: "auto" }}>
               {customer.contacts && customer.contacts.length > 0
                 ? customer.contacts.map((contact, i) => (
@@ -125,12 +119,9 @@ const ServiceCustomer = ({
                   ))
                 : null}
             </div>
-          </div>
-
-          <div className="doubleRowInput">
-            <Typography variant="caption" ml={1}>
-              Commercial Contacts
-            </Typography>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Typography variant="caption">Commercial Contacts</Typography>
             <div style={{ maxHeight: "325px", overflowY: "auto" }}>
               {customer.commercialContacts &&
               customer.commercialContacts.length > 0
@@ -139,8 +130,8 @@ const ServiceCustomer = ({
                   ))
                 : null}
             </div>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
         <Grid container spacing={1} sx={{ margin: "2px", marginTop: "16px" }}>
           <Grid xs={12} sm={12} md={12} lg={4}>
             <Button
@@ -243,7 +234,7 @@ const ServiceCustomer = ({
             </Button>
           </Grid>
         </Grid>
-      </div>
+      </Box>
     );
   }
 };

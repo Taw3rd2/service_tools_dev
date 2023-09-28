@@ -54,7 +54,7 @@ const SampleJob = ({
       </Grid>
       <Grid xs={12} sx={{ display: "flex", justifyContent: "end" }}>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           startIcon={<Close />}
           onClick={() => closeSampleJob()}

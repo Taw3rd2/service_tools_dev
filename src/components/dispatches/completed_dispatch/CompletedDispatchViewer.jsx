@@ -148,8 +148,7 @@ const CompletedDispatchViewer = ({ selectedDispatch, closeModalOne }) => {
       <Grid container spacing={1.5} justifyContent="end">
         <Grid mt={2}>
           <Button
-            variant="outlined"
-            size="large"
+            variant="contained"
             type="button"
             startIcon={<Close />}
             onClick={() => closeModalOne()}

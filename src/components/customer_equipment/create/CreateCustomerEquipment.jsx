@@ -11,6 +11,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 import {
   Avatar,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -25,6 +26,7 @@ import { doc } from "firebase/firestore";
 import { db, createNamedDocument } from "../../../firebase/firestore.utils";
 
 import "../../../global_style/style.css";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
@@ -108,9 +110,9 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
   return (
     <div>
       <form onSubmit={submitNewEquipment} autoComplete="new password">
-        <div className="row">
-          <div className="doubleRowInput">
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+        <Grid container spacing={1.5}>
+          <Grid xs={12} sm={12} md={12} lg={6}>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Name"
                 value={equipmentValues.equipmentName}
@@ -118,9 +120,10 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
                 inputProps={{ tabIndex: "1" }}
                 fullWidth
                 required
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Brand"
                 value={equipmentValues.equipmentBrand}
@@ -128,63 +131,70 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
                 inputProps={{ tabIndex: "2" }}
                 fullWidth
                 required
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Model"
                 value={equipmentValues.equipmentModel}
                 onChange={handleEquipmentChange("equipmentModel")}
                 inputProps={{ tabIndex: "3" }}
                 fullWidth
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Serial"
                 value={equipmentValues.equipmentSerial}
                 onChange={handleEquipmentChange("equipmentSerial")}
                 inputProps={{ tabIndex: "4" }}
                 fullWidth
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Size"
                 value={equipmentValues.equipmentBtu}
                 onChange={handleEquipmentChange("equipmentBtu")}
                 inputProps={{ tabIndex: "5" }}
                 fullWidth
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Efficiency"
                 value={equipmentValues.equipmentEff}
                 onChange={handleEquipmentChange("equipmentEff")}
                 inputProps={{ tabIndex: "6" }}
                 fullWidth
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Fuel or Freon Type"
                 value={equipmentValues.equipmentFuel}
                 onChange={handleEquipmentChange("equipmentFuel")}
                 inputProps={{ tabIndex: "7" }}
                 fullWidth
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <TextField
                 label="Equipment Voltage"
                 value={equipmentValues.equipmentVoltage}
                 onChange={handleEquipmentChange("equipmentVoltage")}
                 inputProps={{ tabIndex: "8" }}
                 fullWidth
+                sx={{ marginTop: "6px" }}
               />
-            </div>
-            <div className="singleRowInput" style={{ paddingTop: "8px" }}>
+            </Grid>
+            <Grid xs={12}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Equipment Installation Date"
@@ -195,14 +205,17 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
                   }}
                   color="primary"
                   renderInput={(params) => (
-                    <TextField {...params} sx={{ width: "100%" }} />
+                    <TextField
+                      {...params}
+                      sx={{ width: "100%", marginTop: "6px" }}
+                    />
                   )}
                   inputProps={{ tabIndex: "9" }}
                 />
               </LocalizationProvider>
-            </div>
-          </div>
-          <div className="doubleRowInput">
+            </Grid>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={6}>
             <Card sx={{ maxWidth: 345, marginTop: "8px" }}>
               <CardHeader
                 avatar={
@@ -281,23 +294,27 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-        <div className="buttonBar">
-          <button type="submit" className="standardButton" tabIndex={10}>
-            <ArrowUpward />
-            <span className="iconSeperation">Create</span>
-          </button>
-          <button
-            type="button"
-            className="standardButton"
-            onClick={() => closeModalTwo()}
-            tabIndex={11}
-          >
-            <Close />
-            <span className="iconSeperation">Cancel</span>
-          </button>
-        </div>
+          </Grid>
+          <Grid xs={12} sx={{ display: "flex", justifyContent: "end" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              startIcon={<ArrowUpward />}
+              sx={{ marginLeft: "6px" }}
+            >
+              Create
+            </Button>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<Close />}
+              onClick={() => closeModalTwo()}
+              sx={{ marginLeft: "6px" }}
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );

@@ -4,27 +4,19 @@ import { db } from "../../firebase/firestore.utils";
 
 import CustomerInformation from "../../components/customer_information/CustomerInformation.component";
 import CustomerSearch from "../../components/customer_search/CustomerSearch.component";
-import Spinner from "../../components/spinner/Spinner";
 import Toast from "../../components/basic_components/toast/Toast";
 import CustomerNotesList from "../../components/customer_notes/list/CustomerNotesList";
 
 import "../../global_style/style.css";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import EquipmentStatistics from "../../components/customer_equipment/details/equipment_statistics/EquipmentStatistics";
+import { CircularProgress } from "@mui/material";
 
-//Base Modals
-const ModalOne = lazy(() =>
-  import("../../components/basic_components/modal_one/ModalOne")
+//Material Modal
+const MaterialModal = lazy(() =>
+  import("../../components/basic_components/material_modal/MaterialModal")
 );
-const ModalTwo = lazy(() =>
-  import("../../components/basic_components/modal_two/ModalTwo")
-);
-const ModalThree = lazy(() =>
-  import("../../components/basic_components/modal_three/ModalThree")
-);
-const ModalFour = lazy(() =>
-  import("../../components/basic_components/modal_four/ModalFour")
-);
+
 //Customer
 const CreateCustomer = lazy(() =>
   import("../../components/customer_information/create/CreateCustomerCard")
@@ -145,81 +137,81 @@ const HomePage = () => {
 
   //ModalOne
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
   };
 
   //ModalTwo
   const [isModalTwoOpen, setModalTwoOpen] = useState(false);
-  const [modalTwoSize, setModalTwoSize] = useState("45%");
-  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
   const [modalTwoContent, setModalTwoContent] = useState(
     <div>Modal Two Content</div>
   );
-  const openModalTwo = (size, title, content) => {
-    setModalTwoSize(size);
-    setModalTwoTitle(title);
+  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
+  const [modalTwoWidth, setModalTwoWidth] = useState("sm");
+  const openModalTwo = (content, title, width) => {
     setModalTwoContent(content);
+    setModalTwoTitle(title);
+    setModalTwoWidth(width);
     setModalTwoOpen(true);
   };
   const closeModalTwo = () => {
-    setModalTwoSize("45%");
-    setModalTwoTitle("Modal Two");
     setModalTwoContent(<div>Modal Two Content</div>);
+    setModalTwoTitle("Modal Two");
+    setModalTwoWidth("sm");
     setModalTwoOpen(false);
   };
 
   //ModalThree
   const [isModalThreeOpen, setModalThreeOpen] = useState(false);
-  const [modalThreeSize, setModalThreeSize] = useState("45%");
-  const [modalThreeTitle, setModalThreeTitle] = useState("Modal Three");
   const [modalThreeContent, setModalThreeContent] = useState(
     <div>Modal Three Content</div>
   );
-  const openModalThree = (size, title, content) => {
-    setModalThreeSize(size);
-    setModalThreeTitle(title);
+  const [modalThreeTitle, setModalThreeTitle] = useState("Modal Three");
+  const [modalThreeWidth, setModalThreeWidth] = useState("sm");
+  const openModalThree = (content, title, width) => {
     setModalThreeContent(content);
+    setModalThreeTitle(title);
+    setModalThreeWidth(width);
     setModalThreeOpen(true);
   };
   const closeModalThree = () => {
-    setModalThreeSize("45%");
-    setModalThreeTitle("Modal Three");
     setModalThreeContent(<div>Modal Three Content</div>);
+    setModalThreeTitle("Modal Three");
+    setModalThreeWidth("sm");
     setModalThreeOpen(false);
   };
 
   //ModalFour
   const [isModalFourOpen, setModalFourOpen] = useState(false);
-  const [modalFourSize, setModalFourSize] = useState("45%");
-  const [modalFourTitle, setModalFourTitle] = useState("Modal Four");
   const [modalFourContent, setModalFourContent] = useState(
     <div>Modal Four Content</div>
   );
-  const openModalFour = (size, title, content) => {
-    setModalFourSize(size);
-    setModalFourTitle(title);
+  const [modalFourTitle, setModalFourTitle] = useState("Modal Four");
+  const [modalFourWidth, setModalFourWidth] = useState("sm");
+  const openModalFour = (content, title, width) => {
     setModalFourContent(content);
+    setModalFourTitle(title);
+    setModalFourWidth(width);
     setModalFourOpen(true);
   };
   const closeModalFour = () => {
-    setModalFourSize("45%");
-    setModalFourTitle("Modal Three");
     setModalFourContent(<div>Modal Three Content</div>);
+    setModalFourTitle("Modal Three");
+    setModalFourWidth("sm");
     setModalFourOpen(false);
   };
 
@@ -231,8 +223,6 @@ const HomePage = () => {
     fieldValue
   ) => {
     openModalFour(
-      "auto",
-      "",
       <EditSingleField
         customerId={customerId}
         equipmentId={equipmentId}
@@ -240,146 +230,146 @@ const HomePage = () => {
         fieldKey={fieldKey}
         fieldValue={fieldValue}
         closeEditSingleField={closeModalFour}
-      />
+      />,
+      "",
+      "sm"
     );
   };
 
   const openCreateCustomer = () => {
     openModalOne(
-      "30%",
+      <CreateCustomer closeModalOne={closeModalOne} />,
       "Create Customer",
-      <CreateCustomer closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openEditCustomerDetails = () => {
     openModalOne(
-      "30%",
-      "Edit Customer Details",
       <EditCustomerDetails
         customer={client}
         openDeleteCustomer={openDeleteCustomer}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Edit Customer Details",
+      "sm"
     );
   };
 
   const openEditCustomerBilling = () => {
     openModalOne(
-      "30%",
+      <EditCustomerBilling customer={client} closeModalOne={closeModalOne} />,
       "Edit Customer Billing Information",
-      <EditCustomerBilling customer={client} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteCustomer = () => {
     openModalTwo(
-      "20%",
-      "Delete Customer",
       <DeleteCustomer
         customer={client}
         handleCustomerSelected={handleCustomerSelected}
         closeDetails={closeModalOne}
         closeDelete={closeModalTwo}
-      />
+      />,
+      "Delete Customer",
+      "sm"
     );
   };
 
   const openCreateDispatch = () => {
     openModalOne(
-      "25%",
+      <CreateDispatch customer={client} closeModalOne={closeModalOne} />,
       "Create Dispatch",
-      <CreateDispatch customer={client} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openCreateCustomerNote = () => {
     openModalOne(
-      "30%",
+      <CustomerNote customer={client} closeModalOne={closeModalOne} />,
       "Note",
-      <CustomerNote customer={client} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteCustomerNote = (note) => {
     openModalTwo(
-      "20%",
-      "Delete Note",
       <DeleteCustomerNote
         customer={client}
         selectedNote={note}
         closeDetails={closeModalOne}
         closeDelete={closeModalTwo}
-      />
+      />,
+      "Delete Note",
+      "sm"
     );
   };
 
   const openCustomerNoteDetails = (note) => {
     openModalOne(
-      "30%",
-      "Note Details",
       <CustomerNote
         customer={client}
         closeModalOne={closeModalOne}
         selectedNote={note}
         openDeleteCustomerNote={openDeleteCustomerNote}
-      />
+      />,
+      "Note Details",
+      "sm"
     );
   };
 
   const openCreateCustomerEquipment = () => {
     openModalTwo(
-      "30%",
-      "Create Equipment",
       <CreateCustomerEquipment
         customer={client}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Create Equipment",
+      "lg"
     );
   };
 
   const openDeleteCustomerEquipment = (equipment) => {
     openModalThree(
-      "25%",
-      "Delete Equipment",
       <DeleteCustomerEquipment
         customer={client}
         selectedEquipment={equipment}
         closeDetails={closeModalTwo}
         closeDelete={closeModalThree}
-      />
+      />,
+      "Delete Equipment",
+      "sm"
     );
   };
 
   const openEquipmentGallery = (unit) => {
     openModalThree(
-      "auto",
-      "",
       <EquipmentGallery
         closeModalThree={closeModalThree}
         openDeleteGalleryImage={openDeleteGalleryImage}
         selectedEquipment={unit}
-      />
+      />,
+      "",
+      "sm"
     );
   };
 
   const openEquipmentStatistics = (unit) => {
     openModalThree(
-      "auto",
-      "",
       <EquipmentStatistics
         closeModalThree={closeModalThree}
         customer={client}
         openEditSingleField={openEditSingleField}
         selectedEquipment={unit}
-      />
+      />,
+      "",
+      "sm"
     );
   };
 
   const openCustomerEquipmentDetails = (equipment) => {
     openModalTwo(
-      420,
-      "Equipment Details",
       <CustomerEquipmentCard
         closeBasicSecondModal={closeModalTwo}
         customer={client}
@@ -389,123 +379,123 @@ const HomePage = () => {
         openEquipmentGallery={openEquipmentGallery}
         openEquipmentStatistics={openEquipmentStatistics}
         selectedEquipment={equipment}
-      />
+      />,
+      "Equipment Details",
+      "sm"
     );
   };
 
   const openCustomerEquipmentList = () => {
     openModalOne(
-      "55%",
-      "Customer Equipment",
       <CustomerEquipmentList
         closeModalOne={closeModalOne}
         customer={client}
         openCreateCustomerEquipment={openCreateCustomerEquipment}
         openCustomerEquipmentDetails={openCustomerEquipmentDetails}
-      />
+      />,
+      "Customer Equipment",
+      "xl"
     );
   };
 
   const openDeleteGalleryImage = (img, equip) => {
     openModalFour(
-      "30%",
-      "Delete Gallery Image",
       <DeleteGalleryImage
         customer={customer}
         selectedEquipment={equip}
         selectedImage={img}
         closeImageViewer={closeModalThree}
         closeDelete={closeModalFour}
-      />
+      />,
+      "Delete Gallery Image",
+      "sm"
     );
   };
 
   const openDispatchDetails = (dispatch) => {
     openModalTwo(
-      "30%",
-      "Dispatch Details",
       <CompletedDispatchViewer
         selectedDispatch={dispatch}
         closeModalOne={closeModalTwo}
-      />
+      />,
+      "Dispatch Details",
+      "sm"
     );
   };
 
   const openDispatchHistory = () => {
     openModalOne(
-      "60%",
-      "Dispatch History",
       <DispatchHistoryList
         customer={client}
         openDispatchDetails={openDispatchDetails}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Dispatch History",
+      "lg"
     );
   };
 
   const openCreateWarranty = () => {
     openModalTwo(
-      "45%",
+      <CreateWarranty customer={client} closeModalTwo={closeModalTwo} />,
       "Create New Warranty",
-      <CreateWarranty customer={client} closeModalTwo={closeModalTwo} />
+      "lg"
     );
   };
 
   const openWarrantyDetails = (warr) => {
     openModalTwo(
-      "20%",
-      `${warr.equipmentName} Warranty Details`,
       <WarrantyDetails
         customer={client}
         selectedWarranty={warr}
         openDeleteWarranty={openDeleteWarranty}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      `${warr.equipmentName} Warranty Details`,
+      "md"
     );
   };
 
   const openDeleteWarranty = (warr) => {
     openModalThree(
-      "30%",
-      "Delete Warranty",
       <DeleteWarrantyContent
         customer={client}
         selectedWarranty={warr}
         closeDetails={closeModalTwo}
         closeDelete={closeModalThree}
-      />
+      />,
+      "Delete Warranty",
+      "sm"
     );
   };
 
   const openWarrantyList = () => {
     openModalOne(
-      "35%",
-      "Warranty",
       <WarrantyList
         customer={client}
         openWarrantyDetails={openWarrantyDetails}
         openCreateWarranty={openCreateWarranty}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Warranty",
+      "lg"
     );
   };
 
   const openCreateMaintenance = () => {
     openModalOne(
-      "45%",
-      "Create New Maintenance",
       <CreateMaintenance
         customer={client}
         closeModalTwo={closeModalOne}
         openMaintenanceMaterialList={openMaintenanceMaterialList}
-      />
+      />,
+      "Create New Maintenance",
+      "lg"
     );
   };
 
   const openMaintenanceDetails = (maint, equipment, equipmentIndex) => {
     openModalTwo(
-      "25%",
-      `${equipment.equipmentName} Maintenance Details`,
       <MaintenanceDetails
         closeModalTwo={closeModalTwo}
         customer={client}
@@ -513,59 +503,60 @@ const HomePage = () => {
         openDeleteMaintenance={openDeleteMaintenance}
         selectedMaintenance={maint}
         unit={equipment}
-      />
+      />,
+      `${equipment.equipmentName} Maintenance Details`,
+      "md"
     );
   };
 
   const openDeleteMaintenance = (maint, equipment) => {
     openModalThree(
-      "30%",
-      `Delete Maintenance for ${equipment.equipmentName}`,
       <DeleteMaintenanceContent
         customer={client}
         selectedMaintenance={maint}
         unit={equipment}
         closeDetailsModal={closeModalTwo}
         closeDeleteModal={closeModalThree}
-      />
+      />,
+      `Delete Maintenance for ${equipment.equipmentName}`,
+      "sm"
     );
   };
 
   const openMaintenanceList = () => {
     openModalOne(
-      "80%",
-      "Maintenance List",
       <MaintenanceList
         closeModalOne={closeModalOne}
         customer={client}
         openMaintenanceDetails={openMaintenanceDetails}
         openMaintenanceMaterialList={openMaintenanceMaterialList}
-      />
+      />,
+      "Maintenance List",
+      "lg"
     );
   };
 
   const openMaintenanceMaterialList = (custId) => {
-    //possibly set the current customer here?
     openModalTwo(
-      "60%",
-      "Maintenance Material",
       <MaintenanceMaterialList
         closeModalTwo={closeModalTwo}
         customerId={custId}
-      />
+      />,
+      "Maintenance Material",
+      "lg"
     );
   };
 
   const openPartsQuoteList = () => {
     openModalOne(
-      "45%",
+      <PartsQuoteList customer={client} closeBasicModal={closeModalOne} />,
       "Parts Quotes",
-      <PartsQuoteList customer={client} closeBasicModal={closeModalOne} />
+      "lg"
     );
   };
 
   return (
-    <div className="homePage">
+    <div className="sizeAdjustment">
       <Toast />
       <Grid container spacing={1.5} m={1}>
         <Grid xs={12} sm={12} md={12} lg={4}>
@@ -597,42 +588,46 @@ const HomePage = () => {
         </Grid>
       </Grid>
       {isModalOneOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalOneOpen}
+            closeModal={closeModalOne}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
           />
         </Suspense>
       )}
       {isModalTwoOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalTwo
-            modalTwoSize={modalTwoSize}
-            modalTwoTitle={modalTwoTitle}
-            modalTwoContent={modalTwoContent}
-            closeModalTwo={closeModalTwo}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalTwoOpen}
+            closeModal={closeModalTwo}
+            modalContent={modalTwoContent}
+            modalTitle={modalTwoTitle}
+            modalWidth={modalTwoWidth}
           />
         </Suspense>
       )}
       {isModalThreeOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalThree
-            modalThreeSize={modalThreeSize}
-            modalThreeTitle={modalThreeTitle}
-            modalThreeContent={modalThreeContent}
-            closeModalThree={closeModalThree}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalThreeOpen}
+            closeModal={closeModalThree}
+            modalContent={modalThreeContent}
+            modalTitle={modalThreeTitle}
+            modalWidth={modalThreeWidth}
           />
         </Suspense>
       )}
       {isModalFourOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalFour
-            modalFourSize={modalFourSize}
-            modalFourTitle={modalFourTitle}
-            modalFourContent={modalFourContent}
-            closeModalFour={closeModalFour}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            isModalOpen={isModalFourOpen}
+            closeModal={closeModalFour}
+            modalContent={modalFourContent}
+            modalTitle={modalFourTitle}
+            modalWidth={modalFourWidth}
           />
         </Suspense>
       )}

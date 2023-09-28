@@ -1,4 +1,4 @@
-import { InputAdornment, TextField } from "@mui/material";
+import { InputAdornment, TextField, Typography } from "@mui/material";
 
 const Shipping = ({
   quoteValues,
@@ -9,7 +9,7 @@ const Shipping = ({
     <div>
       <div className="row">
         <div className="singleRowInput">
-          <div className="columnHeaderText">Shipping</div>
+          <Typography variant="h5">Shipping</Typography>
         </div>
       </div>
       <div className="row">

@@ -6,12 +6,13 @@ import { updateWarranty } from "../warrantyFunctions";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Close, DeleteForever, Update } from "@mui/icons-material";
 import {
   getFormattedDate,
   getFormattedDateAndTime,
 } from "../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const WarrantyDetailsContent = ({
   customer,
@@ -155,28 +156,38 @@ const WarrantyDetailsContent = ({
           </LocalizationProvider>
         </div>
       </div>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="deleteButton"
-          onClick={() => openDeleteWarranty(selectedWarranty)}
-        >
-          <DeleteForever />
-          <span className="iconSeperation">Delete</span>
-        </button>
-        <button type="submit" className="standardButton">
-          <Update />
-          <span className="iconSeperation">Update</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end", marginTop: "8px" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            color="error"
+            onClick={() => openDeleteWarranty(selectedWarranty)}
+            startIcon={<DeleteForever />}
+          >
+            Delete
+          </Button>
+        </Grid>
+        <Grid>
+          <Button variant="contained" type="submit" startIcon={<Update />}>
+            Update
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            onClick={() => closeModalTwo()}
+            startIcon={<Close />}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

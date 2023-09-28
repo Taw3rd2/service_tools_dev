@@ -2,6 +2,7 @@ import { useState } from "react";
 import { db, useSyncedCollection } from "../../../../firebase/firestore.utils";
 import { ArrowUpward, Close } from "@mui/icons-material";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -13,6 +14,7 @@ import {
   toCurrency,
 } from "../../../../utilities/currencyUtils";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const AddLaborToJob = ({ labor, setLabor, closeModalTwo }) => {
   const laborRates = useSyncedCollection(collection(db, "laborRate"));
@@ -67,7 +69,7 @@ const AddLaborToJob = ({ labor, setLabor, closeModalTwo }) => {
 
   return (
     <form onSubmit={submitLabor} autoComplete="new password">
-      <div className="row">
+      <div className="row" style={{ marginTop: "6px" }}>
         <div className="tripleRowInput">
           <FormControl fullWidth>
             <InputLabel id="labor-rate-selector">Select Labor Type</InputLabel>
@@ -110,20 +112,27 @@ const AddLaborToJob = ({ labor, setLabor, closeModalTwo }) => {
           />
         </div>
       </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          <ArrowUpward />
-          <span className="iconSeperation">Submit</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button variant="contained" type="submit" startIcon={<ArrowUpward />}>
+            Submit
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalTwo()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

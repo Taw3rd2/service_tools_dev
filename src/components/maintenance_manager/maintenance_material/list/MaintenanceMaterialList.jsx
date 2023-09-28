@@ -30,10 +30,10 @@ import {
 } from "../../../../firebase/firestore.utils";
 import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import Spinner from "../../../spinner/Spinner";
-import ModalThree from "../../../basic_components/modal_three/ModalThree";
 import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 import { getPartDetailsFromIds } from "../../maintenance_functions/maintenanceFuctions";
+import MaterialModal from "../../../basic_components/material_modal/MaterialModal";
 const JobMaterialPicker = lazy(() =>
   import(
     "../../../../pages/products/equipment_catalog/material_list/JobMaterialPicker"
@@ -90,33 +90,33 @@ const MaintenanceMaterialList = ({ closeModalTwo, customerId }) => {
   };
 
   const [isModalThreeOpen, setModalThreeOpen] = useState(false);
-  const [modalThreeSize, setModalThreeSize] = useState("45%");
-  const [modalThreeTitle, setModalThreeTitle] = useState("Modal Three");
   const [modalThreeContent, setModalThreeContent] = useState(
     <div>Modal Three Content</div>
   );
-  const openModalThree = (size, title, content) => {
-    setModalThreeSize(size);
-    setModalThreeTitle(title);
+  const [modalThreeTitle, setModalThreeTitle] = useState("Modal Three");
+  const [modalThreeWidth, setModalThreeWidth] = useState("sm");
+  const openModalThree = (content, title, width) => {
     setModalThreeContent(content);
+    setModalThreeTitle(title);
+    setModalThreeWidth(width);
     setModalThreeOpen(true);
   };
   const closeModalThree = () => {
-    setModalThreeSize("45%");
-    setModalThreeTitle("Modal Three");
     setModalThreeContent(<div>Modal Three Content</div>);
+    setModalThreeTitle("Modal Three");
+    setModalThreeWidth("sm");
     setModalThreeOpen(false);
   };
 
   const openMaterialPicker = () => {
     openModalThree(
-      "100%",
-      "Material Picker",
       <JobMaterialPicker
         material={material}
         setMaterial={setMaterial}
         closeModalTwo={closeModalThree}
-      />
+      />,
+      "Material Picker",
+      "100%"
     );
   };
 
@@ -129,8 +129,6 @@ const MaintenanceMaterialList = ({ closeModalTwo, customerId }) => {
       material.forEach((item) => {
         saveableArray.push({ id: item.id, quantity: item.quantity });
       });
-
-      console.log("saveableArray: ", saveableArray);
 
       //if there is no material saved, create a new list
       if (loadedMaterialList) {
@@ -205,7 +203,6 @@ const MaintenanceMaterialList = ({ closeModalTwo, customerId }) => {
   return (
     <Grid container spacing={1.5}>
       <Grid xs={12}>
-        {customerId}
         <TableContainer
           component={Paper}
           sx={{
@@ -342,11 +339,12 @@ const MaintenanceMaterialList = ({ closeModalTwo, customerId }) => {
       </Grid>
       {isModalThreeOpen && (
         <Suspense fallback={<Spinner />}>
-          <ModalThree
-            modalThreeSize={modalThreeSize}
-            modalThreeTitle={modalThreeTitle}
-            modalThreeContent={modalThreeContent}
-            closeModalThree={closeModalThree}
+          <MaterialModal
+            isModalOpen={isModalThreeOpen}
+            closeModal={closeModalThree}
+            modalContent={modalThreeContent}
+            modalTitle={modalThreeTitle}
+            modalWidth={modalThreeWidth}
           />
         </Suspense>
       )}

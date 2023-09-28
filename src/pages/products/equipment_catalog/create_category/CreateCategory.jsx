@@ -3,10 +3,11 @@ import { collection } from "firebase/firestore";
 import { db } from "../../../../firebase/firestore.utils";
 
 import { ArrowUpward, Close } from "@mui/icons-material";
-import { TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { ToastContext } from "../../../../context/toastContext";
 import { createUnNamedDocument } from "../../../../firebase/firestore.utils";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const CreateCategory = ({ tab, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -49,8 +50,8 @@ const CreateCategory = ({ tab, closeModalOne }) => {
   return (
     <div>
       <form onSubmit={submitCategory} autoComplete="new password">
-        <div className="row">
-          <div className="singleRowInput">
+        <Grid container spacing={1.5}>
+          <Grid xs={12}>
             <TextField
               label="Category"
               fullWidth
@@ -58,29 +59,33 @@ const CreateCategory = ({ tab, closeModalOne }) => {
               onChange={(e) => setName(e.target.value)}
               required
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="singleRowInput">
-            <div className="centerInfo textTeal">
+          </Grid>
+          <Grid xs={12}>
+            <Typography variant="body1">
               Format: Brand Name, Efficiency, Features
-            </div>
-          </div>
-        </div>
-        <div className="buttonBar">
-          <button
-            type="button"
-            className="standardButton"
-            onClick={() => closeModalOne()}
-          >
-            <Close />
-            <span className="iconSeperation">Close</span>
-          </button>
-          <button type="submit" className="standardButton">
-            <ArrowUpward />
-            <span className="iconSeperation">Submit</span>
-          </button>
-        </div>
+            </Typography>
+          </Grid>
+          <Grid sx={{ marginLeft: "auto" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              startIcon={<ArrowUpward />}
+              sx={{ margin: "6px" }}
+            >
+              Submit
+            </Button>
+
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<Close />}
+              onClick={() => closeModalOne()}
+              sx={{ margin: "6px" }}
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );

@@ -4,6 +4,7 @@ import {
   IconButton,
   TableCell,
   TableRow,
+  Typography,
   tableCellClasses,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -108,7 +109,7 @@ const PartsQuotePartsList = ({
     <div>
       <div className="row">
         <div className="singleRowInput">
-          <div className="columnHeaderText">Material</div>
+          <Typography variant="h5">Material</Typography>
         </div>
       </div>
       <BasicTable

@@ -5,7 +5,7 @@ const SlideIn = ({ children, startAnimation }) => {
     ? { marginTop: "8px", opacity: 1 }
     : {};
   return (
-    <div class="slideIn" style={transitionProperties}>
+    <div className="slideIn" style={transitionProperties}>
       {children}
     </div>
   );

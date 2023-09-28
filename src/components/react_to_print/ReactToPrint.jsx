@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import ComponentToPrint from "../../pages/products/equipment_catalog/totals/ComponentToPrint";
 import { Close, Print } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { Button } from "@mui/material";
 
 export const ReactToPrint = ({ equipmentType, closeModalOne }) => {
   const componentRef = useRef(null);
@@ -69,16 +71,32 @@ export const ReactToPrint = ({ equipmentType, closeModalOne }) => {
         equipmentType={equipmentType}
         matchesPrint={matchesPrint}
       />
-      <div className="buttonBar">
-        <button className="standardButton" onClick={handlePrint}>
-          <Print />
-          <span className="iconSeperation">Print</span>
-        </button>
-        <button className="standardButton" onClick={() => closeModalOne()}>
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end", marginTop: "6px" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Print />}
+            onClick={handlePrint}
+          >
+            Print
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

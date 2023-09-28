@@ -34,15 +34,17 @@ const EquipmentGallery = ({
           //   );
           // }}
         >
-          {selectedEquipment.equipmentGallery.map((item, index) => (
-            <PhotoView key={index} src={item.imageUrl}>
-              <img src={item.imageUrl} alt="" height="200" width="auto" />
-            </PhotoView>
-          ))}
+          {selectedEquipment &&
+            selectedEquipment.equipmentGallery &&
+            selectedEquipment.equipmentGallery.map((item, index) => (
+              <PhotoView key={index} src={item.imageUrl}>
+                <img src={item.imageUrl} alt="" height="200" width="auto" />
+              </PhotoView>
+            ))}
         </PhotoProvider>
       </Grid>
       <Grid xs={12} sx={{ display: "flex", justifyContent: "end" }}>
-        <Button variant="outlined" onClick={() => closeModalThree()}>
+        <Button variant="contained" onClick={() => closeModalThree()}>
           Close
         </Button>
       </Grid>

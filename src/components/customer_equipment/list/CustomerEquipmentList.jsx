@@ -11,7 +11,6 @@ import {
 import "../../../global_style/style.css";
 import {
   defaultBodyTableCell,
-  getDefaultHeadTableCell,
   greenBodyTableCell,
   redBodyTableCell,
 } from "../../../theme/Theme";
@@ -57,27 +56,13 @@ const CustomerEquipmentList = ({
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
-                <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                  Equipment Name
-                </TableCell>
-                <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                  Brand
-                </TableCell>
-                <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                  Model
-                </TableCell>
-                <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                  Serial
-                </TableCell>
-                <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                  Maintenance Expiration
-                </TableCell>
-                <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                  Parts Expiration
-                </TableCell>
-                <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                  Labor Expiration
-                </TableCell>
+                <TableCell align="left">Equipment Name</TableCell>
+                <TableCell align="left">Brand</TableCell>
+                <TableCell align="left">Model</TableCell>
+                <TableCell align="left">Serial</TableCell>
+                <TableCell align="center">Maintenance Expiration</TableCell>
+                <TableCell align="center">Parts Expiration</TableCell>
+                <TableCell align="center">Labor Expiration</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -117,7 +102,7 @@ const CustomerEquipmentList = ({
         sx={{ display: "flex", justifyContent: "end", marginTop: "8px" }}
       >
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           startIcon={<AddCircleOutline />}
           onClick={() => openCreateCustomerEquipment()}
@@ -126,7 +111,7 @@ const CustomerEquipmentList = ({
           Add New Equipment
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           startIcon={<Close />}
           onClick={() => closeModalOne()}

@@ -76,7 +76,7 @@ const Calendar = ({
   };
 
   const eventColorSetter = (eventData) => {
-    let newBackgroundColor = "#000873";
+    let newBackgroundColor = "#000000";
     let newBorderColor = "white";
 
     technicians.length > 0 &&

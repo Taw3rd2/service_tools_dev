@@ -7,6 +7,8 @@ import {
 } from "../../../../firebase/firestore.utils";
 import { ToastContext } from "../../../../context/toastContext";
 import {
+  Button,
+  IconButton,
   TableCell,
   tableCellClasses,
   TableRow,
@@ -16,10 +18,11 @@ import { styled } from "@mui/material/styles";
 import { toCurrency } from "../../../../utilities/currencyUtils";
 import {
   Add,
+  AddCircleOutline,
   ArrowUpward,
   Close,
   DeleteForever,
-  Remove,
+  RemoveCircleOutline,
 } from "@mui/icons-material";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
@@ -30,11 +33,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 18,
   },
 }));
-
-const rootStyles = {
-  backgroundColor: "#ffd60a",
-  border: "1px solid rgba(132, 230, 239, 0.8)",
-};
 
 const EditLaborList = ({ unitId, openAddLaborToEquipment, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -153,50 +151,28 @@ const EditLaborList = ({ unitId, openAddLaborToEquipment, closeModalOne }) => {
         defaultLaborList
           .sort((a, b) => a.description.localeCompare(b.description))
           .map((item, index) => (
-            <TableRow
-              key={index}
-              sx={
-                index % 2
-                  ? {
-                      background: "#e8eded",
-                      cursor: "pointer",
-                    }
-                  : {
-                      background: "white",
-                      cursor: "pointer",
-                    }
-              }
-            >
+            <TableRow key={index}>
               <TableCell sx={{ display: "flex", justifyContent: "center" }}>
                 <div className="listItemButtonBar">
-                  <button
-                    className="lineItemButton"
-                    onClick={() => {
-                      decreaseHours(item.hours, index);
-                    }}
-                  >
-                    <Remove />
-                  </button>
+                  <IconButton onClick={() => decreaseHours(item.hours, index)}>
+                    <RemoveCircleOutline />
+                  </IconButton>
                   <TextField
                     size="small"
                     id="quantity_text"
                     value={item.hours}
                     sx={{
-                      ...rootStyles,
                       marginLeft: "8px",
                       width: "50px",
-                      input: { background: "#FFF", textAlign: "center" },
+                      input: { textAlign: "center" },
                     }}
                   />
-                  <button
-                    className="lineItemButton"
-                    style={{ marginLeft: "8px" }}
-                    onClick={() => {
-                      increaseHours(item.hours, index);
-                    }}
+                  <IconButton
+                    onClick={() => increaseHours(item.hours, index)}
+                    sx={{ marginLeft: "8px" }}
                   >
-                    <Add />
-                  </button>
+                    <AddCircleOutline />
+                  </IconButton>
                 </div>
               </TableCell>
               <TableCell align="left">
@@ -208,7 +184,7 @@ const EditLaborList = ({ unitId, openAddLaborToEquipment, closeModalOne }) => {
               </TableCell>
               <TableCell align="center">
                 <DeleteForever
-                  sx={{ color: "teal" }}
+                  color="error"
                   onClick={() => {
                     removeArrayItem(index);
                   }}
@@ -222,27 +198,27 @@ const EditLaborList = ({ unitId, openAddLaborToEquipment, closeModalOne }) => {
   const additionalButtons = (
     <>
       {pickerButtonActive ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => {
             openAddLaborToEquipment();
           }}
+          sx={{ margin: "8px" }}
         >
-          <Add />
-          <span className="iconSeperation">Add labor</span>
-        </button>
+          Add Labor
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
+          sx={{ margin: "8px" }}
           disabled
         >
-          <Add />
-          <span className="iconSeperation">Save to add more</span>
-        </button>
+          Save to add more
+        </Button>
       )}
     </>
   );
@@ -260,32 +236,34 @@ const EditLaborList = ({ unitId, openAddLaborToEquipment, closeModalOne }) => {
       />
       <div className="buttonBar">
         {pickerButtonActive ? (
-          <button
+          <Button
+            variant="contained"
             type="button"
-            className="standardButton"
+            startIcon={<ArrowUpward />}
             onClick={() => saveLaborToEquipment()}
           >
-            <ArrowUpward />
-            <span className="iconSeperation">Save Changes</span>
-          </button>
+            Save Changes
+          </Button>
         ) : (
-          <button
+          <Button
+            variant="contained"
             type="button"
-            className="standardGoButton"
+            startIcon={<ArrowUpward />}
             onClick={() => saveLaborToEquipment()}
+            color="success"
           >
-            <ArrowUpward />
-            <span className="iconSeperation">Save Changes</span>
-          </button>
+            Save Changes
+          </Button>
         )}
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
+          startIcon={<Close />}
           onClick={() => closeModalOne()}
+          sx={{ marginLeft: "8px" }}
         >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
+          Close
+        </Button>
       </div>
     </div>
   );

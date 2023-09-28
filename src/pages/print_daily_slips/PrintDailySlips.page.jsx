@@ -42,7 +42,7 @@ const PrintDailySlips = () => {
   }, [location.state.date, location.state.techLead]);
 
   return (
-    <>
+    <div className="sizeAdjustment">
       <div
         style={{
           display: "flex",
@@ -76,7 +76,7 @@ const PrintDailySlips = () => {
           <ViewDailySlip key={index} printData={printData} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

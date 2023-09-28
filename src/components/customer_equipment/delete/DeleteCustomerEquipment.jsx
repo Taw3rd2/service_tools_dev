@@ -43,7 +43,7 @@ const DeleteCustomerEquipment = ({
   return (
     <Grid container spacing={1.5}>
       <Grid xs={12} sm={12} md={12} lg={12}>
-        <Typography variant="h5" color="red">
+        <Typography variant="h5" color="orange">
           Unrecoverable Delete
         </Typography>
       </Grid>
@@ -62,7 +62,7 @@ const DeleteCustomerEquipment = ({
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={6}>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           color="error"
           startIcon={<DeleteForever />}
@@ -83,7 +83,7 @@ const DeleteCustomerEquipment = ({
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={6}>
         <Button
-          variant="outlined"
+          variant="contained"
           type="button"
           startIcon={<Close />}
           onClick={() => closeDelete()}

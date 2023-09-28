@@ -181,7 +181,7 @@ const EquipmentStatistics = ({
       </CardContent>
       <CardActions>
         <Button
-          variant="outlined"
+          variant="contained"
           onClick={() => closeModalThree()}
           style={{ marginLeft: "auto", marginRight: "8px" }}
         >

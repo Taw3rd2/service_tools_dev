@@ -7,6 +7,7 @@ import {
 import "../../../global_style/style.css";
 import { AddCircleOutline, Close } from "@mui/icons-material";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -16,11 +17,11 @@ import {
 } from "@mui/material";
 import {
   defaultBodyTableCell,
-  getDefaultHeadTableCell,
   greenBodyTableCell,
   redBodyTableCell,
 } from "../../../theme/Theme";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const WarrantyList = ({
   customer,
@@ -86,21 +87,11 @@ const WarrantyList = ({
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Job Number
-              </TableCell>
-              <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                Equipment
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Start Date
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Parts Expiration
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Labor Expiration
-              </TableCell>
+              <TableCell align="center">Job Number</TableCell>
+              <TableCell align="left">Equipment</TableCell>
+              <TableCell align="center">Start Date</TableCell>
+              <TableCell align="center">Parts Expiration</TableCell>
+              <TableCell align="center">Labor Expiration</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -131,24 +122,32 @@ const WarrantyList = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => openCreateWarranty()}
-        >
-          <AddCircleOutline />
-          <span className="iconSeperation">Create New Warranty</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end", marginTop: "8px" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            onClick={() => openCreateWarranty()}
+            startIcon={<AddCircleOutline />}
+          >
+            Create New Warranty
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            onClick={() => closeModalOne()}
+            startIcon={<Close />}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import BlankEquipmentSheet from "./BlankEquipmentSheet";
 import EquipmentDetails from "./EquipmentDetails";
 import "../../../../global_style/style.css";
+import { Typography } from "@mui/material";
 
 const EquipmentWorksheet = ({
   selectedEquipmentId,
@@ -17,7 +18,7 @@ const EquipmentWorksheet = ({
     <div>
       <div className="row">
         <div className="singleRowInput">
-          <div className="worksheetTitle">Equipment Worksheet</div>
+          <Typography variant="h5">Equipment Worksheet</Typography>
         </div>
       </div>
       <div className="row" style={{ border: "2px solid black" }}>

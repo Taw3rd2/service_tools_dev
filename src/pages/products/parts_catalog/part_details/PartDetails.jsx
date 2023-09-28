@@ -9,6 +9,7 @@ import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -39,7 +40,14 @@ import {
 import uploadPicture from "../../../../utilities/images/upload_cloud.jpg";
 import ProgressBar from "../../../../components/progress_bar/ProgressBar";
 import { collection, doc } from "firebase/firestore";
-import { Add, ArrowUpward, Close, DeleteForever } from "@mui/icons-material";
+import {
+  Add,
+  ArrowUpward,
+  Close,
+  DeleteForever,
+  Edit,
+} from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -180,17 +188,19 @@ const PartDetails = ({
 
   return (
     <>
-      <div className="row">
-        <div className="doubleRowInput">
-          <h3>Part Updated: {partValues.partDataDate}</h3>
-        </div>
-        <div className="doubleRowInput">
-          <h3>Suggested on hand quantities</h3>
-        </div>
-      </div>
+      <Grid container spacing={1.5}>
+        <Grid xs={12} sm={12} md={6} ld={6}>
+          <Typography variant="h6">
+            Part Updated: {partValues.partDataDate}
+          </Typography>
+        </Grid>
+        <Grid xs={12} sm={12} md={6} ld={6}>
+          <Typography variant="h6">Suggested on hand quantities</Typography>
+        </Grid>
+      </Grid>
 
       <form autoComplete="new password" onSubmit={onSubmit}>
-        <div className="row">
+        <div className="row" style={{ marginTop: "24px" }}>
           <div className="doubleRowInput">
             <div className="row">
               <div className="tripleRowInput">
@@ -482,77 +492,87 @@ const PartDetails = ({
                 <StyledTableCell align="left">Date</StyledTableCell>
                 <TableCell align="left"></TableCell>
                 <TableCell align="left">
-                  <button
+                  <Button
+                    variant="contained"
                     type="button"
-                    className="standardButton"
+                    startIcon={<Add />}
                     onClick={() => openCreateCrossReference(part)}
                   >
-                    <Add />
-                    <span className="iconSeperation">Add</span>
-                  </button>
+                    Add
+                  </Button>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {partValues.crossReference &&
                 partValues.crossReference.map((item, index) => (
-                  <TableRow
-                    key={index}
-                    sx={
-                      index % 2
-                        ? { background: "#d9d9d9" }
-                        : { background: "white" }
-                    }
-                  >
+                  <TableRow key={index}>
                     <TableCell>{item.partNumber}</TableCell>
                     <TableCell>{item.partVendor}</TableCell>
                     <TableCell>{currencyFormat(item.partCost / 100)}</TableCell>
                     <TableCell>{item.partDataDate}</TableCell>
                     <TableCell>
-                      <button
+                      <Button
+                        variant="contained"
                         type="button"
-                        className="deleteButton"
+                        startIcon={<DeleteForever />}
                         onClick={() => openDeleteCrossReference(part, index)}
+                        color="error"
                       >
                         Delete
-                      </button>
+                      </Button>
                     </TableCell>
                     <TableCell>
-                      <button
+                      <Button
+                        variant="contained"
                         type="button"
-                        className="standardButton"
+                        startIcon={<Edit />}
                         onClick={() => openEditCrossReference(part, index)}
                       >
                         Edit
-                      </button>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <div className="buttonBar">
-          <button
-            type="button"
-            className="deleteButton"
-            onClick={() => openDeletePart(part)}
-          >
-            <DeleteForever />
-            <span className="iconSeperation">Delete</span>
-          </button>
-          <button type="submit" className="standardButton">
-            <ArrowUpward />
-            <span className="iconSeperation">Update</span>
-          </button>
-          <button
-            type="button"
-            className="standardButton"
-            onClick={() => closeModalOne()}
-          >
-            <Close />
-            <span className="iconSeperation">Close</span>
-          </button>
-        </div>
+        <Grid
+          container
+          spacing={1.5}
+          sx={{ display: "flex", justifyContent: "end", marginTop: "6px" }}
+        >
+          <Grid>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<DeleteForever />}
+              onClick={() => openDeletePart(part)}
+              color="error"
+            >
+              Delete
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              variant="contained"
+              type="submit"
+              startIcon={<ArrowUpward />}
+            >
+              Update
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<Close />}
+              onClick={() => closeModalOne()}
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </>
   );

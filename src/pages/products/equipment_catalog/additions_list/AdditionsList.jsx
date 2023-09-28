@@ -2,7 +2,7 @@ import { useState } from "react";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import QuantityControl from "../../../../components/quantity_control/QuantityControl";
 import { toCurrency, toArrayTotal } from "../../../../utilities/currencyUtils";
-import { TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Add, ArrowUpward, DeleteForever } from "@mui/icons-material";
 
@@ -48,20 +48,7 @@ const AdditionsList = ({ additions, setAdditions, openAddAdditionsToJob }) => {
     <>
       {additions.length > 0 &&
         additions.map((item, index) => (
-          <TableRow
-            key={index}
-            sx={
-              index % 2
-                ? {
-                    background: "#e8eded",
-                    cursor: "pointer",
-                  }
-                : {
-                    background: "white",
-                    cursor: "pointer",
-                  }
-            }
-          >
+          <TableRow key={index}>
             <TableCell sx={{ display: "flex", justifyContent: "center" }}>
               <QuantityControl
                 listOfItems={additions}
@@ -80,7 +67,7 @@ const AdditionsList = ({ additions, setAdditions, openAddAdditionsToJob }) => {
             </TableCell>
             <TableCell align="center">
               <DeleteForever
-                sx={{ color: "teal" }}
+                color="error"
                 onClick={() => {
                   removeArrayItem(index);
                 }}
@@ -94,54 +81,56 @@ const AdditionsList = ({ additions, setAdditions, openAddAdditionsToJob }) => {
   const additionalButtons = (
     <>
       {pickerButtonActive ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => {
             openAddAdditionsToJob();
           }}
+          sx={{ margin: "8px" }}
         >
-          <Add />
-          <span className="iconSeperation">Add Items from Services</span>
-        </button>
+          Add Items From Service
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => {
             openAddAdditionsToJob();
           }}
+          sx={{ margin: "8px" }}
+          disabled
         >
-          <Add />
-          <span className="iconSeperation">Add Items from Services</span>
-        </button>
+          Add Items From Service
+        </Button>
       )}
       {pickerButtonActive ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<ArrowUpward />}
           onClick={() => {
-            console.log("Save Changes Clicked");
+            console.log("Save Changes");
           }}
+          sx={{ margin: "8px" }}
         >
-          <ArrowUpward />
-          <span className="iconSeperation">Save Changes</span>
-        </button>
+          Save Changes
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<ArrowUpward />}
           onClick={() => {
-            console.log("Save Changes Clicked");
+            console.log("Save Changes");
           }}
+          sx={{ margin: "8px" }}
+          color="success"
         >
-          <ArrowUpward />
-          <span className="iconSeperation">Save Changes</span>
-        </button>
+          Save Changes
+        </Button>
       )}
     </>
   );

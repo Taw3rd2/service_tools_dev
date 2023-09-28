@@ -2,6 +2,7 @@ import { db, useSyncedCollection } from "../../../../firebase/firestore.utils";
 
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -10,15 +11,16 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import "../../../../global_style/style.css";
 import { Add, DeleteForever, Edit } from "@mui/icons-material";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+
+import "../../../../global_style/style.css";
 
 const TechnicianList = ({ openTechnicianDetails, openDeleteTechnician }) => {
   const technicians = useSyncedCollection(collection(db, "technicians"));
   return (
-    <div className="settingsCard">
-      <div className="settingsCardTitle">Technicians</div>
+    <div className="sizeAdjustment">
       <TableContainer
         component={Paper}
         sx={{ overflow: "auto", maxHeight: 275 }}
@@ -63,17 +65,18 @@ const TechnicianList = ({ openTechnicianDetails, openDeleteTechnician }) => {
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((technician, index) => (
                 <TableRow key={technician.id} sx={{ cursor: "pointer" }}>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {index + 1}
                   </TableCell>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {technician.name}
                   </TableCell>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {technician.email}
                   </TableCell>
                   <TableCell
                     align="center"
+                    padding="none"
                     sx={{
                       fontSize: 20,
                       backgroundColor: technician.color,
@@ -82,42 +85,43 @@ const TechnicianList = ({ openTechnicianDetails, openDeleteTechnician }) => {
                   >
                     {technician.color}
                   </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<Edit />}
+                  <TableCell align="center" padding="none">
+                    <IconButton
                       onClick={() => openTechnicianDetails(technician)}
                     >
-                      Edit
-                    </Button>
+                      <Edit />
+                    </IconButton>
                   </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<DeleteForever />}
+                  <TableCell align="center" padding="none">
+                    <IconButton
                       onClick={() => openDeleteTechnician(technician)}
-                      style={{ color: "red" }}
+                      color="error"
                     >
-                      Delete
-                    </Button>
+                      <DeleteForever />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => openTechnicianDetails()}
-        >
-          <Add />
-          <span className="iconSeperation">Add Technician</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Add />}
+            onClick={() => openTechnicianDetails()}
+            sx={{ marginTop: "8px" }}
+          >
+            Add Technician
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

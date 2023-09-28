@@ -1,10 +1,5 @@
-import { Add, Remove } from "@mui/icons-material";
-import { TextField } from "@mui/material";
-
-const rootStyles = {
-  backgroundColor: "#ffd60a",
-  border: "1px solid rgba(132, 230, 239, 0.8)",
-};
+import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import { IconButton, TextField } from "@mui/material";
 
 const QuantityControl = ({
   listOfItems,
@@ -39,34 +34,31 @@ const QuantityControl = ({
 
   return (
     <div className="listItemButtonBar">
-      <button
-        className="lineItemButton"
+      <IconButton
         onClick={() => {
           decreaseQuantity(part.quantity, index);
         }}
       >
-        <Remove />
-      </button>
+        <RemoveCircleOutline />
+      </IconButton>
       <TextField
         size="small"
         id="quantity_text"
         value={part.quantity}
         sx={{
-          ...rootStyles,
           marginLeft: "8px",
           width: "50px",
-          input: { background: "#FFF", textAlign: "center" },
+          input: { textAlign: "center" },
         }}
       />
-      <button
-        className="lineItemButton"
-        style={{ marginLeft: "8px" }}
+      <IconButton
         onClick={() => {
           increaseQuantity(part.quantity, index);
         }}
+        sx={{ marginLeft: "8px" }}
       >
-        <Add />
-      </button>
+        <AddCircleOutline />
+      </IconButton>
     </div>
   );
 };

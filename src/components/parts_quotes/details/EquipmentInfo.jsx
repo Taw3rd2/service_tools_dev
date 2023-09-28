@@ -1,4 +1,4 @@
-import { Switch, TextField } from "@mui/material";
+import { Switch, TextField, Typography } from "@mui/material";
 
 const EquipmentInfo = ({
   equipmentValues,
@@ -10,7 +10,7 @@ const EquipmentInfo = ({
     <div>
       <div className="row">
         <div className="singleRowInput">
-          <div className="columnHeaderText">Equipment Information</div>
+          <Typography variant="h5">Equipment Information</Typography>
         </div>
       </div>
       <div className="row" style={{ alignItems: "center" }}>

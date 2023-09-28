@@ -12,6 +12,7 @@ import {
 } from "../../../utilities/dateUtils";
 
 import {
+  Box,
   Button,
   Paper,
   Table,
@@ -110,15 +111,16 @@ const CustomerNotesList = ({
     return <NoCustomerLoaded />;
   } else {
     return (
-      <div
-        style={{
-          flexGrow: 1,
-          border: "1px solid teal",
-          padding: "8px",
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          border: 1,
+          borderColor: "primary.main",
+          padding: "4px",
         }}
       >
         {customer.firstname ? (
-          <Typography variant="h5" gutterBottom color="primary">
+          <Typography variant="h5" gutterBottom>
             {customer.firstname} {customer.lastname} Notes
           </Typography>
         ) : (
@@ -133,32 +135,16 @@ const CustomerNotesList = ({
           <Table stickyHeader size="small" aria-label="customer-notes-table">
             <TableHead>
               <TableRow>
-                <TableCell
-                  align="left"
-                  sx={{
-                    minWidth: "40px",
-                    backgroundColor: "teal",
-                    color: "white",
-                  }}
-                >
+                <TableCell align="left" sx={{ minWidth: "40px" }}>
                   Operator
                 </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    minWidth: "40px",
-                    backgroundColor: "teal",
-                    color: "white",
-                  }}
-                >
+                <TableCell align="left" sx={{ minWidth: "40px" }}>
                   Type
                 </TableCell>
                 <TableCell
                   align="left"
                   sx={{
                     minWidth: "40px",
-                    backgroundColor: "teal",
-                    color: "white",
                   }}
                 >
                   Date
@@ -167,18 +153,11 @@ const CustomerNotesList = ({
                   align="left"
                   sx={{
                     minWidth: "40px",
-                    backgroundColor: "teal",
-                    color: "white",
                   }}
                 >
                   Time
                 </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{ backgroundColor: "teal", color: "white" }}
-                >
-                  Note
-                </TableCell>
+                <TableCell align="left">Note</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -225,7 +204,7 @@ const CustomerNotesList = ({
             </Button>
           )}
         </div>
-      </div>
+      </Box>
     );
   }
 };

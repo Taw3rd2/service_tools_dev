@@ -7,10 +7,11 @@ import { collection, doc } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { ToastContext } from "../../../../context/toastContext";
 
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import "../../../../global_style/style.css";
 import { Add, ArrowUpward, Close } from "@mui/icons-material";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const WorkListItemDetails = ({ workListItem, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -113,29 +114,31 @@ const WorkListItemDetails = ({ workListItem, closeModalOne }) => {
           />
         </div>
       </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          {workListItem !== undefined ? (
-            <>
-              <ArrowUpward />
-              <span className="iconSeperation">Update</span>
-            </>
-          ) : (
-            <>
-              <Add />
-              <span className="iconSeperation">Add</span>
-            </>
-          )}
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="submit"
+            startIcon={workListItem !== undefined ? <ArrowUpward /> : <Add />}
+          >
+            {workListItem !== undefined ? "Update" : "Add"}
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

@@ -23,26 +23,25 @@ import {
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Button, TextField } from "@mui/material";
 import "../../../global_style/style.css";
-import { ArrowUpward, Close, DeleteForever } from "@mui/icons-material";
+import {
+  ArrowUpward,
+  Close,
+  DeleteForever,
+  DoNotDisturb,
+} from "@mui/icons-material";
 import MainField from "../../customer_information/fields/MainField";
 import ContactCard from "../../customer_information/fields/ContactCard";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const DispatchDetails = ({
-  selectedDispatch,
   closeModalOne,
+  openCancelDispatch,
+  openDeleteDispatch,
   openJobCompleted,
   openSameTech,
-  openDeleteDispatch,
+  selectedDispatch,
 }) => {
   const { dispatch } = useContext(ToastContext);
 
@@ -101,20 +100,35 @@ const DispatchDetails = ({
       : "Anytime",
   });
 
+  const techHelperList = [...technicians, { name: "NONE" }];
+
+  const timeOfDayList = [
+    { label: "AM", value: "AM" },
+    { label: "Anytime", value: "Anytime" },
+    { label: "First Call", value: "First Call" },
+    { label: "Last Call", value: "Last Call" },
+    { label: "Overtime", value: "overtime" },
+    { label: "PM", value: "PM" },
+  ];
+
   const handleDispatchDataChange = (prop) => (event) => {
     setDispatchData({ ...dispatchData, [prop]: event.target.value });
+  };
+
+  const handleDispatchDataSelectChange = (prop, value) => {
+    setDispatchData({ ...dispatchData, [prop]: value });
   };
 
   const handleDispatchDateChange = (prop) => (value) => {
     setDispatchData({ ...dispatchData, [prop]: value });
   };
 
-  const handleIssueChange = (event) => {
-    const option = workList.filter((i) => event.target.value === i.item);
+  const handleIssueChange = (value) => {
+    const option = workList.filter((i) => value === i.item);
 
     setDispatchData({
       ...dispatchData,
-      issue: event.target.value,
+      issue: value,
       shorthand: option[0].shorthand,
     });
   };
@@ -122,8 +136,12 @@ const DispatchDetails = ({
   const updateDispatch = (event) => {
     event.preventDefault();
 
+    //If the dispatches are canceled, and rescheduled, there is no 2nd dispatch id to build on.
+    //This variable is the techHelper dispatch Id generated if there is no techHelper, and one is generated.
+    let generatedTechHelperId = "";
+
     //validation
-    //The office should not be able to update a dispatch that is done, or needs parts.
+    //The office should not be able to update a dispatch that is done, canceled, or needs parts.
     if (
       selectedDispatch.extendedProps.status === "done" ||
       selectedDispatch.extendedProps.status === "parts"
@@ -342,16 +360,18 @@ const DispatchDetails = ({
               console.log(
                 "techHelper changed to another tech but there is no second dispatch to change"
               );
+              // create a new 2nd dispatch and assign the techHelperId
               let newEvent = { ...updatedDispatch };
               const docForId = doc(collection(db, "events"));
-              const generatedId = docForId.id;
+              const generatedId = docForId.id; //**********//
+              generatedTechHelperId = docForId.id;
               newEvent.techHelper = updatedDispatch.techLead;
               newEvent.techLead = updatedDispatch.techHelper;
               newEvent.id = generatedId;
               newEvent.techHelperId = selectedDispatch.id;
               const eventToUpdate = finalUpdate(newEvent);
 
-              //this should be named doc, and named the name we supply it
+              //this should be named doc, and assigned the generated id
               createNamedDocument(doc(db, "events", newEvent.id), eventToUpdate)
                 .then(() => {
                   dispatch({
@@ -359,7 +379,7 @@ const DispatchDetails = ({
                     payload: {
                       id: getFormattedExactTime(new Date()),
                       type: "SUCCESS",
-                      title: "Update Dispatch",
+                      title: "Create Tech Helper Dispatch",
                       message: "Added second dispatch for helper",
                     },
                   });
@@ -371,27 +391,33 @@ const DispatchDetails = ({
                     payload: {
                       id: getFormattedExactTime(new Date()),
                       type: "ERROR",
-                      title: "Update Dispatch",
+                      title: "Create Tech Helper Dispatch",
                       message: "There was a error updating",
                     },
                   });
                   console.log("firebase error: ", error);
                 });
 
-              const originalEvent = { ...updatedDispatch };
-              originalEvent.techHelperId = generatedId;
-              const originalEventToUpdate = finalUpdate(originalEvent);
+              //update the techLead event with the newly generated techHelperId above
+              //this dont seem to be working...
+              const techLeadEvent = { ...updatedDispatch };
+              techLeadEvent.techHelperId = generatedId;
+              const originalEventToUpdate = finalUpdate(techLeadEvent);
               updateDocument(
                 doc(db, "events", originalEventToUpdate.id),
                 originalEventToUpdate
               )
                 .then(() => {
+                  console.log(
+                    "original event to update: ",
+                    originalEventToUpdate
+                  );
                   dispatch({
                     type: "ADD_NOTIFICATION",
                     payload: {
                       id: getFormattedExactTime(new Date()),
                       type: "SUCCESS",
-                      title: "Update Dispatch",
+                      title: "Update Tech Lead Dispatch",
                       message: "Updated the dispatch in the cloud",
                     },
                   });
@@ -403,7 +429,7 @@ const DispatchDetails = ({
                     payload: {
                       id: getFormattedExactTime(new Date()),
                       type: "ERROR",
-                      title: "Update Dispatch",
+                      title: "Update Tech Lead Dispatch",
                       message: "There was a error updating",
                     },
                   });
@@ -425,7 +451,7 @@ const DispatchDetails = ({
                     payload: {
                       id: getFormattedExactTime(new Date()),
                       type: "SUCCESS",
-                      title: "Update Dispatch",
+                      title: "Update Tech Helper Dispatch",
                       message: "Updated the dispatch in the cloud",
                     },
                   });
@@ -437,7 +463,7 @@ const DispatchDetails = ({
                     payload: {
                       id: getFormattedExactTime(new Date()),
                       type: "ERROR",
-                      title: "Update Dispatch",
+                      title: "Update Tech Helper Dispatch",
                       message: "There was a error updating",
                     },
                   });
@@ -518,8 +544,47 @@ const DispatchDetails = ({
             selectedDispatch.extendedProps.techHelperId === undefined
           ) {
             console.log(
-              "techLead has changed but there is no techHelper event to update"
+              "selectedDispatch.extendedProps.techHelperId was empty"
             );
+            if (generatedTechHelperId) {
+              console.log("generatedTechHelperId was found");
+              const updatedTechLeadEvent = { ...updatedDispatch };
+              updatedTechLeadEvent.techHelperId = generatedTechHelperId;
+              const eventToUpdate = finalUpdate(updatedTechLeadEvent);
+              updateDocument(doc(db, "events", eventToUpdate.id), eventToUpdate)
+                .then(() => {
+                  console.log("updatedTechLeadEvent: ", updatedTechLeadEvent);
+                  dispatch({
+                    type: "ADD_NOTIFICATION",
+                    payload: {
+                      id: getFormattedExactTime(new Date()),
+                      type: "SUCCESS",
+                      title: "Update Tech Lead Dispatch",
+                      message: "Updated the dispatch in the cloud",
+                    },
+                  });
+                  closeModalOne();
+                })
+                .catch((error) => {
+                  dispatch({
+                    type: "ADD_NOTIFICATION",
+                    payload: {
+                      id: getFormattedExactTime(new Date()),
+                      type: "ERROR",
+                      title: "Update Tech Lead Dispatch",
+                      message: "There was a error updating",
+                    },
+                  });
+                  console.log("Firebase error: ", error);
+                });
+            } else {
+              console.log("eneratedTechHelperId was not found");
+              console.log(
+                "techLead has changed but there is no techHelper event to update"
+              );
+            }
+            //newEvent.id
+            // if there is a techHelper here, get the ID and add it to newEvent
           } else {
             console.log(
               "techLead has changed and there is a techHelper event to change"
@@ -564,14 +629,7 @@ const DispatchDetails = ({
   };
 
   return (
-    <form
-      onSubmit={updateDispatch}
-      autoComplete="new-password"
-      style={{
-        maxHeight: "654px",
-        overflow: "auto",
-      }}
-    >
+    <form onSubmit={updateDispatch} autoComplete="new-password">
       <Grid
         container
         spacing={1.5}
@@ -590,6 +648,7 @@ const DispatchDetails = ({
               color="primary"
               inputProps={{ tabIndex: "1" }}
               renderInput={(params) => <TextField {...params} fullWidth />}
+              required
             />
           </LocalizationProvider>
         </Grid>
@@ -600,30 +659,28 @@ const DispatchDetails = ({
             fullWidth
             required
             onChange={handleDispatchDataChange("leadSource")}
-            inputProps={{ tabIndex: "2" }}
           />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
-          {dispatchers.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-operator">Dispatcher</InputLabel>
-              <Select
-                labelId="select-operator"
-                id="operator"
-                value={dispatchData.takenBy}
-                label="Dispatcher"
-                onChange={handleDispatchDataChange("takenBy")}
-                inputProps={{ tabIndex: "3" }}
-              >
-                {dispatchers
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((dispatcher, index) => (
-                    <MenuItem key={index} value={dispatcher.name}>
-                      {dispatcher.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+          {dispatchers.length > 1 && (
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="operator"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={dispatchers
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((dispatcher, index) => dispatcher.name)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("takenBy", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Dispatcher" variant="outlined" />
+              )}
+              value={dispatchData.takenBy}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={6}>
@@ -646,25 +703,26 @@ const DispatchDetails = ({
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={6}>
           {workList.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-work-ordered">Work Ordered</InputLabel>
-              <Select
-                labelId="select-work-ordered"
-                id="work-ordered"
-                value={dispatchData.issue}
-                label="Work ordered"
-                onChange={handleIssueChange}
-                inputProps={{ tabIndex: "12" }}
-              >
-                {workList
-                  .sort((a, b) => a.item.localeCompare(b.item))
-                  .map((issue) => (
-                    <MenuItem key={issue.id} value={issue.item}>
-                      {issue.item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="work-ordered"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={workList
+                .sort((a, b) => a.item.localeCompare(b.item))
+                .map((issue, index) => issue.item)}
+              onChange={(option, value) => handleIssueChange(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Work Ordered"
+                  variant="outlined"
+                />
+              )}
+              value={dispatchData.issue}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={6}>
@@ -673,77 +731,72 @@ const DispatchDetails = ({
             fullWidth
             value={dispatchData.timeAlotted}
             onChange={handleDispatchDataChange("timeAlotted")}
-            inputProps={{ tabIndex: "13" }}
           />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           {technicians.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-tech-lead">Tech Lead</InputLabel>
-              <Select
-                labelId="select-tech-lead"
-                id="tech-lead"
-                value={dispatchData.techLead}
-                label="Tech Lead"
-                onChange={handleDispatchDataChange("techLead")}
-                inputProps={{ tabIndex: "14" }}
-              >
-                {technicians
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((technician) => (
-                    <MenuItem key={technician.id} value={technician.name}>
-                      {technician.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="tech-lead"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={technicians
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((technician, index) => technician.name)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("techLead", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Tech Lead" variant="outlined" />
+              )}
+              value={dispatchData.techLead}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           {technicians.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-tech-helper">Tech Helper</InputLabel>
-              <Select
-                labelId="select-tech-helper"
-                id="tech-helper"
-                value={dispatchData.techHelper}
-                label="Tech helper"
-                onChange={handleDispatchDataChange("techHelper")}
-                inputProps={{ tabIndex: "15" }}
-              >
-                <MenuItem value={"NONE"}>None</MenuItem>
-                {technicians
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((technician) => (
-                    <MenuItem key={technician.id} value={technician.name}>
-                      {technician.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="tech-helper"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={techHelperList
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((technician, index) => technician.name)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("techHelper", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Tech Helper" variant="outlined" />
+              )}
+              value={dispatchData.techHelper}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           {payments.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-payment">Payment</InputLabel>
-              <Select
-                labelId="select-payment"
-                id="payment"
-                value={dispatchData.payment}
-                label="Payment"
-                onChange={handleDispatchDataChange("payment")}
-                inputProps={{ tabIndex: "16" }}
-              >
-                {payments
-                  .sort((a, b) => a.item.localeCompare(b.item))
-                  .map((payment) => (
-                    <MenuItem key={payment.id} value={payment.item}>
-                      {payment.item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="payments"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={payments
+                .sort((a, b) => a.item.localeCompare(b.item))
+                .map((payment, index) => payment.item)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("payment", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Payment" variant="outlined" />
+              )}
+              value={dispatchData.payment}
+            />
           )}
         </Grid>
         <Grid xs={12}>
@@ -755,28 +808,27 @@ const DispatchDetails = ({
             variant="outlined"
             value={dispatchData.notes}
             onChange={handleDispatchDataChange("notes")}
-            inputProps={{ tabIndex: "17" }}
           />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
-          <FormControl fullWidth>
-            <InputLabel id="time-of-day-select">Time Of Day</InputLabel>
-            <Select
-              labelId="time-of-day-select"
-              id="time-of-day"
-              value={dispatchData.timeOfDay}
-              label="Time Of Day"
-              onChange={handleDispatchDataChange("timeOfDay")}
-              inputProps={{ tabIndex: "18" }}
-            >
-              <MenuItem value="AM">AM</MenuItem>
-              <MenuItem value="Anytime">Anytime</MenuItem>
-              <MenuItem value="First Call">First Call</MenuItem>
-              <MenuItem value="Last Call">Last Call</MenuItem>
-              <MenuItem value="overtime">Overtime</MenuItem>
-              <MenuItem value="PM">PM</MenuItem>
-            </Select>
-          </FormControl>
+          <Autocomplete
+            disableClearable
+            disablePortal
+            fullWidth
+            getOptionLabel={(option) => option}
+            id="time-of-day"
+            isOptionEqualToValue={(option, value) => option === value}
+            options={timeOfDayList
+              .sort((a, b) => a.label.localeCompare(b.label))
+              .map((item, index) => item.value)}
+            onChange={(option, value) =>
+              handleDispatchDataSelectChange("timeOfDay", value)
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Time Of Day" variant="outlined" />
+            )}
+            value={dispatchData.timeOfDay}
+          />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <TextField
@@ -785,44 +837,79 @@ const DispatchDetails = ({
             required
             value={dispatchData.jobNumber}
             onChange={handleDispatchDataChange("jobNumber")}
-            inputProps={{ tabIndex: "19" }}
           />
         </Grid>
-        <Grid xs={12} sm={12} md={12} lg={4}></Grid>
+        <Grid xs={12} sm={12} md={12} lg={4}>
+          <TextField
+            label="Status"
+            fullWidth
+            required
+            value={selectedDispatch.extendedProps.status}
+          />
+        </Grid>
       </Grid>
       <Grid container spacing={1.5} sx={{ margin: "2px", marginTop: "16px" }}>
-        <Grid xs={12} sm={12} md={12} lg={4}>
+        <Grid xs={12} sm={12} md={12} lg={3}>
           <Button
-            variant="outlined"
+            variant="contained"
             size="large"
             color="error"
             startIcon={<DeleteForever />}
             onClick={() => openDeleteDispatch(selectedDispatch)}
-            tabIndex={20}
             fullWidth
           >
             Delete
           </Button>
         </Grid>
-        <Grid xs={12} sm={12} md={12} lg={4}>
+        <Grid xs={12} sm={12} md={12} lg={3}>
           <Button
-            variant="outlined"
+            variant="contained"
             size="large"
-            type="submit"
-            startIcon={<ArrowUpward />}
-            tabIndex={21}
+            color="warning"
+            startIcon={<DoNotDisturb />}
+            onClick={() => openCancelDispatch(selectedDispatch)}
             fullWidth
           >
-            Update
+            {selectedDispatch.extendedProps.status === "canceled"
+              ? "Schedule"
+              : "Cancel"}
           </Button>
         </Grid>
-        <Grid xs={12} sm={12} md={12} lg={4}>
+        {selectedDispatch.extendedProps.status === "canceled" ? (
+          <Grid xs={12} sm={12} md={12} lg={3}>
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              type="submit"
+              startIcon={<ArrowUpward />}
+              fullWidth
+              disabled
+            >
+              Update
+            </Button>
+          </Grid>
+        ) : (
+          <Grid xs={12} sm={12} md={12} lg={3}>
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              type="submit"
+              startIcon={<ArrowUpward />}
+              fullWidth
+            >
+              Update
+            </Button>
+          </Grid>
+        )}
+        <Grid xs={12} sm={12} md={12} lg={3}>
           <Button
-            variant="outlined"
+            variant="contained"
             size="large"
+            color="primary"
             startIcon={<Close />}
             onClick={() => closeModalOne()}
-            tabIndex={22}
             fullWidth
           >
             Close

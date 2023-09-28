@@ -267,7 +267,7 @@ const CreateCustomerCard = ({ closeModalOne }) => {
           <Grid>
             <Button
               size="large"
-              variant="outlined"
+              variant="contained"
               startIcon={<PersonAdd />}
               type="submit"
               tabIndex={14}
@@ -278,7 +278,7 @@ const CreateCustomerCard = ({ closeModalOne }) => {
           <Grid>
             <Button
               size="large"
-              variant="outlined"
+              variant="contained"
               startIcon={<Close />}
               type="button"
               onClick={() => closeModalOne()}

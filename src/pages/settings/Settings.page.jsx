@@ -11,12 +11,20 @@ import WorkList from "./work_list/list/WorkList";
 import Toast from "../../components/basic_components/toast/Toast";
 
 import "../../global_style/style.css";
-import Spinner from "../../components/spinner/Spinner";
 import DeleteTechnician from "./technicians/delete/DeleteTechnician";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Accordion from "../../components/basic_components/basic_accordian/Accordion";
+import SetTheme from "./theme/SetTheme";
+import { CircularProgress } from "@mui/material";
 
-const ModalOne = lazy(() =>
-  import("../../components/basic_components/modal_one/ModalOne")
+//Material Modal
+const MaterialModal = lazy(() =>
+  import("../../components/basic_components/material_modal/MaterialModal")
 );
+const TechnicianDetailsModal = lazy(() =>
+  import("./technicians/create_details/TechnicianDetailsModal")
+);
+
 const DeleteDispatcher = lazy(() =>
   import("./dispatchers/delete/DeleteDispatcher")
 );
@@ -63,233 +71,315 @@ const WorkListItemDetails = lazy(() =>
 );
 
 const Settings = () => {
-  //Modal One
+  //ModalOne
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
+  };
+
+  //Technician Details Modal
+  const [isTechModalOpen, setTechModalOpen] = useState(false);
+  const [techModalWidth, setTechModalWidth] = useState("sm");
+  const [techModalContent, setTechModalContent] = useState(
+    <div>Technician Modal Content</div>
+  );
+  const [techModalTitle, setTechModalTitle] = useState("Tech Modal");
+  const openTechModal = (content, title, width) => {
+    setTechModalContent(content);
+    setTechModalTitle(title);
+    setTechModalWidth(width);
+    setTechModalOpen(true);
+  };
+  const closeTechModal = () => {
+    setTechModalContent(<div>Modal One Content</div>);
+    setTechModalTitle("Modal One");
+    setTechModalWidth("sm");
+    setTechModalOpen(false);
   };
 
   const openDeleteDispatcher = (dispatcher) => {
     openModalOne(
-      "20%",
+      <DeleteDispatcher
+        dispatcher={dispatcher}
+        closeModalOne={closeModalOne}
+      />,
       "Delete Dispatcher",
-      <DeleteDispatcher dispatcher={dispatcher} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteEquipmentTab = (equipmentTab) => {
     openModalOne(
-      "20%",
-      "Delete Equipment Tab",
       <DeleteEquipmentTab
         equipmentTab={equipmentTab}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Delete Equipment Tab",
+      "sm"
     );
   };
 
   const openDeleteInventoryTab = (tab) => {
     openModalOne(
-      "20%",
+      <DeleteInventoryTab inventoryTab={tab} closeModalOne={closeModalOne} />,
       "Delete Parts Tab",
-      <DeleteInventoryTab inventoryTab={tab} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteLaborRate = (laborRate) => {
     openModalOne(
-      "20%",
+      <DeleteLaborRate laborRate={laborRate} closeModalOne={closeModalOne} />,
       "Delete Labor Rate",
-      <DeleteLaborRate laborRate={laborRate} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeletePayment = (payment) => {
     openModalOne(
-      "20%",
+      <DeletePayment payment={payment} closeModalOne={closeModalOne} />,
       "Delete Payment",
-      <DeletePayment payment={payment} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteServicesTab = (tab) => {
     openModalOne(
-      "20%",
+      <DeleteServicesTab servicesTab={tab} closeModalOne={closeModalOne} />,
       "Delete Services Tab",
-      <DeleteServicesTab servicesTab={tab} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteTechnician = (tech) => {
     openModalOne(
-      "20%",
+      <DeleteTechnician technician={tech} closeModalOne={closeModalOne} />,
       "Delete Technician",
-      <DeleteTechnician technician={tech} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteWorklistItem = (item) => {
     openModalOne(
-      "20%",
+      <DeleteWorkListItem workListItem={item} closeModalOne={closeModalOne} />,
       "Delete Work List Item",
-      <DeleteWorkListItem workListItem={item} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDispatcherDetails = (dispatcher) => {
     openModalOne(
-      "15%",
-      <>{dispatcher !== undefined ? "Dispatcher Details" : "New Dispatcher"}</>,
       <DispatcherDetails
         dispatcher={dispatcher}
         closeModalOne={closeModalOne}
-      />
+      />,
+      <>{dispatcher !== undefined ? "Dispatcher Details" : "New Dispatcher"}</>,
+      "sm"
     );
   };
 
   const openEquipmentTabDetails = (equipmentTab) => {
     openModalOne(
-      "20%",
+      <EquipmentTabDetails
+        equipmentTab={equipmentTab}
+        closeModalOne={closeModalOne}
+      />,
       <>
         {equipmentTab !== undefined
           ? "Equipment Tab Details"
           : "New Equipment Tab"}
       </>,
-      <EquipmentTabDetails
-        equipmentTab={equipmentTab}
-        closeModalOne={closeModalOne}
-      />
+      "sm"
     );
   };
 
   const openInventoryTabDetails = (tab) => {
     openModalOne(
-      "20%",
+      <InventoryTabDetails inventoryTab={tab} closeModalOne={closeModalOne} />,
       <>{tab !== undefined ? "Parts Tab Details" : "New Parts Tab"}</>,
-      <InventoryTabDetails inventoryTab={tab} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openLaborRateDetails = (laborRate) => {
     openModalOne(
-      "20%",
+      <LaborRateDetails laborRate={laborRate} closeModalOne={closeModalOne} />,
       <>{laborRate !== undefined ? "Labor Rate Details" : "New Labor Rate"}</>,
-      <LaborRateDetails laborRate={laborRate} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openPaymentDetails = (payment) => {
     openModalOne(
-      "20%",
+      <PaymentDetails payment={payment} closeModalOne={closeModalOne} />,
       <>{payment !== undefined ? "Payment Details" : "New Payment"}</>,
-      <PaymentDetails payment={payment} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openServicesTabDetails = (tab) => {
     openModalOne(
-      "20%",
+      <ServicesTabDetails servicesTab={tab} closeModalOne={closeModalOne} />,
       <>{tab !== undefined ? "Services Tab Details" : "New Services Tab"}</>,
-      <ServicesTabDetails servicesTab={tab} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openTechnicianDetails = (tech) => {
-    openModalOne(
-      "40%",
+    openTechModal(
+      <TechnicianDetails technician={tech} closeModalOne={closeTechModal} />,
       <>{tech !== undefined ? "Technician Details" : "New Technician"}</>,
-      <TechnicianDetails technician={tech} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openWorkListItemDetails = (item) => {
     openModalOne(
-      "20%",
+      <WorkListItemDetails workListItem={item} closeModalOne={closeModalOne} />,
       <>
         {item !== undefined ? "Work List Item Details" : "New Worklist Item"}
       </>,
-      <WorkListItemDetails workListItem={item} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   return (
-    <div className="settings">
+    <div>
       <Toast />
-      <div className="settingsRow">
-        <div className="settingsTopLeft">
-          <InventoryTabList
-            openDeleteInventoryTab={openDeleteInventoryTab}
-            openInventoryTabDetails={openInventoryTabDetails}
+      <Grid container spacing={1}>
+        <Grid xs={8}>
+          <Accordion
+            title="Inventory Tabs"
+            height="260px"
+            content={
+              <InventoryTabList
+                openDeleteInventoryTab={openDeleteInventoryTab}
+                openInventoryTabDetails={openInventoryTabDetails}
+              />
+            }
           />
-        </div>
-        <div className="settingsTopMiddle">
-          <EquipmentTabList
-            openDeleteEquipmentTab={openDeleteEquipmentTab}
-            openEquipmentTabDetails={openEquipmentTabDetails}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Equipment Tabs"
+            height="260px"
+            content={
+              <EquipmentTabList
+                openDeleteEquipmentTab={openDeleteEquipmentTab}
+                openEquipmentTabDetails={openEquipmentTabDetails}
+              />
+            }
           />
-        </div>
-        <div className="settingsTopRight">
-          <ServicesTabList
-            openDeleteServicesTab={openDeleteServicesTab}
-            openServicesTabDetails={openServicesTabDetails}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Services Tabs"
+            height="260px"
+            content={
+              <ServicesTabList
+                openDeleteServicesTab={openDeleteServicesTab}
+                openServicesTabDetails={openServicesTabDetails}
+              />
+            }
           />
-        </div>
-      </div>
-      <div className="settingsRow">
-        <div className="settingsBottomLeft">
-          <DispatcherList
-            openDispatcherDetails={openDispatcherDetails}
-            openDeleteDispatcher={openDeleteDispatcher}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Dispatcher List"
+            height="260px"
+            content={
+              <DispatcherList
+                openDispatcherDetails={openDispatcherDetails}
+                openDeleteDispatcher={openDeleteDispatcher}
+              />
+            }
           />
-        </div>
-        <div className="settingsBottomRight">
-          <TechnicianList
-            openDeleteTechnician={openDeleteTechnician}
-            openTechnicianDetails={openTechnicianDetails}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Technician List"
+            height="260px"
+            content={
+              <TechnicianList
+                openDeleteTechnician={openDeleteTechnician}
+                openTechnicianDetails={openTechnicianDetails}
+              />
+            }
           />
-        </div>
-      </div>
-      <div className="settingsRow">
-        <div className="settingsTopLeft">
-          <LaborRateList
-            openDeleteLaborRate={openDeleteLaborRate}
-            openLaborRateDetails={openLaborRateDetails}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Labor List"
+            height="260px"
+            content={
+              <LaborRateList
+                openDeleteLaborRate={openDeleteLaborRate}
+                openLaborRateDetails={openLaborRateDetails}
+              />
+            }
           />
-        </div>
-        <div className="settingsTopMiddle">
-          <PaymentList
-            openDeletePayment={openDeletePayment}
-            openPaymentDetails={openPaymentDetails}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Payments List"
+            height="260px"
+            content={
+              <PaymentList
+                openDeletePayment={openDeletePayment}
+                openPaymentDetails={openPaymentDetails}
+              />
+            }
           />
-        </div>
-        <div className="settingsTopRight">
-          <WorkList
-            openDeleteWorkListItem={openDeleteWorklistItem}
-            openWorkListItemDetails={openWorkListItemDetails}
+        </Grid>
+        <Grid xs={8}>
+          <Accordion
+            title="Work list"
+            height="260px"
+            content={
+              <WorkList
+                openDeleteWorkListItem={openDeleteWorklistItem}
+                openWorkListItemDetails={openWorkListItemDetails}
+              />
+            }
           />
-        </div>
-      </div>
+        </Grid>
+        <Grid xs={8}>
+          <Accordion title="Theme" height="290px" content={<SetTheme />} />
+        </Grid>
+      </Grid>
       {isModalOneOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModal={closeModalOne}
+            isModalOpen={isModalOneOpen}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
+          />
+        </Suspense>
+      )}
+      {isTechModalOpen && (
+        <Suspense fallback={<CircularProgress />}>
+          <TechnicianDetailsModal
+            closeModal={closeTechModal}
+            isModalOpen={isTechModalOpen}
+            modalContent={techModalContent}
+            modalTitle={techModalTitle}
+            modalWidth={techModalWidth}
           />
         </Suspense>
       )}

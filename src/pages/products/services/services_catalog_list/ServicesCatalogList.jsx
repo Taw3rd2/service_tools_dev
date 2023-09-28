@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toCurrency } from "../../../../utilities/currencyUtils";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import { Add, BorderAll } from "@mui/icons-material";
-import { TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -67,26 +67,24 @@ const ServicesCatalogList = ({
 
   const additionalButtons = (
     <>
-      <button
+      <Button
+        variant="contained"
         type="button"
-        className="standardButton"
-        style={{ margin: "8px" }}
-        onClick={() =>
-          alert("Will open a file rename window then save to an Excel Sheet")
-        }
+        startIcon={<BorderAll />}
+        sx={{ margin: "8px" }}
+        disabled
       >
-        <BorderAll />
-        <span className="iconSeperation">Export to Excel</span>
-      </button>
-      <button
+        Export to Excel
+      </Button>
+      <Button
+        variant="contained"
         type="button"
-        className="standardButton"
-        style={{ margin: "8px" }}
+        startIcon={<Add />}
         onClick={() => openCreateService()}
+        sx={{ margin: "8px" }}
       >
-        <Add />
-        <span className="iconSeperation">Add New Service</span>
-      </button>
+        Add New Service
+      </Button>
     </>
   );
 

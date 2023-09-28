@@ -8,6 +8,7 @@ import {
 import { ToastContext } from "../../../context/toastContext";
 
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -17,6 +18,7 @@ import {
 import "../../../global_style/style.css";
 import { ArrowUpward, Close } from "@mui/icons-material";
 import { getFormattedExactTime } from "../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const AddDayLabel = ({ closeModalThree, calendarDateSelected }) => {
   const technicians = useSyncedCollection(collection(db, "technicians"));
@@ -63,9 +65,9 @@ const AddDayLabel = ({ closeModalThree, calendarDateSelected }) => {
 
   return (
     <form onSubmit={onSubmit} autoComplete="new-password">
-      <div className="row">
-        <div className="doubleRowInput">
-          {technicians.length > 0 && (
+      <Grid container spacing={1.5} sx={{ marginTop: "6px" }}>
+        {technicians.length > 0 && (
+          <Grid xs={12} sm={12} md={12} lg={6}>
             <FormControl fullWidth>
               <InputLabel id="select-tech-lead">Tech Lead</InputLabel>
               <Select
@@ -85,9 +87,9 @@ const AddDayLabel = ({ closeModalThree, calendarDateSelected }) => {
                   ))}
               </Select>
             </FormControl>
-          )}
-        </div>
-        <div className="doubleRowInput">
+          </Grid>
+        )}
+        <Grid xs={12} sm={12} md={12} lg={6}>
           <TextField
             label="Location Name"
             required
@@ -96,22 +98,29 @@ const AddDayLabel = ({ closeModalThree, calendarDateSelected }) => {
             onChange={handleLabelDataChange("locationName")}
             inputProps={{ tabIndex: "2" }}
           />
-        </div>
-      </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          <ArrowUpward />
-          <span className="iconSeperation">Add Label</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalThree()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ marginTop: "6px", display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button variant="contained" type="submit" startIcon={<ArrowUpward />}>
+            Add Label
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalThree()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

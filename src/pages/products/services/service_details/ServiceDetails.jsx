@@ -8,6 +8,7 @@ import {
 import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -17,6 +18,7 @@ import {
   TextField,
 } from "@mui/material";
 import { ArrowUpward, Close, DeleteForever } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const ServiceDetails = ({ service, openDeleteService, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -187,28 +189,42 @@ const ServiceDetails = ({ service, openDeleteService, closeModalOne }) => {
             <p>* = required</p>
           </div>
         </div>
-        <div className="buttonBar">
-          <button
-            type="button"
-            className="deleteButton"
-            onClick={() => openDeleteService(service)}
-          >
-            <DeleteForever />
-            <span className="iconSeperation">Delete</span>
-          </button>
-          <button type="submit" className="standardButton">
-            <ArrowUpward />
-            <span className="iconSeperation">Update</span>
-          </button>
-          <button
-            type="button"
-            className="standardButton"
-            onClick={() => closeModalOne()}
-          >
-            <Close />
-            <span className="iconSeperation">Close</span>
-          </button>
-        </div>
+        <Grid
+          container
+          spacing={1.5}
+          sx={{ display: "flex", justifyContent: "end" }}
+        >
+          <Grid>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<DeleteForever />}
+              onClick={() => openDeleteService(service)}
+              color="error"
+            >
+              Delete
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              variant="contained"
+              type="submit"
+              startIcon={<ArrowUpward />}
+            >
+              Update
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<Close />}
+              onClick={() => closeModalOne()}
+            >
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );

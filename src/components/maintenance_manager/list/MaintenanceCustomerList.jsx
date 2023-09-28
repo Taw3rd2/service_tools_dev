@@ -1,9 +1,6 @@
 import { useState, Fragment } from "react";
 import { db, useSyncedCollection } from "../../../firebase/firestore.utils";
-import {
-  defaultBodyTableCell,
-  getDefaultHeadTableCell,
-} from "../../../theme/Theme";
+import { defaultBodyTableCell } from "../../../theme/Theme";
 import {
   Box,
   Button,
@@ -89,8 +86,11 @@ const MaintenanceCustomerList = ({
           <TableCell align="center" sx={defaultBodyTableCell}>
             {row.customerPhone}
           </TableCell>
+          <TableCell align="center" sx={defaultBodyTableCell}>
+            {row.equipment.length}
+          </TableCell>
         </TableRow>
-        <TableRow sx={{ backgroundColor: "#00808024" }}>
+        <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
@@ -173,18 +173,11 @@ const MaintenanceCustomerList = ({
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Open
-              </TableCell>
-              <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                Customer
-              </TableCell>
-              <TableCell align="left" sx={getDefaultHeadTableCell(0)}>
-                Contract Address
-              </TableCell>
-              <TableCell align="center" sx={getDefaultHeadTableCell(0)}>
-                Phone Number
-              </TableCell>
+              <TableCell align="center">Open</TableCell>
+              <TableCell align="left">Customer</TableCell>
+              <TableCell align="left">Contract Address</TableCell>
+              <TableCell align="center">Phone Number</TableCell>
+              <TableCell align="center">Number of Units</TableCell>
             </TableRow>
           </TableHead>
 

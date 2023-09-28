@@ -11,10 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import {
-  getDefaultHeadTableCell,
-  defaultBodyTableCell,
-} from "../../theme/Theme";
+import { defaultBodyTableCell } from "../../theme/Theme";
 
 const EquipmentPicker = ({
   equipment,
@@ -50,24 +47,12 @@ const EquipmentPicker = ({
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center" sx={getDefaultHeadTableCell(5)}>
-                      #
-                    </TableCell>
-                    <TableCell align="left" sx={getDefaultHeadTableCell(150)}>
-                      Name
-                    </TableCell>
-                    <TableCell align="left" sx={getDefaultHeadTableCell(150)}>
-                      Brand
-                    </TableCell>
-                    <TableCell align="left" sx={getDefaultHeadTableCell(150)}>
-                      Model
-                    </TableCell>
-                    <TableCell align="left" sx={getDefaultHeadTableCell(150)}>
-                      Serial
-                    </TableCell>
-                    <TableCell align="left" sx={getDefaultHeadTableCell(5)}>
-                      Add?
-                    </TableCell>
+                    <TableCell align="center">#</TableCell>
+                    <TableCell align="left">Name</TableCell>
+                    <TableCell align="left">Brand</TableCell>
+                    <TableCell align="left">Model</TableCell>
+                    <TableCell align="left">Serial</TableCell>
+                    <TableCell align="center">Add?</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

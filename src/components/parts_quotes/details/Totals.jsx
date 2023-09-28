@@ -29,7 +29,7 @@ const Totals = ({
     <div>
       <div className="row">
         <div className="singleRowInput">
-          <div className="columnHeaderText">Totals</div>
+          <Typography variant="h5">Totals</Typography>
         </div>
       </div>
       <div className="smallRow" style={{ alignItems: "center" }}>

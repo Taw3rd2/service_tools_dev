@@ -1,16 +1,15 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase/firestore.utils";
+import { auth, db } from "./firebase/firestore.utils";
 import React, { lazy, Suspense, useMemo, useState, useEffect } from "react";
 
 import { Routes, Route } from "react-router-dom";
-
-import Topbar from "./components/topbar/Topbar";
-import Spinner from "./components/spinner/Spinner";
 import PrintDailySlips from "./pages/print_daily_slips/PrintDailySlips.page";
 import PrintOneSlip from "./pages/print_daily_slips/PrintOneSlip";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { CircularProgress, CssBaseline } from "@mui/material";
+import Navbar from "./components/topbar/Navbar";
+import { doc, onSnapshot } from "firebase/firestore";
 
 //const GeneralLedger = lazy(() => import("./pages/accounting/GeneralLedger.page"))
 const HomePage = lazy(() => import("./pages/homepage/HomePage.page"));
@@ -18,7 +17,7 @@ const HomePage = lazy(() => import("./pages/homepage/HomePage.page"));
 const EquipmentCatalog = lazy(() =>
   import("./pages/products/equipment_catalog/EquipmentCatalog.page")
 );
-const Maintenance = lazy(() => import("../src/pages/maintenance/Maintenance"));
+//const Maintenance = lazy(() => import("../src/pages/maintenance/Maintenance"));
 const PartsCatalog = lazy(() =>
   import("./pages/products/parts_catalog/PartsCatalog.page")
 );
@@ -49,56 +48,77 @@ function App() {
     };
   }, []);
 
+  const [themeColor, setThemeColor] = useState({
+    color: "#4287f5",
+    mode: "dark",
+  });
+  useEffect(() => {
+    const themeId = "BZ2zpDOt130MnEM9STLL";
+    const subscribeToTheme = onSnapshot(doc(db, "theme", themeId), (doc) => {
+      setThemeColor({ ...doc.data() });
+    });
+
+    return () => {
+      subscribeToTheme();
+    };
+  }, []);
+
   const getDesignTokens = (mode) => ({
     palette: {
       mode,
-      ...(mode === "light"
+      ...(mode === themeColor.mode
         ? {
             primary: {
-              main: "#007f7f",
+              main: themeColor.color,
             },
             secondary: {
-              main: "#f50057",
+              main: "#f50057", //red
             },
           }
         : {
             background: {
-              default: "#333",
-              paper: "#333",
+              default: "#333", //black
+              paper: "#333", //black
             },
             primary: {
-              main: "#007f7f",
-              //main: "#4287f5",
+              main: themeColor.color, //dark teal
             },
             secondary: {
-              main: "#f50057",
+              main: "#f50057", //red
             },
           }),
     },
   });
 
-  const [mode, setMode] = useState("light");
+  //const [mode, setMode] = useState("light");
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        const previousMode = themeColor.mode;
+        console.log("previousMode: ", previousMode);
+        setThemeColor({
+          ...themeColor,
+          mode: previousMode === "light" ? "dark" : "light",
+        });
+        console.log("current mode: ", themeColor.mode);
+        //setThemeColor((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
-    []
+    [themeColor]
   );
 
   const currentTheme = useMemo(
-    () => createTheme(getDesignTokens(mode)),
-    [mode]
+    () => createTheme(getDesignTokens(themeColor.mode)),
+    [themeColor]
   );
 
   return loading ? (
-    <div />
+    <CircularProgress />
   ) : (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
-      {authUser ? <Topbar authUser={authUser} colorMode={colorMode} /> : null}
-      <Suspense fallback={<Spinner />}>
+      {authUser ? <Navbar authUser={authUser} colorMode={colorMode} /> : null}
+      <Suspense fallback={<CircularProgress />}>
         <Routes>
           <Route path="/" element={authUser ? <HomePage /> : <SignIn />} />
           <Route
@@ -109,10 +129,10 @@ function App() {
             path="/schedule"
             element={authUser ? <Schedule /> : <SignIn />}
           />
-          <Route
+          {/* <Route
             path="/maintenance"
             element={authUser ? <Maintenance /> : <SignIn />}
-          />
+          /> */}
           <Route
             path="/equipment_catalog"
             element={authUser ? <EquipmentCatalog /> : <SignIn />}

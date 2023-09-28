@@ -62,10 +62,16 @@ const CustomerEquipmentCard = ({
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
+
   const open = Boolean(anchorEl);
+
+  console.log("open: ", open);
+  console.log("anchorEl: ", anchorEl);
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -76,6 +82,7 @@ const CustomerEquipmentCard = ({
   };
 
   const routeToPartsQuoteCreator = () => {
+    handleMenuClose();
     const selectedEquipment = {
       equipmentName: unit.equipmentName,
       equipmentBrand: unit.equipmentBrand,
@@ -137,32 +144,22 @@ const CustomerEquipmentCard = ({
         action={
           <div>
             <IconButton
-              id="installDateButton"
               aria-controls={open ? "installDateMenu" : undefined}
               aria-expanded={open ? "true" : undefined}
               aria-haspopup="true"
-              aria-label="installDate"
               onClick={handleMenuClick}
             >
               <MoreVert />
             </IconButton>
             <Menu
-              disableScrollLock
-              id="installDateMenu"
+              disablePortal
               anchorEl={anchorEl}
-              open={open}
+              id="installDateMenu"
               onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              MenuListProps={{
-                "aria-labelledby": "installDateButton",
-              }}
+              onClick={handleMenuClose}
+              open={open}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               <MenuItem onClick={() => handleEditInstallDate()}>
                 <Edit />
@@ -177,8 +174,8 @@ const CustomerEquipmentCard = ({
                 </Typography>
               </MenuItem>
               <MenuItem onClick={() => handleDeleteEquipmentClick(unit)}>
-                <DeleteForever color="error" />
-                <Typography sx={{ marginLeft: "8px" }} color="red">
+                <DeleteForever />
+                <Typography sx={{ marginLeft: "8px" }} color="orange">
                   Delete This Unit
                 </Typography>
               </MenuItem>
@@ -233,7 +230,7 @@ const CustomerEquipmentCard = ({
         <Grid container spacing={1.5} sx={{ margin: "8px" }}>
           <Grid xs={6}>
             <Button
-              variant="outlined"
+              variant="contained"
               startIcon={<Camera />}
               onClick={() => openEquipmentGallery(selectedEquipment)}
               fullWidth
@@ -243,7 +240,7 @@ const CustomerEquipmentCard = ({
           </Grid>
           <Grid xs={6}>
             <Button
-              variant="outlined"
+              variant="contained"
               startIcon={<BarChart />}
               fullWidth
               onClick={() => openEquipmentStatistics(selectedEquipment)}

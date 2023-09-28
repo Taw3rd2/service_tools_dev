@@ -1,4 +1,4 @@
-import { TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import { Add } from "@mui/icons-material";
@@ -33,15 +33,15 @@ const EmptyAdditionsList = ({ openAddAdditionsToJob }) => {
 
   const additionalButtons = (
     <>
-      <button
+      <Button
+        variant="contained"
         type="button"
-        className="standardButton"
-        style={{ margin: "8px" }}
+        startIcon={<Add />}
         onClick={() => openAddAdditionsToJob()}
+        sx={{ margin: "8px" }}
       >
-        <Add />
-        <span className="iconSeperation">Add Items from Services</span>
-      </button>
+        Add Items From Services
+      </Button>
     </>
   );
 

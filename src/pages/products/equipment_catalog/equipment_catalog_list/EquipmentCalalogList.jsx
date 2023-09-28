@@ -68,25 +68,28 @@ const EquipmentCatalogList = ({
     <>
       {filteredEquipment.length > 0 ? (
         <Button
-          size="large"
-          variant="outlined"
+          variant="contained"
+          type="button"
           startIcon={<DeleteForever />}
           onClick={() =>
             alert(
               "The list has to be empty before you can delete the category."
             )
           }
-          style={{ color: "red", margin: "8px" }}
+          size="large"
+          color="error"
+          style={{ margin: "8px" }}
         >
           Delete the Category
         </Button>
       ) : (
         <Button
-          size="large"
-          variant="outlined"
+          variant="contained"
           startIcon={<DeleteForever />}
           onClick={() => openDeleteCategory(category)}
-          style={{ color: "red", margin: "8px" }}
+          size="large"
+          style={{ margin: "8px" }}
+          color="error"
         >
           Delete the Category
         </Button>

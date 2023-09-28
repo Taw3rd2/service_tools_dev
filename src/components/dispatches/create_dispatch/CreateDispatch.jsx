@@ -11,14 +11,7 @@ import {
 import ContactCard from "../../customer_information/fields/ContactCard";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Button, TextField, Typography } from "@mui/material";
 import { ArrowUpward, Close } from "@mui/icons-material";
 import { submitDispatchToFirestore } from "../dispatchFunctions";
 
@@ -28,6 +21,12 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const CreateDispatch = ({ customer, date, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
+
+  const dispatchers = useSyncedCollection(collection(db, "dispatchers"));
+  const technicians = useSyncedCollection(collection(db, "technicians"));
+  const workList = useSyncedCollection(collection(db, "workList"));
+  const payments = useSyncedCollection(collection(db, "payments"));
+
   const [dispatchData, setDispatchData] = useState({
     issue: "",
     jobNumber: "",
@@ -43,6 +42,20 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
     timeOfDay: "Anytime",
   });
 
+  const loadedDispatcherList = [...dispatchers, { name: "" }];
+  const loadedHelperTechnicians = [...technicians, { name: "NONE" }];
+  const loadedTechnicians = [...technicians, { name: "" }];
+  const loadedWorkList = [...workList, { item: "" }];
+  const loadedPayments = [...payments, { item: "" }];
+  const timeOfDayList = [
+    { label: "AM", value: "AM" },
+    { label: "Anytime", value: "Anytime" },
+    { label: "First Call", value: "First Call" },
+    { label: "Last Call", value: "Last Call" },
+    { label: "Overtime", value: "overtime" },
+    { label: "PM", value: "PM" },
+  ];
+
   const handleDispatchDataChange = (prop) => (event) => {
     setDispatchData({ ...dispatchData, [prop]: event.target.value });
   };
@@ -51,20 +64,19 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
     setDispatchData({ ...dispatchData, [prop]: setDateToZeroHours(value) });
   };
 
-  const handleIssueChange = (event) => {
-    const option = workList.filter((i) => event.target.value === i.item);
+  const handleDispatchDataSelectChange = (prop, value) => {
+    setDispatchData({ ...dispatchData, [prop]: value });
+  };
+
+  const handleIssueChange = (value) => {
+    const option = workList.filter((i) => value === i.item);
 
     setDispatchData({
       ...dispatchData,
-      issue: event.target.value,
+      issue: value,
       shorthand: option[0].shorthand,
     });
   };
-
-  const dispatchers = useSyncedCollection(collection(db, "dispatchers"));
-  const technicians = useSyncedCollection(collection(db, "technicians"));
-  const workList = useSyncedCollection(collection(db, "workList"));
-  const payments = useSyncedCollection(collection(db, "payments"));
 
   const submitDispatch = (event) => {
     event.preventDefault();
@@ -167,7 +179,6 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
               value={dispatchData.start}
               onChange={handleDispatchDateChange("start")}
               color="primary"
-              inputProps={{ tabIndex: "1" }}
               renderInput={(params) => <TextField {...params} fullWidth />}
               required
             />
@@ -180,31 +191,28 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
             fullWidth
             required
             onChange={handleDispatchDataChange("leadSource")}
-            inputProps={{ tabIndex: "2" }}
           />
         </Grid>
         <Grid sm={12} md={12} lg={4}>
           {dispatchers.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-operator">Dispatcher</InputLabel>
-              <Select
-                labelId="select-operator"
-                id="operator"
-                value={dispatchData.takenBy}
-                label="Dispatcher"
-                onChange={handleDispatchDataChange("takenBy")}
-                inputProps={{ tabIndex: "3" }}
-                required
-              >
-                {dispatchers
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((dispatcher, index) => (
-                    <MenuItem key={index} value={dispatcher.name}>
-                      {dispatcher.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="operator"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={loadedDispatcherList
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((dispatcher, index) => dispatcher.name)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("takenBy", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Dispatcher" variant="outlined" />
+              )}
+              value={dispatchData.takenBy}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={6}>
@@ -227,26 +235,26 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={6}>
           {workList.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-work-ordered">Work Ordered</InputLabel>
-              <Select
-                labelId="select-work-ordered"
-                id="work-ordered"
-                value={dispatchData.issue}
-                label="Work ordered"
-                onChange={handleIssueChange}
-                inputProps={{ tabIndex: "12" }}
-                required
-              >
-                {workList
-                  .sort((a, b) => a.item.localeCompare(b.item))
-                  .map((issue) => (
-                    <MenuItem key={issue.id} value={issue.item}>
-                      {issue.item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="work-ordered"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={loadedWorkList
+                .sort((a, b) => a.item.localeCompare(b.item))
+                .map((issue, index) => issue.item)}
+              onChange={(option, value) => handleIssueChange(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Work Ordered"
+                  variant="outlined"
+                />
+              )}
+              value={dispatchData.issue}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={6}>
@@ -255,79 +263,72 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
             fullWidth
             value={dispatchData.timeAlotted}
             onChange={handleDispatchDataChange("timeAlotted")}
-            inputProps={{ tabIndex: "13" }}
           />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           {technicians.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-tech-lead">Tech Lead</InputLabel>
-              <Select
-                labelId="select-tech-lead"
-                id="tech-lead"
-                value={dispatchData.techLead}
-                label="Tech Lead"
-                onChange={handleDispatchDataChange("techLead")}
-                inputProps={{ tabIndex: "14" }}
-                required
-              >
-                {technicians
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((technician) => (
-                    <MenuItem key={technician.id} value={technician.name}>
-                      {technician.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="tech-lead"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={loadedTechnicians
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((technician, index) => technician.name)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("techLead", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Tech Lead" variant="outlined" />
+              )}
+              value={dispatchData.techLead}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           {technicians.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-tech-helper">Tech Helper</InputLabel>
-              <Select
-                labelId="select-tech-helper"
-                id="tech-helper"
-                value={dispatchData.techHelper}
-                label="Tech helper"
-                onChange={handleDispatchDataChange("techHelper")}
-                inputProps={{ tabIndex: "15" }}
-              >
-                <MenuItem value={"NONE"}>None</MenuItem>
-                {technicians
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((technician) => (
-                    <MenuItem key={technician.id} value={technician.name}>
-                      {technician.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="tech-helper"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={loadedHelperTechnicians
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((technician, index) => technician.name)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("techHelper", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Tech Helper" variant="outlined" />
+              )}
+              value={dispatchData.techHelper}
+            />
           )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           {payments.length > 0 && (
-            <FormControl fullWidth>
-              <InputLabel id="select-payment">Payment</InputLabel>
-              <Select
-                labelId="select-payment"
-                id="payment"
-                value={dispatchData.payment}
-                label="Payment"
-                onChange={handleDispatchDataChange("payment")}
-                inputProps={{ tabIndex: "16" }}
-                required
-              >
-                {payments
-                  .sort((a, b) => a.item.localeCompare(b.item))
-                  .map((payment) => (
-                    <MenuItem key={payment.id} value={payment.item}>
-                      {payment.item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disableClearable
+              disablePortal
+              fullWidth
+              getOptionLabel={(option) => option}
+              id="payment"
+              isOptionEqualToValue={(option, value) => option === value}
+              options={loadedPayments
+                .sort((a, b) => a.item.localeCompare(b.item))
+                .map((payment, index) => payment.item)}
+              onChange={(option, value) =>
+                handleDispatchDataSelectChange("payment", value)
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Payment" variant="outlined" />
+              )}
+              value={dispatchData.payment}
+            />
           )}
         </Grid>
         <Grid xs={12}>
@@ -339,28 +340,27 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
             variant="outlined"
             value={dispatchData.notes}
             onChange={handleDispatchDataChange("notes")}
-            inputProps={{ tabIndex: "17" }}
           />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
-          <FormControl fullWidth>
-            <InputLabel id="time-of-day-select">Time Of Day</InputLabel>
-            <Select
-              labelId="time-of-day-select"
-              id="time-of-day"
-              value={dispatchData.timeOfDay}
-              label="Time Of Day"
-              onChange={handleDispatchDataChange("timeOfDay")}
-              inputProps={{ tabIndex: "18" }}
-            >
-              <MenuItem value="AM">AM</MenuItem>
-              <MenuItem value="Anytime">Anytime</MenuItem>
-              <MenuItem value="First Call">First Call</MenuItem>
-              <MenuItem value="Last Call">Last Call</MenuItem>
-              <MenuItem value="overtime">Overtime</MenuItem>
-              <MenuItem value="PM">PM</MenuItem>
-            </Select>
-          </FormControl>
+          <Autocomplete
+            disableClearable
+            disablePortal
+            fullWidth
+            getOptionLabel={(option) => option}
+            id="time-of-day-select"
+            isOptionEqualToValue={(option, value) => option === value}
+            options={timeOfDayList
+              .sort((a, b) => a.label.localeCompare(b.label))
+              .map((item, index) => item.value)}
+            onChange={(option, value) =>
+              handleDispatchDataSelectChange("timeOfDay", value)
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Time Of Day" variant="outlined" />
+            )}
+            value={dispatchData.timeOfDay}
+          />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <TextField
@@ -369,30 +369,29 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
             required
             value={dispatchData.jobNumber}
             onChange={handleDispatchDataChange("jobNumber")}
-            inputProps={{ tabIndex: "19" }}
           />
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}></Grid>
       </Grid>
 
       {inputError && (
-        <p className="deleteWarningText">
+        <Typography variant="h5" color="orange">
           Technician names can not be the same.
-        </p>
+        </Typography>
       )}
       {dateError && (
-        <p className="deleteWarningText">Please set a service date.</p>
+        <Typography variant="h5" color="orange">
+          Please set a service date.
+        </Typography>
       )}
 
       <Grid container spacing={1.5} sx={{ margin: "2px", marginTop: "16px" }}>
         <Grid xs={12} sm={12} md={12} lg={4}></Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
-            size="large"
+            variant="contained"
             type="submit"
             startIcon={<ArrowUpward />}
-            tabIndex={20}
             fullWidth
           >
             Add
@@ -400,11 +399,9 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
-            size="large"
+            variant="contained"
             type="button"
             startIcon={<Close />}
-            tabIndex={21}
             onClick={() => closeModalOne()}
             fullWidth
           >

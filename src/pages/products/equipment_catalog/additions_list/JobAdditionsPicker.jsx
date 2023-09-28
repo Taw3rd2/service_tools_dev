@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { db, useSyncedCollection } from "../../../../firebase/firestore.utils";
 import BasicTable from "../../../../components/basic_components/BasicTable";
-import { Checkbox, TableCell, tableCellClasses, TableRow } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  TableCell,
+  tableCellClasses,
+  TableRow,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "../../../../global_style/style.css";
 import { toCurrency } from "../../../../utilities/currencyUtils";
@@ -107,21 +113,7 @@ const JobAdditionsPicker = ({ additions, setAdditions, closeModalTwo }) => {
         searchableServices
           .sort((a, b) => a.partNumber.localeCompare(b.partNumber))
           .map((service, index) => (
-            <TableRow
-              key={index}
-              sx={
-                index % 2
-                  ? {
-                      background: "#e8eded",
-                      cursor: "pointer",
-                    }
-                  : {
-                      background: "white",
-                      cursor: "pointer",
-                    }
-              }
-              onClick={handleCheckChange(index)}
-            >
+            <TableRow key={index} onClick={handleCheckChange(index)}>
               <TableCell sx={{ width: 25 }} align="left">
                 {index + 1}
               </TableCell>
@@ -149,21 +141,7 @@ const JobAdditionsPicker = ({ additions, setAdditions, closeModalTwo }) => {
         services
           .sort((a, b) => a.partNumber.localeCompare(b.partNumber))
           .map((service, index) => (
-            <TableRow
-              key={index}
-              sx={
-                index % 2
-                  ? {
-                      background: "#e8eded",
-                      cursor: "pointer",
-                    }
-                  : {
-                      background: "white",
-                      cursor: "pointer",
-                    }
-              }
-              onClick={handleCheckChange(index)}
-            >
+            <TableRow key={index} onClick={handleCheckChange(index)}>
               <TableCell sx={{ width: 25 }} align="left">
                 {index + 1}
               </TableCell>
@@ -187,44 +165,41 @@ const JobAdditionsPicker = ({ additions, setAdditions, closeModalTwo }) => {
   const additionalButtons = (
     <>
       {activeSearchBar ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<ArrowUpward />}
           onClick={() => addSelectedServicesToAdditionsList()}
+          sx={{ margin: "8px" }}
         >
-          <ArrowUpward />
-          <span className="iconSeperation">
-            Save Selected And Add To Additions List
-          </span>
-        </button>
+          Save Selected And Add To Additions List
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardGoButton"
-          style={{ margin: "8px" }}
+          startIcon={<ArrowUpward />}
           onClick={() => addSelectedServicesToAdditionsList()}
+          sx={{ margin: "8px" }}
+          color="success"
         >
-          <ArrowUpward />
-          <span className="iconSeperation">
-            Save Selected And Add To Additions List
-          </span>
-        </button>
+          Save Selected And Add To Additions List
+        </Button>
       )}
-      <button
+      <Button
+        variant="contained"
         type="button"
-        className="standardButton"
-        style={{ margin: "8px" }}
+        startIcon={<Close />}
         onClick={() => closeModalTwo()}
+        sx={{ margin: "8px" }}
       >
-        <Close />
-        <span className="iconSeperation">Close</span>
-      </button>
+        Close
+      </Button>
     </>
   );
 
   return (
-    <div className="worksheetContainer">
+    <div>
       {activeSearchBar ? (
         <BasicSearchBar
           value={query}

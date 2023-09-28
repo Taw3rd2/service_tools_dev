@@ -1,22 +1,20 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Button, Tab, Tabs } from "@mui/material";
+import { Button, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
 import { db, useSyncedCollection } from "../../../firebase/firestore.utils";
 
 import EquipmentCatalogList from "./equipment_catalog_list/EquipmentCalalogList";
 import EquipmentWorksheet from "./equipment_worksheet/EquipmentWorksheet";
-import Spinner from "../../../components/spinner/Spinner";
 import Toast from "../../../components/basic_components/toast/Toast";
 import { Add, Print } from "@mui/icons-material";
 import { ReactToPrint } from "../../../components/react_to_print/ReactToPrint";
 import { collection } from "firebase/firestore";
 import SampleJob from "./sample_job/SampleJob";
 
-const ModalOne = lazy(() =>
-  import("../../../components/basic_components/modal_one/ModalOne")
+//Material Modal
+const MaterialModal = lazy(() =>
+  import("../../../components/basic_components/material_modal/MaterialModal")
 );
-const ModalTwo = lazy(() =>
-  import("../../../components/basic_components/modal_two/ModalTwo")
-);
+
 const AddEquipmentToJob = lazy(() =>
   import("./equipment_worksheet/AddEquipmentToJob")
 );
@@ -142,77 +140,78 @@ const EquipmentCatalog = () => {
   //additions List
   const [additions, setAdditions] = useState([]);
 
-  //Modal One
+  //ModalOne
   const [isModalOneOpen, setModalOneOpen] = useState(false);
-  const [modalOneSize, setModalOneSize] = useState("45%");
-  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const [modalOneWidth, setModalOneWidth] = useState("sm");
   const [modalOneContent, setModalOneContent] = useState(
     <div>Modal One Content</div>
   );
-  const openModalOne = (size, title, content) => {
-    setModalOneSize(size);
-    setModalOneTitle(title);
+  const [modalOneTitle, setModalOneTitle] = useState("Modal One");
+  const openModalOne = (content, title, width) => {
     setModalOneContent(content);
+    setModalOneTitle(title);
+    setModalOneWidth(width);
     setModalOneOpen(true);
   };
   const closeModalOne = () => {
-    setModalOneSize("45%");
-    setModalOneTitle("Modal One");
     setModalOneContent(<div>Modal One Content</div>);
+    setModalOneTitle("Modal One");
+    setModalOneWidth("sm");
     setModalOneOpen(false);
   };
 
-  //Modal Two
+  //ModalTwo
   const [isModalTwoOpen, setModalTwoOpen] = useState(false);
-  const [modalTwoSize, setModalTwoSize] = useState("45%");
-  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
   const [modalTwoContent, setModalTwoContent] = useState(
     <div>Modal Two Content</div>
   );
-  const openModalTwo = (size, title, content) => {
-    setModalTwoSize(size);
-    setModalTwoTitle(title);
+  const [modalTwoTitle, setModalTwoTitle] = useState("Modal Two");
+  const [modalTwoWidth, setModalTwoWidth] = useState("sm");
+  const openModalTwo = (content, title, width) => {
     setModalTwoContent(content);
+    setModalTwoTitle(title);
+    setModalTwoWidth(width);
     setModalTwoOpen(true);
   };
   const closeModalTwo = () => {
-    setModalTwoSize("45%");
-    setModalTwoTitle("Modal Two");
     setModalTwoContent(<div>Modal Two Content</div>);
+    setModalTwoTitle("Modal Two");
+    setModalTwoWidth("sm");
     setModalTwoOpen(false);
   };
 
   const openDeleteEquipment = (unit) => {
     openModalOne(
-      "20%",
+      <DeleteEquipment
+        equipmentToDelete={unit}
+        closeModalOne={closeModalOne}
+      />,
       "Delete Equipment",
-      <DeleteEquipment equipmentToDelete={unit} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openCreateCategory = (tab) => {
     openModalOne(
-      "20%",
+      <CreateCategory tab={tab} closeModalOne={closeModalOne} />,
       "Create Category",
-      <CreateCategory tab={tab} closeModalOne={closeModalOne} />
+      "sm"
     );
   };
 
   const openDeleteCategory = (category) => {
     openModalOne(
-      "20%",
-      "Delete Category",
       <DeleteCategory
         categoryToDelete={category}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Delete Category",
+      "sm"
     );
   };
 
   const openAddMaterialList = () => {
     openModalOne(
-      "30%",
-      "Add Equipment To Job",
       <AddEquipmentToJob
         additions={additions}
         closeModalOne={closeModalOne}
@@ -223,19 +222,21 @@ const EquipmentCatalog = () => {
         setAdditions={setAdditions}
         setLabor={setLabor}
         setMaterial={setMaterial}
-      />
+      />,
+      "Add Equipment To Job",
+      "sm"
     );
   };
 
   const openEditLaborList = (unitId) => {
     openModalOne(
-      "50%",
-      "Edit Pre Defined Labor List",
       <EditLaborList
         unitId={unitId}
         openAddLaborToEquipment={openAddLaborToEquipment}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Edit Pre Defined Labor List",
+      "lg"
     );
   };
 
@@ -250,12 +251,12 @@ const EquipmentCatalog = () => {
 
   const openWorksheetAdditionsPicker = () => {
     openModalTwo(
-      "45%",
-      "Flat Rate Additions Picker",
       <WorksheetAdditionsPicker
         selectedEquipmentId={selectedEquipmentId}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Flat Rate Additions Picker",
+      "lg"
     );
   };
 
@@ -271,70 +272,70 @@ const EquipmentCatalog = () => {
 
   const openWorksheetMaterialPicker = () => {
     openModalTwo(
-      "45%",
-      "Material Picker",
       <WorksheetMaterialPicker
         selectedEquipmentId={selectedEquipmentId}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Material Picker",
+      "lg"
     );
   };
 
   const openJobMaterialPicker = () => {
     openModalTwo(
-      "45%",
-      "Material Picker",
       <JobMaterialPicker
         material={material}
         setMaterial={setMaterial}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Material Picker",
+      "sm"
     );
   };
 
   const openAddLaborToEquipment = () => {
     openModalTwo(
-      "30%",
-      "Add Labor To Equipment",
       <AddLaborToEquipment
         selectedEquipmentId={selectedEquipmentId}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Add Labor To Equipment",
+      "md"
     );
   };
 
   const openAddLaborToJob = () => {
     openModalTwo(
-      "30%",
-      "Add Labor To Job",
       <AddLaborToJob
         labor={labor}
         setLabor={setLabor}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Add Labor To Job",
+      "sm"
     );
   };
 
   const openAddAdditionsToJob = () => {
     openModalTwo(
-      "45%",
-      "Additions Picker",
       <JobAdditionsPicker
         additions={additions}
         setAdditions={setAdditions}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Additions Picker",
+      "lg"
     );
   };
 
   const openPrintEquipmentSheets = (equipmentType) => {
     openModalOne(
-      "45%",
-      "Equipment Sheets",
       <ReactToPrint
         equipmentType={equipmentType}
         closeModalOne={closeModalOne}
-      />
+      />,
+      "Equipment Sheets",
+      "lg"
     );
   };
 
@@ -348,14 +349,14 @@ const EquipmentCatalog = () => {
   };
 
   return (
-    <div className="equipmentCatalogPage">
+    <div className="sizeAdjustment">
       <Toast />
       <div className="row" style={{ marginBottom: "0px", display: "flex" }}>
         <div
           className="singleRowInput"
-          style={{ alignItems: "center", marginTop: "8px" }}
+          style={{ alignItems: "center", margin: "8px" }}
         >
-          <div className="searchBarLabel">Units: {listOfEquipment.length}</div>
+          <Typography variant="h4">Units: {listOfEquipment.length}</Typography>
         </div>
       </div>
       <div className="row">
@@ -404,42 +405,47 @@ const EquipmentCatalog = () => {
                       ))}
                   <div className="buttonBar">
                     <Button
-                      size="small"
-                      variant="outlined"
+                      variant="contained"
+                      type="button"
                       startIcon={<Print />}
                       onClick={() => openPrintEquipmentSheets("CarrierFurnace")}
+                      size="small"
                     >
                       Carrier Furnace Price Sheets
                     </Button>
                     <Button
-                      size="small"
-                      variant="outlined"
+                      variant="contained"
+                      type="button"
                       startIcon={<Print />}
                       onClick={() => openPrintEquipmentSheets("PayneFurnace")}
+                      size="small"
                     >
                       Payne Furnace Price Sheets
                     </Button>
                     <Button
-                      size="small"
-                      variant="outlined"
+                      variant="contained"
+                      type="button"
                       startIcon={<Print />}
                       onClick={() => openPrintEquipmentSheets("CarrierAC")}
+                      size="small"
                     >
                       Carrier AC Price Sheets
                     </Button>
                     <Button
-                      size="small"
-                      variant="outlined"
+                      variant="contained"
+                      type="button"
                       startIcon={<Print />}
                       onClick={() => openPrintEquipmentSheets("PayneAC")}
+                      size="small"
                     >
                       Payne AC Price Sheets
                     </Button>
                     <Button
-                      size="small"
-                      variant="outlined"
+                      variant="contained"
+                      type="button"
                       startIcon={<Add />}
                       onClick={() => openCreateCategory(tab)}
+                      size="small"
                     >
                       {`Add ${tab.name} Category`}
                     </Button>
@@ -462,11 +468,11 @@ const EquipmentCatalog = () => {
         </div>
       </div>
       {isSampleJobOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalTwo
-            modalTwoSize={"90%"}
-            modalTwoTitle={"Sample Job"}
-            modalTwoContent={
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModal={closeModalTwo}
+            isModalOpen={isSampleJobOpen}
+            modalContent={
               <SampleJob
                 additions={additions}
                 closeSampleJob={closeSampleJob}
@@ -481,16 +487,17 @@ const EquipmentCatalog = () => {
                 setMaterial={setMaterial}
               />
             }
-            closeModalTwo={closeModalTwo}
+            modalTitle={"Sample Job"}
+            modalWidth={"xl"}
           />
         </Suspense>
       )}
       {isEditMaterialListOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={"50%"}
-            modalOneTitle={"Edit Pre Defined Material List"}
-            modalOneContent={
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModal={closeModalOne}
+            isModalOpen={isEditMaterialListOpen}
+            modalContent={
               <EditMaterialList
                 selectedEquipmentId={selectedEquipmentId}
                 selectedEquipmentValues={selectedEquipmentValues}
@@ -501,16 +508,17 @@ const EquipmentCatalog = () => {
                 closeModalOne={closeEditMaterialList}
               />
             }
-            closeModalOne={closeModalOne}
+            modalTitle={"Edit Pre Defined Material List"}
+            modalWidth={"md"}
           />
         </Suspense>
       )}
       {isEditAdditionsListOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={"50%"}
-            modalOneTitle={"Edit Pre Defined Additions List"}
-            modalOneContent={
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModal={closeModalOne}
+            isModalOpen={isEditAdditionsListOpen}
+            modalContent={
               <EditAdditionsList
                 selectedEquipmentId={selectedEquipmentId}
                 selectedEquipmentValues={selectedEquipmentValues}
@@ -518,26 +526,30 @@ const EquipmentCatalog = () => {
                 closeModalOne={closeEditAdditionsList}
               />
             }
+            modalTitle={"Edit Pre Defined Additions List"}
+            modalWidth={"md"}
           />
         </Suspense>
       )}
       {isModalOneOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalOne
-            modalOneSize={modalOneSize}
-            modalOneTitle={modalOneTitle}
-            modalOneContent={modalOneContent}
-            closeModalOne={closeModalOne}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
+            closeModal={closeModalOne}
+            isModalOpen={isModalOneOpen}
+            modalContent={modalOneContent}
+            modalTitle={modalOneTitle}
+            modalWidth={modalOneWidth}
           />
         </Suspense>
       )}
       {isModalTwoOpen && (
-        <Suspense fallback={<Spinner />}>
-          <ModalTwo
-            modalTwoSize={modalTwoSize}
-            modalTwoTitle={modalTwoTitle}
-            modalTwoContent={modalTwoContent}
+        <Suspense fallback={<CircularProgress />}>
+          <MaterialModal
             closeModalTwo={closeModalTwo}
+            isModalOpen={isModalTwoOpen}
+            modalContent={modalTwoContent}
+            modalTitle={modalTwoTitle}
+            modalWidth={modalTwoWidth}
           />
         </Suspense>
       )}

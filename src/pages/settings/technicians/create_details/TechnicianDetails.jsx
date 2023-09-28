@@ -12,9 +12,10 @@ import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 import SlideIn from "../../../../components/basic_components/slide-in/SlideIn";
 import { ChromePicker } from "react-color";
 
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import "../../../../global_style/style.css";
 import { Add, ArrowUpward, Close } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const TechnicianDetails = ({ technician, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -104,50 +105,46 @@ const TechnicianDetails = ({ technician, closeModalOne }) => {
   };
 
   return (
-    <form
-      onSubmit={submitTechnician}
-      autoComplete="new-password"
-      style={{ zoom: 1.25 }}
-    >
-      <div className="row">
-        <div className="tripleRowInput">
+    <form onSubmit={submitTechnician} autoComplete="new-password">
+      <Grid container spacing={1.5}>
+        <Grid xs={4}>
           <TextField
             label="Name"
             value={techValues.name}
             fullWidth
             color="primary"
+            size="small"
             sx={{ marginTop: "16px" }}
             onChange={handleTechValueChange("name")}
             required
           />
-        </div>
-        <div className="tripleRowInput">
+        </Grid>
+        <Grid xs={4}>
           <TextField
             label="Email"
             value={techValues.email}
             fullWidth
             color="primary"
+            size="small"
             sx={{ marginTop: "16px" }}
             onChange={handleTechValueChange("email")}
             required
           />
-        </div>
-        <div className="tripleRowInput">
-          <button
+        </Grid>
+        <Grid xs={4}>
+          <Button
+            variant="contained"
             type="button"
-            className="standardButton"
-            style={{
-              padding: "20px",
+            onClick={toggleColorPicker}
+            sx={{
               marginTop: "16px",
-              color: "white",
               backgroundColor: `${techValues.color}`,
             }}
-            onClick={toggleColorPicker}
           >
-            Set Technician Color
-          </button>
-        </div>
-      </div>
+            Set Tech Color
+          </Button>
+        </Grid>
+      </Grid>
 
       <div className="row">
         <div style={{ margin: "0 auto" }}>
@@ -162,30 +159,31 @@ const TechnicianDetails = ({ technician, closeModalOne }) => {
           </SlideIn>
         </div>
       </div>
-
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          {technician !== undefined ? (
-            <>
-              <ArrowUpward />
-              <span className="iconSeperation">Update</span>
-            </>
-          ) : (
-            <>
-              <Add />
-              <span className="iconSeperation">Add</span>
-            </>
-          )}
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="submit"
+            startIcon={technician !== undefined ? <ArrowUpward /> : <Add />}
+          >
+            {technician !== undefined ? "Update" : "Add"}
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

@@ -1,13 +1,22 @@
 import { toCurrency, toArrayTotal } from "../../../../utilities/currencyUtils";
 import BasicTable from "../../../../components/basic_components/BasicTable";
 import {
+  Button,
+  IconButton,
   TableCell,
   tableCellClasses,
   TableRow,
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Add, ArrowUpward, DeleteForever, Remove } from "@mui/icons-material";
+import {
+  Add,
+  AddCircleOutline,
+  ArrowUpward,
+  DeleteForever,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
+import { useState } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -16,12 +25,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const rootStyles = {
-  backgroundColor: "#ffd60a",
-  border: "1px solid rgba(132, 230, 239, 0.8)",
-};
-
 const LaborList = ({ labor, setLabor, openAddLaborToJob }) => {
+  const [pickerButtonActive, setPickerButtonActive] = useState(true);
   const displayTotalLaborCost = () => {
     let total = 0;
     if (labor.length < 1) {
@@ -47,10 +52,12 @@ const LaborList = ({ labor, setLabor, openAddLaborToJob }) => {
   };
 
   const increaseHours = (hrs, index) => {
+    setPickerButtonActive(false);
     updateHours(hrs + 1, index);
   };
 
   const decreaseHours = (hrs, index) => {
+    setPickerButtonActive(false);
     if (hrs < 1) {
       return;
     } else {
@@ -78,50 +85,34 @@ const LaborList = ({ labor, setLabor, openAddLaborToJob }) => {
     <>
       {labor.length > 0 &&
         labor.map((item, index) => (
-          <TableRow
-            key={index}
-            sx={
-              index % 2
-                ? {
-                    background: "#e8eded",
-                    cursor: "pointer",
-                  }
-                : {
-                    background: "white",
-                    cursor: "pointer",
-                  }
-            }
-          >
+          <TableRow key={index}>
             <TableCell sx={{ display: "flex", justifyContent: "center" }}>
               <div className="listItemButtonBar">
-                <button
-                  className="lineItemButton"
+                <IconButton
                   onClick={() => {
                     decreaseHours(item.hours, index);
                   }}
                 >
-                  <Remove />
-                </button>
+                  <RemoveCircleOutline />
+                </IconButton>
                 <TextField
                   size="small"
                   id="quantity_text"
                   value={item.hours}
                   sx={{
-                    ...rootStyles,
                     marginLeft: "8px",
                     width: "50px",
-                    input: { background: "#FFF", textAlign: "center" },
+                    input: { textAlign: "center" },
                   }}
                 />
-                <button
-                  className="lineItemButton"
-                  style={{ marginLeft: "8px" }}
+                <IconButton
                   onClick={() => {
                     increaseHours(item.hours, index);
                   }}
+                  sx={{ marginLeft: "8px" }}
                 >
-                  <Add />
-                </button>
+                  <AddCircleOutline />
+                </IconButton>
               </div>
             </TableCell>
             <TableCell align="left">
@@ -133,7 +124,7 @@ const LaborList = ({ labor, setLabor, openAddLaborToJob }) => {
             </TableCell>
             <TableCell align="center">
               <DeleteForever
-                sx={{ color: "teal" }}
+                color="error"
                 onClick={() => {
                   removeArrayItem(index);
                 }}
@@ -146,28 +137,60 @@ const LaborList = ({ labor, setLabor, openAddLaborToJob }) => {
 
   const additionalButtons = (
     <>
-      <button
-        type="button"
-        className="standardButton"
-        style={{ margin: "8px" }}
-        onClick={() => {
-          openAddLaborToJob();
-        }}
-      >
-        <Add />
-        <span className="iconSeperation">Add labor</span>
-      </button>
-      <button
-        type="button"
-        className="standardButton"
-        style={{ margin: "8px" }}
-        onClick={() => {
-          console.log("Save Changes Clicked");
-        }}
-      >
-        <ArrowUpward />
-        <span className="iconSeperation">Save Changes</span>
-      </button>
+      {pickerButtonActive ? (
+        <Button
+          variant="contained"
+          type="button"
+          startIcon={<Add />}
+          onClick={() => {
+            openAddLaborToJob();
+          }}
+          sx={{ margin: "8px" }}
+        >
+          Add labor
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          type="button"
+          startIcon={<Add />}
+          onClick={() => {
+            openAddLaborToJob();
+          }}
+          sx={{ margin: "8px" }}
+          disabled
+        >
+          Add labor
+        </Button>
+      )}
+      {pickerButtonActive ? (
+        <Button
+          variant="contained"
+          type="button"
+          startIcon={<ArrowUpward />}
+          onClick={() => {
+            setPickerButtonActive(true);
+            console.log("Save Changes Clicked");
+          }}
+          sx={{ margin: "8px" }}
+        >
+          Save Changes
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          type="button"
+          startIcon={<ArrowUpward />}
+          onClick={() => {
+            setPickerButtonActive(true);
+            console.log("Save Changes Clicked");
+          }}
+          sx={{ margin: "8px" }}
+          color="success"
+        >
+          Save Changes
+        </Button>
+      )}
     </>
   );
 

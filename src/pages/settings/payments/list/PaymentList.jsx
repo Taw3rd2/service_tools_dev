@@ -1,6 +1,7 @@
 import { db, useSyncedCollection } from "../../../../firebase/firestore.utils";
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -12,13 +13,15 @@ import {
 import "../../../../global_style/style.css";
 import { Add, DeleteForever, Edit } from "@mui/icons-material";
 import { collection } from "firebase/firestore";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+
+import "../../../../global_style/style.css";
 
 const PaymentList = ({ openPaymentDetails, openDeletePayment }) => {
   const payments = useSyncedCollection(collection(db, "payments"));
 
   return (
-    <div className="settingsCard">
-      <div className="settingsCardTitle">Payments</div>
+    <div className="sizeAdjustment">
       <TableContainer
         component={Paper}
         sx={{ overflow: "auto", maxHeight: 275 }}
@@ -54,48 +57,47 @@ const PaymentList = ({ openPaymentDetails, openDeletePayment }) => {
               .sort((a, b) => a.item.localeCompare(b.item))
               .map((payment, index) => (
                 <TableRow key={payment.id} sx={{ cursor: "pointer" }}>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {index + 1}
                   </TableCell>
-                  <TableCell align="left" sx={{ fontSize: 20 }}>
+                  <TableCell align="left" padding="none" sx={{ fontSize: 20 }}>
                     {payment.item}
                   </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<Edit />}
-                      onClick={() => openPaymentDetails(payment)}
-                    >
-                      Edit
-                    </Button>
+                  <TableCell align="center" padding="none">
+                    <IconButton onClick={() => openPaymentDetails(payment)}>
+                      <Edit />
+                    </IconButton>
                   </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<DeleteForever />}
+                  <TableCell align="center" padding="none">
+                    <IconButton
                       onClick={() => openDeletePayment(payment)}
-                      style={{ color: "red" }}
+                      color="error"
                     >
-                      Delete
-                    </Button>
+                      <DeleteForever />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => openPaymentDetails()}
-        >
-          <Add />
-          <span className="iconSeperation">Add Payment</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Add />}
+            onClick={() => openPaymentDetails()}
+            sx={{ marginTop: "8px" }}
+          >
+            Add Payment
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

@@ -3,8 +3,9 @@ import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
 import { doc } from "firebase/firestore";
 import { db, updateDocument } from "../../../../firebase/firestore.utils";
-import { InputAdornment, TextField } from "@mui/material";
+import { Button, InputAdornment, TextField } from "@mui/material";
 import { ArrowUpward, Close } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const EditCrossReference = ({ part, crossReferenceIndex, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
@@ -92,7 +93,7 @@ const EditCrossReference = ({ part, crossReferenceIndex, closeModalTwo }) => {
 
   return (
     <form onSubmit={updateCrossReference} autoComplete="new-password">
-      <div className="row">
+      <div className="row" style={{ marginTop: "6px" }}>
         <div className="tripleRowInput">
           <TextField
             label="Part Number"
@@ -131,20 +132,27 @@ const EditCrossReference = ({ part, crossReferenceIndex, closeModalTwo }) => {
           />
         </div>
       </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          <ArrowUpward />
-          <span className="iconSeperation">Submit</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button variant="contained" type="submit" startIcon={<ArrowUpward />}>
+            Update
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalTwo()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

@@ -7,6 +7,8 @@ import { deleteWarranty } from "../warrantyFunctions";
 import { getFormattedDateAndTime } from "../../../utilities/dateUtils";
 
 import "../../../global_style/style.css";
+import { Button, Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const DeleteWarrantyContent = ({
   customer,
@@ -41,37 +43,48 @@ const DeleteWarrantyContent = ({
   };
   return (
     <div className="container">
-      <div className="deleteWarningText">UnrecoverableDelete</div>
+      <Typography variant="h5" color="orange">
+        Unrecoverable Delete
+      </Typography>
       <ul>
         <li>All Warranty information for this unit</li>
       </ul>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="deleteButton"
-          onClick={() =>
-            deleteWarranty(
-              customer,
-              selectedWarranty,
-              activateSuccessNotification,
-              activateFailureNotification,
-              closeDetails,
-              closeDelete
-            )
-          }
-        >
-          <DeleteForever />
-          <span className="iconSeperation">Confirm Delete</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeDelete()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<DeleteForever />}
+            color="error"
+            onClick={() =>
+              deleteWarranty(
+                customer,
+                selectedWarranty,
+                activateSuccessNotification,
+                activateFailureNotification,
+                closeDetails,
+                closeDelete
+              )
+            }
+          >
+            Confirm Delete
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeDelete()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

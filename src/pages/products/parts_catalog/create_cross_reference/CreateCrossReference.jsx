@@ -3,8 +3,9 @@ import { doc } from "firebase/firestore";
 import { db, updateDocument } from "../../../../firebase/firestore.utils";
 import { ToastContext } from "../../../../context/toastContext";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
-import { InputAdornment, TextField } from "@mui/material";
+import { Button, InputAdornment, TextField } from "@mui/material";
 import { ArrowUpward, Close } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const CreateCrossReference = ({ part, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
@@ -85,7 +86,7 @@ const CreateCrossReference = ({ part, closeModalTwo }) => {
 
   return (
     <form onSubmit={submitNewCrossReference} autoComplete="new-password">
-      <div className="row">
+      <div className="row" style={{ marginTop: "6px" }}>
         <div className="tripleRowInput">
           <TextField
             label="Part Number"
@@ -124,20 +125,27 @@ const CreateCrossReference = ({ part, closeModalTwo }) => {
           />
         </div>
       </div>
-      <div className="buttonBar">
-        <button type="submit" className="standardButton">
-          <ArrowUpward />
-          <span className="iconSeperation">Submit</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalTwo()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button variant="contained" type="submit" startIcon={<ArrowUpward />}>
+            Update
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalTwo()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

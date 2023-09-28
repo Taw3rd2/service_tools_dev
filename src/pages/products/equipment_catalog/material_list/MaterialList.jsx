@@ -6,9 +6,9 @@ import {
   toArrayTotal,
   stringPriceToNumber,
 } from "../../../../utilities/currencyUtils";
-import { TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Add, DeleteForever } from "@mui/icons-material";
+import { Add, ArrowUpward, DeleteForever } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -83,7 +83,7 @@ const MaterialList = ({ material, setMaterial, openJobMaterialPicker }) => {
             </TableCell>
             <TableCell align="center">
               <DeleteForever
-                sx={{ color: "teal" }}
+                color="error"
                 onClick={() => {
                   removeArrayItem(index);
                 }}
@@ -97,33 +97,56 @@ const MaterialList = ({ material, setMaterial, openJobMaterialPicker }) => {
   const additionalButtons = (
     <>
       {pickerButtonActive ? (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => {
             openJobMaterialPicker();
           }}
+          sx={{ margin: "8px" }}
         >
-          <Add />
-          <span className="iconSeperation">
-            Add Material From The Parts Catalog
-          </span>
-        </button>
+          Add Material From Parts
+        </Button>
       ) : (
-        <button
+        <Button
+          variant="contained"
           type="button"
-          className="standardButton"
-          style={{ margin: "8px" }}
+          startIcon={<Add />}
           onClick={() => {
             openJobMaterialPicker();
           }}
+          sx={{ margin: "8px" }}
+          disabled
         >
-          <Add />
-          <span className="iconSeperation">
-            Add Material From The Parts Catalog
-          </span>
-        </button>
+          Add Material From Parts
+        </Button>
+      )}
+      {pickerButtonActive ? (
+        <Button
+          variant="contained"
+          type="button"
+          startIcon={<ArrowUpward />}
+          onClick={() => {
+            console.log("Save Changes");
+          }}
+          sx={{ margin: "8px" }}
+        >
+          Save Changes
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          type="button"
+          startIcon={<ArrowUpward />}
+          onClick={() => {
+            console.log("Save Changes");
+          }}
+          sx={{ margin: "8px" }}
+          color="success"
+        >
+          Save Changes
+        </Button>
       )}
     </>
   );

@@ -10,9 +10,7 @@ const MainField = ({ title, name, address, address2, business }) => {
           <Typography variant="caption">{title}</Typography>
           <div style={{ display: "flex" }}>
             <Business color="primary" />
-            <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-              {name}
-            </Typography>
+            <Typography variant="body1">{name}</Typography>
           </div>
         </>
       ) : (
@@ -22,22 +20,18 @@ const MainField = ({ title, name, address, address2, business }) => {
           </Typography>
           <div style={{ display: "flex" }}>
             <Person color="primary" />
-            <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-              {name}
-            </Typography>
+            <Typography variant="body1">{name}</Typography>
           </div>
         </>
       )}
 
       <div style={{ display: "flex" }}>
         <LocationOn style={{ color: "red" }} />
-        <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-          {address}
-        </Typography>
+        <Typography variant="body1">{address}</Typography>
       </div>
 
       <div style={{ display: "flex" }}>
-        <Typography variant="body1" sx={{ marginLeft: "28px" }}>
+        <Typography variant="body1" sx={{ marginLeft: "24px" }}>
           {address2}
         </Typography>
       </div>

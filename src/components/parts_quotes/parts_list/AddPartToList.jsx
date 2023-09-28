@@ -36,7 +36,7 @@ const AddPartToList = ({ closeModalOne, quoteValues, setQuoteValues }) => {
 
   return (
     <form onSubmit={onSubmit} autoComplete="new password">
-      <Grid container spacing={1.5}>
+      <Grid container spacing={1.5} sx={{ marginTop: "8px" }}>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <TextField
             label="Quantity"
@@ -96,7 +96,7 @@ const AddPartToList = ({ closeModalOne, quoteValues, setQuoteValues }) => {
         </Grid>
         <Grid xs={12} sx={{ display: "flex", justifyContent: "end" }}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="submit"
             startIcon={<ArrowUpward />}
             sx={{ marginLeft: "8px" }}
@@ -104,7 +104,7 @@ const AddPartToList = ({ closeModalOne, quoteValues, setQuoteValues }) => {
             Submit
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             startIcon={<Close />}
             onClick={() => closeModalOne()}

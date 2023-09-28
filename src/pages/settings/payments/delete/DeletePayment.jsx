@@ -5,6 +5,8 @@ import { ToastContext } from "../../../../context/toastContext";
 import { db, deleteDocument } from "../../../../firebase/firestore.utils";
 import "../../../../global_style/style.css";
 import { getFormattedExactTime } from "../../../../utilities/dateUtils";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { Button, Typography } from "@mui/material";
 
 const DeletePayment = ({ payment, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -41,30 +43,41 @@ const DeletePayment = ({ payment, closeModalOne }) => {
 
   return (
     <div className="container">
-      <div className="deleteWarningText">Unrecoverable Delete!</div>
+      <Typography variant="h5" color="orange">
+        Unrecoverable Delete!
+      </Typography>
       <ul>
         <li>
           This includes <strong>{payment.item}</strong>
         </li>
       </ul>
-      <div className="buttonBar">
-        <button
-          type="button"
-          className="deleteButton"
-          onClick={() => removePayment()}
-        >
-          <DeleteForever />
-          <span className="iconSeperation">Confirm Delete</span>
-        </button>
-        <button
-          type="button"
-          className="standardButton"
-          onClick={() => closeModalOne()}
-        >
-          <Close />
-          <span className="iconSeperation">Close</span>
-        </button>
-      </div>
+      <Grid
+        container
+        spacing={1.5}
+        sx={{ display: "flex", justifyContent: "end" }}
+      >
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<DeleteForever />}
+            onClick={() => removePayment()}
+            color="error"
+          >
+            Confirm Delete
+          </Button>
+        </Grid>
+        <Grid>
+          <Button
+            variant="contained"
+            type="button"
+            startIcon={<Close />}
+            onClick={() => closeModalOne()}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 };

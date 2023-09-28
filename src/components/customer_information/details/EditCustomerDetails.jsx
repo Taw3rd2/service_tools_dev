@@ -246,7 +246,7 @@ const EditCustomerDetails = ({
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             color="error"
             startIcon={<DeleteForever />}
@@ -259,7 +259,7 @@ const EditCustomerDetails = ({
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="submit"
             startIcon={<ArrowUpward />}
             tabIndex={14}
@@ -270,7 +270,7 @@ const EditCustomerDetails = ({
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <Button
-            variant="outlined"
+            variant="contained"
             type="button"
             startIcon={<Close />}
             tabIndex={15}

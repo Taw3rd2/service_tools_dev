@@ -14,6 +14,7 @@ import {
 } from "../../../../utilities/currencyUtils";
 
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -28,6 +29,7 @@ import {
   DeleteForever,
   Edit,
 } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const EquipmentDetails = ({
   selectedEquipmentId,
@@ -314,86 +316,108 @@ const EquipmentDetails = ({
             </div>
           </div>
           <div className="oneThirdRowInput">
-            <div className="buttonBarStack">
-              <button
-                type="button"
-                className="deleteButton"
-                onClick={() => clearFields()}
-              >
-                <Clear />
-                <span className="iconSeperation">Clear Fields</span>
-              </button>
-
+            <Grid container spacing={1.5}>
+              <Grid xs={12}>
+                <Button
+                  variant="contained"
+                  type="button"
+                  startIcon={<Clear />}
+                  onClick={() => clearFields()}
+                  color="error"
+                  fullWidth
+                >
+                  Clear Fields
+                </Button>
+              </Grid>
               {selectedEquipmentId ? (
                 <>
-                  <button type="submit" className="standardButton">
-                    <ArrowUpward />
-                    <span className="iconSeperation">
+                  <Grid xs={12}>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      startIcon={<ArrowUpward />}
+                      fullWidth
+                    >
                       Update Equipment Values
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    className="deleteButton"
-                    onClick={() =>
-                      startDeleteEquipment(
-                        selectedEquipmentId,
-                        selectedEquipmentValues.model
-                      )
-                    }
-                  >
-                    <DeleteForever />
-                    <div className="iconSeperation">Delete Equipment</div>
-                  </button>
-                  <div style={{ marginTop: "8px" }} />
-
-                  <button
-                    type="button"
-                    className="standardButton"
-                    onClick={() => openEditMaterialList()}
-                  >
-                    <Edit />
-                    <div className="iconSeperation">
-                      Edit pre defined material list
-                    </div>
-                  </button>
-                  <button
-                    type="button"
-                    className="standardButton"
-                    onClick={() => openEditLaborList(selectedEquipmentId)}
-                  >
-                    <Edit />
-                    <div className="iconSeperation">
-                      Edit pre defined labor list
-                    </div>
-                  </button>
-                  <button
-                    type="button"
-                    className="standardButton"
-                    onClick={() => openEditAdditionsList(selectedEquipmentId)}
-                  >
-                    <Edit />
-                    <div className="iconSeperation">
-                      Edit pre defined Additions list
-                    </div>
-                  </button>
-                  <div style={{ marginTop: "8px" }} />
-                  <button
-                    type="button"
-                    className="standardButton"
-                    onClick={() => openAddMaterialList()}
-                  >
-                    <Add />
-                    <div className="iconSeperation">Open a Sample Job</div>
-                  </button>
+                    </Button>
+                  </Grid>
+                  <Grid xs={12}>
+                    <Button
+                      variant="contained"
+                      type="button"
+                      startIcon={<DeleteForever />}
+                      onClick={() =>
+                        startDeleteEquipment(
+                          selectedEquipmentId,
+                          selectedEquipmentValues.model
+                        )
+                      }
+                      color="error"
+                      fullWidth
+                    >
+                      Delete Equipment
+                    </Button>
+                  </Grid>
+                  <Grid xs={12}>
+                    <Button
+                      variant="contained"
+                      type="button"
+                      startIcon={<Edit />}
+                      onClick={() => openEditMaterialList()}
+                      fullWidth
+                      sx={{ marginTop: "16px" }}
+                    >
+                      Edit Pre defined Material List
+                    </Button>
+                  </Grid>
+                  <Grid xs={12}>
+                    <Button
+                      variant="contained"
+                      type="button"
+                      startIcon={<Edit />}
+                      onClick={() => openEditLaborList(selectedEquipmentId)}
+                      fullWidth
+                    >
+                      Edit Pre defined Labor List
+                    </Button>
+                  </Grid>
+                  <Grid xs={12}>
+                    <Button
+                      variant="contained"
+                      type="button"
+                      startIcon={<Edit />}
+                      onClick={() => openEditAdditionsList(selectedEquipmentId)}
+                      fullWidth
+                    >
+                      Edit Pre defined Additions List
+                    </Button>
+                  </Grid>
+                  <Grid xs={12}>
+                    <Button
+                      variant="contained"
+                      type="button"
+                      startIcon={<Add />}
+                      onClick={() => openAddMaterialList()}
+                      fullWidth
+                      sx={{ marginTop: "16px" }}
+                    >
+                      Open a Sample Job
+                    </Button>
+                  </Grid>
                 </>
               ) : (
-                <button type="submit" className="standardButton">
-                  <ArrowUpward />
-                  <span className="iconSeperation">Add New Equipment</span>
-                </button>
+                <Grid xs={12}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    startIcon={<ArrowUpward />}
+                    fullWidth
+                  >
+                    Add New Equipment
+                  </Button>
+                </Grid>
               )}
-            </div>
+            </Grid>
           </div>
         </div>
       </form>

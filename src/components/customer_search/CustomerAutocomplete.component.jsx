@@ -45,12 +45,12 @@ const CustomerAutocomplete = ({
               key={option.id}
             >
               <Grid2 xs={12}>
-                <Typography noWrap>
+                <Typography variant="body1" noWrap>
                   {option.lastname} {option.firstname}
                 </Typography>
               </Grid2>
               <Grid2 xs={12}>
-                <Typography noWrap style={{ color: "red" }}>
+                <Typography variant="subtitle1" noWrap>
                   {option.city}
                 </Typography>
               </Grid2>

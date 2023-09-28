@@ -1,10 +1,9 @@
 .accordion {
     border-radius: 5px;
-    background: teal;
+    margin-left: 8px;
 }
 
 .accordion-visible {
-    background: teal;
     color: #fff;
     cursor: pointer;
     border: 1px solid #474d9b;
@@ -19,7 +18,7 @@
 }
 
 .accordion-visible span {
-    padding: 15px 0;
+    padding: 6px 0;
     font-size: 20px;
 }
 

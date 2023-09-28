@@ -141,7 +141,6 @@ const PricingDetails = ({ labor, material, additions }) => {
             display: "flex",
             alignItems: "center",
             fontSize: "24px",
-            color: "blue",
           }}
         >
           <div>{`Job Total: ${toCurrency(getJobTotal() / 100)}`}</div>

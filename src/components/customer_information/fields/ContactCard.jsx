@@ -13,25 +13,17 @@ const ContactCard = ({ contact }) => {
       <div style={{ display: "flex" }}>
         <Person color="primary" />
         {contact.contactName ? (
-          <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-            {contact.contactName}
-          </Typography>
+          <Typography variant="body1">{contact.contactName}</Typography>
         ) : (
-          <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-            No Contact Name Entered
-          </Typography>
+          <Typography variant="body1">No Contact Name Entered</Typography>
         )}
       </div>
       <div style={{ display: "flex" }}>
         <PhoneOutlined color="primary" />
         {contact.contactPhone ? (
-          <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-            {contact.contactPhone}
-          </Typography>
+          <Typography variant="body1">{contact.contactPhone}</Typography>
         ) : (
-          <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-            No Contact Phone Entered
-          </Typography>
+          <Typography variant="body1">No Contact Phone Entered</Typography>
         )}
       </div>
       {contact.contactEmail ? (
@@ -51,9 +43,7 @@ const ContactCard = ({ contact }) => {
       {contact.contactNotes ? (
         <div style={{ display: "flex" }}>
           <DescriptionOutlined color="primary" />
-          <Typography variant="body1" sx={{ marginLeft: "4px" }}>
-            {contact.contactNotes}
-          </Typography>
+          <Typography variant="body1">{contact.contactNotes}</Typography>
         </div>
       ) : null}
     </Card>
