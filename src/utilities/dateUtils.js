@@ -17,6 +17,14 @@ export const setDateToZeroHours = (date) => {
   return newMillis;
 };
 
+export const setDateToOneAm = (date) => {
+  const newHours = setHours(date, 1);
+  const newMin = setMinutes(newHours, 0);
+  const newSeconds = setSeconds(newMin, 0);
+  const newMillis = setMilliseconds(newSeconds, 0);
+  return newMillis;
+};
+
 //called in ClientActivityPage
 export const getFormattedTime = (date) => {
   if (Object.prototype.toString.call(date) === "[object Date]") {

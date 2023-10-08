@@ -10,8 +10,6 @@ import { Close, DoNotDisturb } from "@mui/icons-material";
 const CancelDispatch = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
   const { dispatch } = useContext(ToastContext);
 
-  console.log("selectedDispatch: ", selectedDispatch);
-
   const deleteSecondDispatch = (id) => {
     return new Promise((resolve, reject) => {
       if (id) {
@@ -120,32 +118,6 @@ const CancelDispatch = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
       selectedDispatch.extendedProps.techHelperId
     ).then(updateDispatch(updatedDispatch));
     console.log("Dispatch Canceled");
-    // await updateDoc(doc(db, "events", selectedDispatch.id), updatedDispatch)
-    //   .then(() => {
-    //     dispatch({
-    //       type: "ADD_NOTIFICATION",
-    //       payload: {
-    //         id: getFormattedExactTime(new Date()),
-    //         type: "SUCCESS",
-    //         title: "Cancel Dispatch",
-    //         message: "Updated the dispatch in the cloud",
-    //       },
-    //     });
-    //     closeModalTwo();
-    //     closeModalOne();
-    //   })
-    //   .catch((error) => {
-    //     dispatch({
-    //       type: "ADD_NOTIFICATION",
-    //       payload: {
-    //         id: getFormattedExactTime(new Date()),
-    //         type: "ERROR",
-    //         title: "Cancel Dispatch",
-    //         message: "There was a error updating the dispatch",
-    //       },
-    //     });
-    //     console.log("firebase error: ", error);
-    //   });
   };
 
   return (

@@ -32,6 +32,9 @@ const DispatchDetails = lazy(() =>
 const DeleteDispatch = lazy(() =>
   import("../../components/dispatches/delete/DeleteDispatch")
 );
+const Holding = lazy(() =>
+  import("../../components/dispatches/holding/Holding")
+);
 //Menu
 const DailyOptionsMenu = lazy(() =>
   import("../../components/navigation_buttons/DailyOptionsMenu")
@@ -166,6 +169,7 @@ const Schedule = () => {
         closeModalOne={closeModalOne}
         openCancelDispatch={openCancelDispatch}
         openDeleteDispatch={openDeleteDispatch}
+        openHolding={openHolding}
         openJobCompleted={openJobCompleted}
         openSameTech={openSameTech}
         selectedDispatch={selectedDispatch}
@@ -185,13 +189,27 @@ const Schedule = () => {
     );
   };
 
+  const openHolding = (selectedDispatch) => {
+    openModalTwo(
+      <Holding
+        selectedDispatch={selectedDispatch}
+        closeModalOne={closeModalOne}
+        closeModalTwo={closeModalTwo}
+      />,
+      "Move To Holding",
+      "sm"
+    );
+  };
+
   const openCancelDispatch = (selectedDispatch) => {
     openModalTwo(
       <CancelDispatch
         selectedDispatch={selectedDispatch}
         closeModalOne={closeModalOne}
         closeModalTwo={closeModalTwo}
-      />
+      />,
+      "Cancel Dispatch",
+      "sm"
     );
   };
 
@@ -312,7 +330,7 @@ const Schedule = () => {
   };
 
   return (
-    <div className="sizeAdjustment">
+    <div className="">
       <Toast />
       <div style={{ borderBottom: 2, borderColor: "divider" }}>
         <Tabs

@@ -202,15 +202,25 @@ export const useSyncedEvents = (collection1) => {
 
       const events = [];
       snapshot.forEach((doc) => {
-        events.push({
-          ...doc.data(),
-          id: doc.id,
-          start: doc.data().start.toDate(),
-          end: doc.data().end.toDate(),
-          dateCreated: doc.data().dateCreated.toDate(),
-          dateModified: doc.data().dateModified.toDate(),
-          dateScheduled: doc.data().dateScheduled.toDate(),
-        });
+        doc.data().dateScheduled
+          ? events.push({
+              ...doc.data(),
+              id: doc.id,
+              start: doc.data().start.toDate(),
+              end: doc.data().end.toDate(),
+              dateCreated: doc.data().dateCreated.toDate(),
+              dateModified: doc.data().dateModified.toDate(),
+              dateScheduled: doc.data().dateScheduled.toDate(),
+            })
+          : events.push({
+              ...doc.data(),
+              id: doc.id,
+              start: null,
+              end: null,
+              dateCreated: doc.data().dateCreated.toDate(),
+              dateModified: doc.data().dateModified.toDate(),
+              dateScheduled: null,
+            });
       });
       setDocuments(events);
       return () => subscription.unsubscribe();

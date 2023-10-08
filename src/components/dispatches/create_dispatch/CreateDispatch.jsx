@@ -93,21 +93,21 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
       });
       setInputError(true);
       return;
-    } else if (dispatchData.start === null) {
-      dispatch({
-        type: "ADD_NOTIFICATION",
-        payload: {
-          id: getFormattedExactTime(new Date()),
-          type: "INFO",
-          title: "Create Dispatch",
-          message: "Select a service date.",
-        },
-      });
-      setDateError(true);
-      return;
+      // } else if (dispatchData.start === null) {
+      //   dispatch({
+      //     type: "ADD_NOTIFICATION",
+      //     payload: {
+      //       id: getFormattedExactTime(new Date()),
+      //       type: "INFO",
+      //       title: "Create Dispatch",
+      //       message: "Select a service date.",
+      //     },
+      //   });
+      //   setDateError(true);
+      //   return;
     } else {
       setInputError(false);
-      setDateError(false);
+      //setDateError(false);
       submitDispatchToFirestore(
         customer,
         dispatchData,
@@ -115,15 +115,6 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
         activateFailureNotification,
         closeModalOne
       );
-      dispatch({
-        type: "ADD_NOTIFICATION",
-        payload: {
-          id: getFormattedDateAndTime(dispatchData.start),
-          type: "INFO",
-          title: "Submitted",
-          message: "Requested a cloud update",
-        },
-      });
     }
   };
 
@@ -152,7 +143,7 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
   };
 
   const [inputError, setInputError] = useState(false);
-  const [dateError, setDateError] = useState(false);
+  //const [dateError, setDateError] = useState(false);
 
   //   const localInvoiceId = invoiceId !== undefined ? invoiceId : "";
   //   const [jobNumber, setJobNumber] = useState(
@@ -170,6 +161,9 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
         overflow: "auto",
       }}
     >
+      <Typography variant="caption4">
+        * to start a dispatch in holding, leave the scheduled date empty!
+      </Typography>
       <Grid container spacing={1.5} sx={{ margin: "2px", marginTop: "16px" }}>
         <Grid sm={12} md={12} lg={4}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -379,11 +373,11 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
           Technician names can not be the same.
         </Typography>
       )}
-      {dateError && (
+      {/* {dateError && (
         <Typography variant="h5" color="orange">
           Please set a service date.
         </Typography>
-      )}
+      )} */}
 
       <Grid container spacing={1.5} sx={{ margin: "2px", marginTop: "16px" }}>
         <Grid xs={12} sm={12} md={12} lg={4}></Grid>
