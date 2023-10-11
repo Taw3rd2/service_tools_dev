@@ -50,7 +50,9 @@ export const finalUpdate = (eventToUpdate) => {
     dateCreated: eventToUpdate.dateCreated,
     dateModified: new Date(),
     dateScheduled: eventToUpdate.start,
-    end: addHours(setDateToZeroHours(eventToUpdate.start), 1),
+    end: eventToUpdate.start
+      ? addHours(setDateToZeroHours(eventToUpdate.start), 1)
+      : null,
     firstname: eventToUpdate.firstname,
     id: eventToUpdate.id,
     issue: eventToUpdate.issue,
@@ -59,7 +61,9 @@ export const finalUpdate = (eventToUpdate) => {
     leadSource: eventToUpdate.leadSource,
     notes: eventToUpdate.notes,
     payment: eventToUpdate.payment,
-    scheduledDate: getUnixTime(setDateToZeroHours(eventToUpdate.start)),
+    scheduledDate: eventToUpdate.start
+      ? getUnixTime(setDateToZeroHours(eventToUpdate.start))
+      : null,
     shorthand: eventToUpdate.shorthand,
     start: eventToUpdate.start,
     status: eventToUpdate.status,

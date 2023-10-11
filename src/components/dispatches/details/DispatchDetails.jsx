@@ -77,9 +77,7 @@ const DispatchDetails = ({
     shorthand: selectedDispatch.extendedProps.shorthand
       ? selectedDispatch.extendedProps.shorthand
       : "",
-    start: selectedDispatch.start
-      ? selectedDispatch.start
-      : setDateToZeroHours(new Date()),
+    start: selectedDispatch.start ? selectedDispatch.start : null,
     takenBy: selectedDispatch.extendedProps.takenBy
       ? selectedDispatch.extendedProps.takenBy
       : "",
@@ -152,18 +150,34 @@ const DispatchDetails = ({
         }}
       >
         <Grid xs={12} sm={12} md={12} lg={4}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Scheduled Date"
-              fullWidth
-              value={dispatchData.start}
-              onChange={handleDispatchDateChange("start")}
-              color="primary"
-              inputProps={{ tabIndex: "1" }}
-              renderInput={(params) => <TextField {...params} fullWidth />}
-              required
-            />
-          </LocalizationProvider>
+          {selectedDispatch.extendedProps.status === "holding" ? (
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Scheduled Date"
+                fullWidth
+                value={dispatchData.start}
+                onChange={handleDispatchDateChange("start")}
+                color="primary"
+                inputProps={{ tabIndex: "1" }}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+                required
+                disabled
+              />
+            </LocalizationProvider>
+          ) : (
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Scheduled Date"
+                fullWidth
+                value={dispatchData.start}
+                onChange={handleDispatchDateChange("start")}
+                color="primary"
+                inputProps={{ tabIndex: "1" }}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+                required
+              />
+            </LocalizationProvider>
+          )}
         </Grid>
         <Grid xs={12} sm={12} md={12} lg={4}>
           <TextField
@@ -358,6 +372,7 @@ const DispatchDetails = ({
             fullWidth
             required
             value={selectedDispatch.extendedProps.status}
+            disabled
           />
         </Grid>
       </Grid>
@@ -368,27 +383,29 @@ const DispatchDetails = ({
           sx={{ color: "red" }}
           onClick={() => openDeleteDispatch(selectedDispatch)}
         />
-        <BottomNavigationAction
-          label={
-            selectedDispatch.extendedProps.status === "canceled"
-              ? "Reschedule"
-              : "Cancel"
-          }
-          icon={
-            selectedDispatch.extendedProps.status === "canceled" ? (
-              <Update />
-            ) : (
-              <DoNotDisturb />
-            )
-          }
-          sx={{
-            color:
+        {selectedDispatch.extendedProps.status === "holding" ? null : (
+          <BottomNavigationAction
+            label={
               selectedDispatch.extendedProps.status === "canceled"
-                ? "green"
-                : "orange",
-          }}
-          onClick={() => openCancelDispatch(selectedDispatch)}
-        />
+                ? "Reschedule"
+                : "Cancel"
+            }
+            icon={
+              selectedDispatch.extendedProps.status === "canceled" ? (
+                <Update />
+              ) : (
+                <DoNotDisturb />
+              )
+            }
+            sx={{
+              color:
+                selectedDispatch.extendedProps.status === "canceled"
+                  ? "green"
+                  : "orange",
+            }}
+            onClick={() => openCancelDispatch(selectedDispatch)}
+          />
+        )}
         <BottomNavigationAction
           label="Update"
           icon={<ArrowUpward />}
@@ -404,11 +421,13 @@ const DispatchDetails = ({
               : () => submitUpdateDispatch()
           }
         />
-        <BottomNavigationAction
-          label="Holding"
-          icon={<Schedule />}
-          onClick={() => openHolding(selectedDispatch)}
-        />
+        {selectedDispatch.extendedProps.status === "holding" ? null : (
+          <BottomNavigationAction
+            label="Holding"
+            icon={<Schedule />}
+            onClick={() => openHolding(selectedDispatch)}
+          />
+        )}
         <BottomNavigationAction
           label="Close"
           icon={<Close />}

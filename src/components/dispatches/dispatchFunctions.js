@@ -333,6 +333,7 @@ export const updateDispatch = (
       ) {
         console.log("there is no extra dispatch to change");
         // update the original dispatch only
+        console.log("updatedDispatch: ", updatedDispatch);
         const eventToUpdate = finalUpdate(updatedDispatch);
         updateDocument(doc(db, "events", eventToUpdate.id), eventToUpdate)
           .then(() => {

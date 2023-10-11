@@ -85,8 +85,9 @@ const Holding = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
               dateScheduled: 0,
               end: null,
               id: selectedDispatch.id,
-              start: null,
               scheduledDate: null,
+              status: "holding",
+              start: null,
               title: selectedDispatch.title,
             };
             updateDoc(doc(db, "events", selectedDispatch.id), updatedDispatch)
@@ -126,8 +127,9 @@ const Holding = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
         dateScheduled: 0,
         end: null,
         id: selectedDispatch.id,
-        start: null,
         scheduledDate: null,
+        status: "holding",
+        start: null,
         title: selectedDispatch.title,
       };
       await updateDoc(doc(db, "events", selectedDispatch.id), updatedDispatch)

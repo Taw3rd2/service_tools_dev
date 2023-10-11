@@ -278,7 +278,7 @@ const Calendar = ({
       scheduledDate: getUnixFromDate(setDateToZeroHours(eventInfo.event.start)),
       shorthand: eventInfo.draggedEl.getAttribute("shorthand"),
       start: eventInfo.event.start,
-      status: eventInfo.draggedEl.getAttribute("status"),
+      status: "scheduled",
       takenBy: eventInfo.draggedEl.getAttribute("taken-by"),
       techHelper: eventInfo.draggedEl.getAttribute("tech-helper"),
       techHelperId: eventInfo.draggedEl.getAttribute("tech-helper-id"),
@@ -377,6 +377,38 @@ const Calendar = ({
           Holding
         </div>
         {datelessEvents.map((disp, index) => {
+          const selectedEvent = {
+            event: {
+              extendedProps: {
+                customerId: disp.customerId,
+                dateCreated: disp.dateCreated,
+                dateModified: disp.dateModified,
+                dateScheduled: disp.dateScheduled,
+                firstname: disp.firstname,
+                id: disp.id,
+                invoiceId: disp.invoiceId,
+                issue: disp.issue,
+                jobNumber: disp.jobNumber,
+                lastname: disp.lastname,
+                leadSource: disp.leadSource,
+                notes: disp.notes,
+                payment: disp.payment,
+                scheduledDate: disp.scheduledDate,
+                shorthand: disp.shorthand,
+                status: disp.status,
+                takenBy: disp.takenBy,
+                techHelper: disp.techHelper,
+                techHelperId: disp.techHelperId,
+                techLead: disp.techLead,
+                timeAlotted: disp.timeAlotted,
+                timeOfDay: disp.timeOfDay,
+              },
+              end: disp.end,
+              id: disp.id,
+              start: disp.start,
+              title: disp.title,
+            },
+          };
           return (
             <div
               className="fc-event"
@@ -418,6 +450,7 @@ const Calendar = ({
                 margin: "2px",
                 marginBottom: "2px",
               }}
+              onClick={() => selectEvent(selectedEvent)}
             >
               {disp.title}
             </div>
@@ -428,7 +461,7 @@ const Calendar = ({
         <FullCalendar
           customButtons={{
             openDrawerButton: {
-              text: "Holding",
+              text: "holding",
               click: function () {
                 toggleHolding();
               },
