@@ -101,6 +101,17 @@ export const getFormattedExactTime = (date) => {
   }
 };
 
+export const getFormattedCompactDateAndTime = (date) => {
+  if (Object.prototype.toString.call(date) === "[object Date]") {
+    const exactTimeFormat = format(date, "MM/dd/yy h:mm");
+    return exactTimeFormat;
+  } else {
+    const newDate = date.toDate();
+    const exactTimeFormat = format(newDate, "MM/dd/yy h:mm");
+    return exactTimeFormat;
+  }
+};
+
 export const getDateFromString = (string) => {
   return parse(string, "MMM, dd, yyyy", new Date());
 };

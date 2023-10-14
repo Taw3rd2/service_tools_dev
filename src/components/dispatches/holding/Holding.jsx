@@ -22,6 +22,10 @@ const Holding = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
 
   const moveToHolding = async () => {
     console.log("moving to holding");
+    console.log(
+      "selectedDispatch.extendedProps: ",
+      selectedDispatch.extendedProps
+    );
 
     //if dispatch is done, parts, or canceled
     if (
@@ -40,7 +44,10 @@ const Holding = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
         },
       });
       return;
-    } else if (selectedDispatch.extendedProps.techHelperId) {
+    } else if (
+      selectedDispatch.extendedProps.techHelperId &&
+      selectedDispatch.extendedProps.techHelper !== "NONE"
+    ) {
       //we have 2 techs
 
       //TODO Validation on 2nd tech status is not done and unreachable here..

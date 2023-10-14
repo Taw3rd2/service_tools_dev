@@ -185,7 +185,7 @@ const Schedule = () => {
           <Print fontSize="large" />
         </IconButton>
       </div>,
-      "sm"
+      "md"
     );
   };
 

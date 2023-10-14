@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { collection } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db, useSyncedCollection } from "../../../firebase/firestore.utils";
 import { ToastContext } from "../../../context/toastContext";
 import {
@@ -22,12 +23,19 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 const CreateDispatch = ({ customer, date, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
 
+  const currentAuth = getAuth();
   const dispatchers = useSyncedCollection(collection(db, "dispatchers"));
   const technicians = useSyncedCollection(collection(db, "technicians"));
   const workList = useSyncedCollection(collection(db, "workList"));
   const payments = useSyncedCollection(collection(db, "payments"));
-
   const [dispatchData, setDispatchData] = useState({
+    dispatchLog: [
+      {
+        activity: "Created the dispatch",
+        activityTime: new Date(),
+        name: currentAuth.currentUser.displayName,
+      },
+    ],
     issue: "",
     jobNumber: "",
     leadSource: "PC",
@@ -93,21 +101,8 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
       });
       setInputError(true);
       return;
-      // } else if (dispatchData.start === null) {
-      //   dispatch({
-      //     type: "ADD_NOTIFICATION",
-      //     payload: {
-      //       id: getFormattedExactTime(new Date()),
-      //       type: "INFO",
-      //       title: "Create Dispatch",
-      //       message: "Select a service date.",
-      //     },
-      //   });
-      //   setDateError(true);
-      //   return;
     } else {
       setInputError(false);
-      //setDateError(false);
       submitDispatchToFirestore(
         customer,
         dispatchData,
