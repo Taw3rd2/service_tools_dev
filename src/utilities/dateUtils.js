@@ -107,7 +107,7 @@ export const getFormattedCompactDateAndTime = (date) => {
     return exactTimeFormat;
   } else {
     const newDate = date.toDate();
-    const exactTimeFormat = format(newDate, "MM/dd/yy h:mm");
+    const exactTimeFormat = format(newDate, "MM/dd/yy h:mm a");
     return exactTimeFormat;
   }
 };

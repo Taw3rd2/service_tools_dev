@@ -32,8 +32,11 @@ const DispatchDetails = lazy(() =>
 const DeleteDispatch = lazy(() =>
   import("../../components/dispatches/delete/DeleteDispatch")
 );
-const Holding = lazy(() =>
-  import("../../components/dispatches/holding/Holding")
+const ConfirmHolding = lazy(() =>
+  import("../../components/dispatches/holding/ConfirmHolding")
+);
+const AddDispatchLog = lazy(() =>
+  import("../../components/dispatches/details/dispatch_log/AddDispatchLog")
 );
 //Menu
 const DailyOptionsMenu = lazy(() =>
@@ -167,6 +170,7 @@ const Schedule = () => {
     openModalOne(
       <DispatchDetails
         closeModalOne={closeModalOne}
+        openAddDispatchLog={openAddDispatchLog}
         openCancelDispatch={openCancelDispatch}
         openDeleteDispatch={openDeleteDispatch}
         openHolding={openHolding}
@@ -191,7 +195,7 @@ const Schedule = () => {
 
   const openHolding = (selectedDispatch) => {
     openModalTwo(
-      <Holding
+      <ConfirmHolding
         selectedDispatch={selectedDispatch}
         closeModalOne={closeModalOne}
         closeModalTwo={closeModalTwo}
@@ -320,13 +324,18 @@ const Schedule = () => {
       "Customer Search",
       "sm"
     );
-    // openCustomerSearchModal(
-    //   <CalendarCustomerSearch
-    //     openCreateDispatch={openCreateDispatch}
-    //     closeModalOne={closeCustomerSearchModal}
-    //     date={date}
-    //   />
-    // );
+  };
+
+  const openAddDispatchLog = (disp, func) => {
+    openModalTwo(
+      <AddDispatchLog
+        closeModalTwo={closeModalTwo}
+        disp={disp}
+        handleDispatchLogChange={func}
+      />,
+      "Add log message",
+      "sm"
+    );
   };
 
   return (

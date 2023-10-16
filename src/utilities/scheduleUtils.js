@@ -47,6 +47,7 @@ export const compareLead = (originalEvent, changedEvent) => {
 export const finalUpdate = (eventToUpdate) => {
   const updatedDispatch = {
     customerId: eventToUpdate.customerId,
+    dispatchLog: eventToUpdate.dispatchLog,
     dateCreated: eventToUpdate.dateCreated,
     dateModified: new Date(),
     dateScheduled: eventToUpdate.start,
@@ -74,13 +75,6 @@ export const finalUpdate = (eventToUpdate) => {
     timeAlotted: eventToUpdate.timeAlotted,
     timeOfDay: eventToUpdate.timeOfDay,
     title: `${eventToUpdate.timeAlotted} /${eventToUpdate.lastname} /${eventToUpdate.shorthand} /${eventToUpdate.timeOfDay}`,
-
-    //   street: eventToUpdate.street,
-    //   city: eventToUpdate.city,
-    //   phoneName: eventToUpdate.phoneName,
-    //   altPhoneName: eventToUpdate.altPhoneName,
-    //   phone: eventToUpdate.phone,
-    //   altphone: eventToUpdate.altphone,
   };
   return updatedDispatch;
 };

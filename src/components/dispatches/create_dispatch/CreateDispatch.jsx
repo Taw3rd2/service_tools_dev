@@ -19,6 +19,7 @@ import { submitDispatchToFirestore } from "../dispatchFunctions";
 import "../../../global_style/style.css";
 import MainField from "../../customer_information/fields/MainField";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { getUnixTime } from "date-fns";
 
 const CreateDispatch = ({ customer, date, closeModalOne }) => {
   const { dispatch } = useContext(ToastContext);
@@ -31,9 +32,10 @@ const CreateDispatch = ({ customer, date, closeModalOne }) => {
   const [dispatchData, setDispatchData] = useState({
     dispatchLog: [
       {
-        activity: "Created the dispatch",
+        activity: "Created the dispatch.",
         activityTime: new Date(),
         name: currentAuth.currentUser.displayName,
+        sortingDate: getUnixTime(new Date()),
       },
     ],
     issue: "",

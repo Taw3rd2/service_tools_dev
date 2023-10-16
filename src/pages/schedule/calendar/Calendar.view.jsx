@@ -17,12 +17,14 @@ import "./calendarView.css";
 
 import { SettingsOutlined } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import {
   getUnixFromDate,
   setDateToOneAm,
   setDateToZeroHours,
 } from "../../../utilities/dateUtils";
+import { getAuth } from "firebase/auth";
+import Holding from "../../../components/dispatches/holding/Holding";
+import { getUnixTime } from "date-fns";
 
 const settingsButton = {
   borderRadius: "5px",
@@ -59,12 +61,10 @@ const Calendar = ({
   openDailyOptionsMenu,
   openCalendarCustomerSearch,
 }) => {
-  const theme = useTheme();
-
   const labels = useSyncedLabels(collection(db, "calLabel"));
   const events = useSyncedEvents(collection(db, "events"));
-
   const datelessEvents = events.filter((event) => event.dateScheduled === null);
+  const currentAuth = getAuth();
 
   useEffect(() => {
     let draggableEl = document.getElementById("external-events");
@@ -262,7 +262,6 @@ const Calendar = ({
   };
 
   const handleEventReceive = async (eventInfo) => {
-    console.log("eventInfo", eventInfo);
     // get the event id from eventInfo.draggedEl
     const eventId = eventInfo.draggedEl.getAttribute("data-id");
 
@@ -272,134 +271,115 @@ const Calendar = ({
     // populate the dispatch with the correct info
     if (docSnap.exists()) {
       const eventData = docSnap.data();
-      console.log("eventData: ", eventData);
-      const finalEventUpdate = {
-        customerId: eventData.customerId,
-        dateCreated: eventData.dateCreated,
-        dateModified: new Date(),
-        dateScheduled: eventInfo.event.start,
-        dispatchLog: eventData.dispatchLog,
-        end: setDateToOneAm(eventInfo.event.start),
-        firstname: eventData.firstname,
-        id: eventData.id,
-        invoiceId: eventData.invoiceId,
-        issue: eventData.issue,
-        jobNumber: eventData.jobNumber,
-        lastname: eventData.lastname,
-        leadSource: eventData.leadSource,
-        notes: eventData.notes,
-        payment: eventData.payment,
-        scheduledDate: getUnixFromDate(
-          setDateToZeroHours(eventInfo.event.start)
-        ),
-        shorthand: eventData.shorthand,
-        start: eventInfo.event.start,
-        status: "scheduled",
-        takenBy: eventData.takenBy,
-        techHelper: eventData.techHelper,
-        techHelperId: eventData.techHelperId,
-        techLead: eventData.techLead,
-        timeAlotted: eventData.timeAlotted,
-        timeOfDay: eventData.timeOfDay,
-        title: eventData.title,
+
+      //create a new dispatch log and add it to the array
+      const updatedDispatchLog = eventData.dispatchLog?.length
+        ? eventData.dispatchLog
+        : [];
+      const dispatchLogToAdd = {
+        activity: "Moved from holding to scheduled.",
+        activityTime: new Date(),
+        name: currentAuth.currentUser.displayName,
+        sortingDate: getUnixTime(new Date()),
       };
-      console.log("finalEventUpdate: ", finalEventUpdate);
-      if (eventInfo.draggedEl.getAttribute("data-id")) {
-        //if we have a id, update the dispatch in firestore
-        updateDocument(
-          doc(db, "events", eventInfo.draggedEl.getAttribute("data-id")),
-          finalEventUpdate
-        )
+      updatedDispatchLog.push(dispatchLogToAdd);
+
+      //check for a 2nd tech before updating the original.
+      if (eventData.techHelper !== "NONE") {
+        const docForId = doc(collection(db, "events"));
+        const helperEvent = {
+          customerId: eventData.customerId,
+          dateCreated: eventData.dateCreated,
+          dateModified: new Date(),
+          dateScheduled: eventInfo.event.start,
+          dispatchLog: updatedDispatchLog,
+          end: setDateToOneAm(eventInfo.event.start),
+          firstname: eventData.firstname,
+          id: docForId.id,
+          invoiceId: eventData.invoiceId,
+          issue: eventData.issue,
+          jobNumber: eventData.jobNumber,
+          lastname: eventData.lastname,
+          leadSource: eventData.leadSource,
+          notes: eventData.notes,
+          payment: eventData.payment,
+          scheduledDate: getUnixFromDate(
+            setDateToZeroHours(eventInfo.event.start)
+          ),
+          shorthand: eventData.shorthand,
+          start: eventInfo.event.start,
+          status: "scheduled",
+          takenBy: eventData.takenBy,
+          techHelper: eventData.techLead,
+          techHelperId: eventInfo.draggedEl.getAttribute("data-id"),
+          techLead: eventData.techHelper,
+          timeAlotted: eventData.timeAlotted,
+          timeOfDay: eventData.timeOfDay,
+          title: eventData.title,
+        };
+        createNamedDocument(doc(db, "events", docForId.id), helperEvent)
           .then(() => {
-            console.log("updated original dispatch");
-            //check for a 2nd tech
-            if (eventData.techHelperId) {
-              const helperEvent = {
-                customerId: eventInfo.draggedEl.getAttribute("customer-id"),
-                dateCreated: eventData.dateCreated,
-                dateModified: new Date(),
-                dateScheduled: eventInfo.event.start,
-                dispatchLog: eventData.dispatchLog,
-                end: setDateToOneAm(eventInfo.event.start),
-                firstname: eventData.firstname,
-                id: eventData.techHelperId,
-                invoiceId: eventData.invoiceId,
-                issue: eventData.issue,
-                jobNumber: eventData.jobNumber,
-                lastname: eventData.lastname,
-                leadSource: eventData.leadSource,
-                notes: eventData.notes,
-                payment: eventData.payment,
-                scheduledDate: getUnixFromDate(
-                  setDateToZeroHours(eventInfo.event.start)
-                ),
-                shorthand: eventData.shorthand,
-                start: eventInfo.event.start,
-                status: "scheduled",
-                takenBy: eventData.takenBy,
-                techHelper: eventData.techLead,
-                techHelperId: eventInfo.draggedEl.getAttribute("data-id"),
-                techLead: eventData.techHelper,
-                timeAlotted: eventData.timeAlotted,
-                timeOfDay: eventData.timeOfDay,
-                title: eventData.title,
-              };
-              createNamedDocument(
-                doc(db, "events", eventData.techHelperId),
-                helperEvent
+            console.log("Success creating tech helper in firestore");
+            //update the original
+            const originalEventUpdate = {
+              customerId: eventData.customerId,
+              dateCreated: eventData.dateCreated,
+              dateModified: new Date(),
+              dateScheduled: eventInfo.event.start,
+              dispatchLog: updatedDispatchLog,
+              end: setDateToOneAm(eventInfo.event.start),
+              firstname: eventData.firstname,
+              id: eventData.id,
+              invoiceId: eventData.invoiceId,
+              issue: eventData.issue,
+              jobNumber: eventData.jobNumber,
+              lastname: eventData.lastname,
+              leadSource: eventData.leadSource,
+              notes: eventData.notes,
+              payment: eventData.payment,
+              scheduledDate: getUnixFromDate(
+                setDateToZeroHours(eventInfo.event.start)
+              ),
+              shorthand: eventData.shorthand,
+              start: eventInfo.event.start,
+              status: "scheduled",
+              takenBy: eventData.takenBy,
+              techHelper: eventData.techHelper,
+              techHelperId: docForId.id,
+              techLead: eventData.techLead,
+              timeAlotted: eventData.timeAlotted,
+              timeOfDay: eventData.timeOfDay,
+              title: eventData.title,
+            };
+            if (eventInfo.draggedEl.getAttribute("data-id")) {
+              //if we have a id, update the dispatch in firestore
+              updateDocument(
+                doc(db, "events", eventInfo.draggedEl.getAttribute("data-id")),
+                originalEventUpdate
               )
                 .then(() => {
-                  console.log("Success updating tech helper in firestore");
+                  console.log("Success updating the original dispatch");
                 })
                 .catch((error) =>
                   console.log(
-                    "firebase error on updating tech helper dispatch",
+                    "firestore error updating original dispatch: ",
                     error
                   )
                 );
+            } else {
+              console.log("No Id to update");
             }
           })
           .catch((error) =>
-            console.log("firestore error updating original dispatch: ", error)
+            console.log(
+              "firebase error on updating tech helper dispatch",
+              error
+            )
           );
-      } else {
-        console.log("No Id to update");
       }
     } else {
       console.log("event document was undefined or dose not exist");
     }
-
-    // const droppedEvent = {
-    //   customerId: eventInfo.draggedEl.getAttribute("customer-id"),
-    //   dateCreated: new Date(eventInfo.draggedEl.getAttribute("date-created")),
-    //   dateModified: new Date(),
-    //   dateScheduled: eventInfo.event.start,
-    //   dispatchLog: eventInfo.event.dispatchLog
-    //     ? Array.from(eventInfo.draggedEl.getAttribute("dispatch-log"))
-    //     : [],
-    //   end: setDateToOneAm(eventInfo.event.start),
-    //   firstname: eventInfo.draggedEl.getAttribute("firstname"),
-    //   id: eventInfo.draggedEl.getAttribute("data-id"),
-    //   invoiceId: eventInfo.draggedEl.getAttribute("invoice-id"),
-    //   issue: eventInfo.draggedEl.getAttribute("issue"),
-    //   jobNumber: eventInfo.draggedEl.getAttribute("job-number"),
-    //   lastname: eventInfo.draggedEl.getAttribute("lastname"),
-    //   leadSource: eventInfo.draggedEl.getAttribute("lead-source"),
-    //   notes: eventInfo.draggedEl.getAttribute("notes"),
-    //   payment: eventInfo.draggedEl.getAttribute("payment"),
-    //   scheduledDate: getUnixFromDate(setDateToZeroHours(eventInfo.event.start)),
-    //   shorthand: eventInfo.draggedEl.getAttribute("shorthand"),
-    //   start: eventInfo.event.start,
-    //   status: "scheduled",
-    //   takenBy: eventInfo.draggedEl.getAttribute("taken-by"),
-    //   techHelper: eventInfo.draggedEl.getAttribute("tech-helper"),
-    //   techHelperId: eventInfo.draggedEl.getAttribute("tech-helper-id"),
-    //   techLead: eventInfo.draggedEl.getAttribute("tech-lead"),
-    //   timeAlotted: eventInfo.draggedEl.getAttribute("time-alotted"),
-    //   timeOfDay: eventInfo.draggedEl.getAttribute("time-of-day"),
-    //   title: eventInfo.draggedEl.getAttribute("title"),
-    // };
-    // console.log("droppedEvent: ", droppedEvent);
   };
 
   return (
@@ -423,88 +403,12 @@ const Calendar = ({
         >
           Holding
         </div>
-        {datelessEvents.map((disp, index) => {
-          const selectedEvent = {
-            event: {
-              extendedProps: {
-                customerId: disp.customerId,
-                dateCreated: disp.dateCreated,
-                dateModified: disp.dateModified,
-                dateScheduled: disp.dateScheduled,
-                dispatchLog: disp.dispatchLog,
-                firstname: disp.firstname,
-                id: disp.id,
-                invoiceId: disp.invoiceId,
-                issue: disp.issue,
-                jobNumber: disp.jobNumber,
-                lastname: disp.lastname,
-                leadSource: disp.leadSource,
-                notes: disp.notes,
-                payment: disp.payment,
-                scheduledDate: disp.scheduledDate,
-                shorthand: disp.shorthand,
-                status: disp.status,
-                takenBy: disp.takenBy,
-                techHelper: disp.techHelper,
-                techHelperId: disp.techHelperId,
-                techLead: disp.techLead,
-                timeAlotted: disp.timeAlotted,
-                timeOfDay: disp.timeOfDay,
-              },
-              end: disp.end,
-              id: disp.id,
-              start: disp.start,
-              title: disp.title,
-            },
-          };
-          return (
-            <div
-              className="fc-event"
-              customer-id={disp.customerId}
-              data-id={disp.id}
-              date-created={disp.dateCreated}
-              date-modified={disp.dateModified}
-              date-scheduled={disp.dateScheduled}
-              dispatch-log={disp.dispatchLog}
-              draggable="true"
-              end={disp.end}
-              firstname={disp.firstname}
-              id={disp.id}
-              invoice-id={disp.invoiceId}
-              issue={disp.issue}
-              job-number={disp.jobNumber}
-              key={disp.id}
-              lastname={disp.lastname}
-              lead-source={disp.leadSource}
-              notes={disp.notes}
-              payment={disp.payment}
-              scheduled-date={disp.scheduledDate}
-              shorthand={disp.shorthand}
-              start={disp.start}
-              status={disp.status}
-              taken-by={disp.takenBy}
-              tech-helper={disp.techHelper}
-              tech-helper-id={disp.techHelperId}
-              tech-lead={disp.techLead}
-              time-alotted={disp.timeAlotted}
-              time-of-day={disp.timeOfDay}
-              title={disp.title}
-              style={{
-                backgroundColor: theme.palette.background.paper,
-                border: "1px solid",
-                borderRadius: "3px",
-                color: theme.palette.text.primary,
-                cursor: "pointer",
-                display: isDrawerOpen ? "inherit" : "none",
-                margin: "2px",
-                marginBottom: "2px",
-              }}
-              onClick={() => selectEvent(selectedEvent)}
-            >
-              {disp.title}
-            </div>
-          );
-        })}
+        <Holding
+          datelessEvents={datelessEvents}
+          isDrawerOpen={isDrawerOpen}
+          selectEvent={selectEvent}
+          technicians={technicians}
+        />
       </div>
       <div style={{ width: "100%", margin: "2px" }}>
         <FullCalendar
@@ -519,20 +423,13 @@ const Calendar = ({
           dayCellContent={customDateHeader}
           displayEventTime={false}
           droppable={true}
-          drop={(dropInfo) => console.log("dropInfo", dropInfo)}
+          // drop={(dropInfo) => console.log("dropInfo", dropInfo)}
           editable={true}
           eventBorderColor={30}
           eventClassNames="fc-h-event"
-          eventChange={() => {
-            console.log("eventChange");
-          }}
           eventClick={selectEvent}
           eventDataTransform={eventColorSetter}
           eventDisplay="block"
-          eventDrop={(info) => {
-            console.log("start: ", info.event.start);
-            console.log("info: ", info);
-          }}
           eventReceive={handleEventReceive}
           events={[...getFilteredEvents()]}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

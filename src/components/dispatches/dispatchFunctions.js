@@ -1,5 +1,5 @@
 import { addHours, getUnixTime } from "date-fns";
-import { collection, doc } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import {
   createNamedDocument,
   db,
@@ -16,6 +16,7 @@ import {
   compareLead,
   finalUpdate,
 } from "../../utilities/scheduleUtils";
+import { getAuth } from "firebase/auth";
 
 export const submitDispatchToFirestore = (
   customer,
@@ -313,6 +314,11 @@ export const updateDispatch = (
     openSameTech();
     return;
   } else {
+    //Validation OK
+    //Start Update
+    const currentAuth = getAuth();
+
+    //gather data
     const updatedDispatch = {
       ...dispatchData,
       customerId: selectedDispatch.extendedProps.customerId,
@@ -326,6 +332,20 @@ export const updateDispatch = (
       techHelperId: selectedDispatch.extendedProps.techHelperId,
       title: selectedDispatch.title,
     };
+    //add dispatch log
+    const updatedDispatchLog = selectedDispatch.extendedProps.dispatchLog
+      ?.length
+      ? selectedDispatch.extendedProps.dispatchLog
+      : [];
+    const dispatchLogToAdd = {
+      activity: "Updated the dispatch.",
+      activityTime: new Date(),
+      name: currentAuth.currentUser.displayName,
+      sortingDate: getUnixTime(new Date()),
+    };
+    updatedDispatchLog.push(dispatchLogToAdd);
+    updatedDispatch.dispatchLog = updatedDispatchLog;
+
     //compare old dispatch with changes to see if techs changed
     const noTechChange = compareEvents(
       selectedDispatch.extendedProps,
@@ -339,7 +359,6 @@ export const updateDispatch = (
       ) {
         console.log("there is no extra dispatch to change");
         // update the original dispatch only
-        console.log("updatedDispatch: ", updatedDispatch);
         const eventToUpdate = finalUpdate(updatedDispatch);
         updateDocument(doc(db, "events", eventToUpdate.id), eventToUpdate)
           .then(() => {
@@ -352,7 +371,6 @@ export const updateDispatch = (
                 message: "Updated the dispatch in the cloud",
               },
             });
-            closeModalOne();
           })
           .catch((error) => {
             dispatch({
@@ -395,7 +413,6 @@ export const updateDispatch = (
                 message: "Updated the dispatch in the cloud",
               },
             });
-            closeModalOne();
           })
           .catch((error) => {
             dispatch({
@@ -418,7 +435,6 @@ export const updateDispatch = (
             message: "Updated the dispatch in the cloud",
           },
         });
-        closeModalOne();
       }
     } else {
       console.log("techs have changed");
@@ -480,7 +496,6 @@ export const updateDispatch = (
                     message: "Dispatch updated in the cloud",
                   },
                 });
-                closeModalOne();
               })
               .catch((error) => {
                 dispatch({
@@ -564,7 +579,6 @@ export const updateDispatch = (
                     message: "Updated the dispatch in the cloud",
                   },
                 });
-                closeModalOne();
               })
               .catch((error) => {
                 dispatch({
@@ -614,7 +628,6 @@ export const updateDispatch = (
               });
 
             let newEvent = { ...updatedDispatch };
-            console.log("newEvent: ", newEvent);
             newEvent.id = updatedDispatch.techHelperId;
             newEvent.techLead = updatedDispatch.techHelper;
             newEvent.techHelper = updatedDispatch.techLead;
@@ -634,7 +647,6 @@ export const updateDispatch = (
                     message: "Updated the dispatch in the cloud",
                   },
                 });
-                closeModalOne();
               })
               .catch((error) => {
                 dispatch({
@@ -668,7 +680,6 @@ export const updateDispatch = (
                 message: "Updated the dispatch in the cloud",
               },
             });
-            closeModalOne();
           })
           .catch((error) => {
             dispatch({
@@ -704,7 +715,6 @@ export const updateDispatch = (
                     message: "Updated the dispatch in the cloud",
                   },
                 });
-                closeModalOne();
               })
               .catch((error) => {
                 dispatch({
@@ -749,7 +759,6 @@ export const updateDispatch = (
                   message: "Updated the dispatch in the cloud",
                 },
               });
-              closeModalOne();
             })
             .catch((error) => {
               dispatch({
@@ -766,5 +775,29 @@ export const updateDispatch = (
         }
       }
     }
+  }
+};
+
+export const submitNewLogMessage = async (disp, log) => {
+  const updatedDispatchLog = disp.extendedProps.dispatchLog?.length
+    ? disp.extendedProps.dispatchLog
+    : [];
+  updatedDispatchLog.push(log);
+
+  if (disp.extendedProps.techHelperId) {
+    //two techs to update
+    await updateDoc(doc(db, "events", disp.id), {
+      dispatchLog: updatedDispatchLog,
+    }).then(
+      console.log("first dispatch log updated"),
+      await updateDoc(doc(db, "events", disp.extendedProps.techHelperId), {
+        dispatchLog: updatedDispatchLog,
+      }).then(console.log("second dispatch log updated"))
+    );
+  } else {
+    //one tech to update
+    await updateDoc(doc(db, "events", disp.id), {
+      dispatchLog: updatedDispatchLog,
+    }).then(console.log("dispatch log updated"));
   }
 };

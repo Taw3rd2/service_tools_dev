@@ -3,7 +3,6 @@ import { useContext, useState } from "react";
 import { collection } from "firebase/firestore";
 import {
   db,
-  useAuth,
   useSyncedCollection,
   useSyncedDocument,
 } from "../../../firebase/firestore.utils";
@@ -15,6 +14,7 @@ import {
   Autocomplete,
   BottomNavigation,
   BottomNavigationAction,
+  Paper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -24,6 +24,7 @@ import {
   Close,
   DeleteForever,
   DoNotDisturb,
+  OpenInNew,
   Schedule,
   Update,
 } from "@mui/icons-material";
@@ -31,11 +32,11 @@ import MainField from "../../customer_information/fields/MainField";
 import ContactCard from "../../customer_information/fields/ContactCard";
 import { updateDispatch } from "../dispatchFunctions";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { getFormattedCompactDateAndTime } from "../../../utilities/dateUtils";
-import { getAuth } from "firebase/auth";
+import DispatchLog from "./dispatch_log/DispatchLog";
 
 const DispatchDetails = ({
   closeModalOne,
+  openAddDispatchLog,
   openCancelDispatch,
   openDeleteDispatch,
   openHolding,
@@ -50,13 +51,15 @@ const DispatchDetails = ({
     selectedDispatch.extendedProps.customerId
   );
 
-  const currentAuth = getAuth();
   const dispatchers = useSyncedCollection(collection(db, "dispatchers"));
   const technicians = useSyncedCollection(collection(db, "technicians"));
   const workList = useSyncedCollection(collection(db, "workList"));
   const payments = useSyncedCollection(collection(db, "payments"));
 
   const [dispatchData, setDispatchData] = useState({
+    dispatchLog: selectedDispatch.extendedProps.dispatchLog?.length
+      ? selectedDispatch.extendedProps.dispatchLog
+      : [],
     firstname: selectedDispatch.extendedProps.firstname
       ? selectedDispatch.extendedProps.firstname
       : "",
@@ -132,21 +135,13 @@ const DispatchDetails = ({
     });
   };
 
+  const handleDispatchLogChange = (newLog) => {
+    setDispatchData({ ...dispatchData, dispatchLog: newLog });
+    submitUpdateDispatch();
+  };
+
   const submitUpdateDispatch = () => {
-    // add the update here
     const updatedDisaptchData = { ...dispatchData };
-
-    console.log("updatedDispatchData: ", updatedDisaptchData);
-    console.log("selectedDispatch: ", selectedDispatch);
-
-    // updatedDisaptchData.dispatchLog.push({
-    //   activity: "Updated the dispatch",
-    //   activityTime: new Date(),
-    //   name: currentAuth.currentUser.displayName,
-    // });
-
-    // console.log("updatedDispatchData: ", updatedDisaptchData);
-
     updateDispatch(
       closeModalOne,
       dispatch,
@@ -158,17 +153,15 @@ const DispatchDetails = ({
   };
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} mt={1}>
+      {selectedDispatch.extendedProps.status === "holding" && (
+        <Typography variant="caption" sx={{ margin: "8px" }}>
+          Note: Use Drag and Drop to move dispatches out of holding.
+        </Typography>
+      )}
       <Grid xs={8}>
         <form onSubmit={submitUpdateDispatch} autoComplete="new-password">
-          <Grid
-            container
-            spacing={1.5}
-            sx={{
-              margin: "2px",
-              marginTop: "16px",
-            }}
-          >
+          <Grid container spacing={1.5}>
             <Grid xs={12} sm={12} md={12} lg={4}>
               {selectedDispatch.extendedProps.status === "holding" ? (
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -315,10 +308,12 @@ const DispatchDetails = ({
               )}
             </Grid>
             <Grid xs={12} sm={12} md={12} lg={4}>
-              {technicians.length > 0 && (
+              {technicians.length > 0 &&
+              selectedDispatch.extendedProps.status === "holding" ? (
                 <Autocomplete
                   disableClearable
                   disablePortal
+                  disabled
                   fullWidth
                   getOptionLabel={(option) => option}
                   id="tech-helper"
@@ -338,6 +333,31 @@ const DispatchDetails = ({
                   )}
                   value={dispatchData.techHelper}
                 />
+              ) : (
+                technicians.length > 0 && (
+                  <Autocomplete
+                    disableClearable
+                    disablePortal
+                    fullWidth
+                    getOptionLabel={(option) => option}
+                    id="tech-helper"
+                    isOptionEqualToValue={(option, value) => option === value}
+                    options={techHelperList
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((technician, index) => technician.name)}
+                    onChange={(option, value) =>
+                      handleDispatchDataSelectChange("techHelper", value)
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Tech Helper"
+                        variant="outlined"
+                      />
+                    )}
+                    value={dispatchData.techHelper}
+                  />
+                )
               )}
             </Grid>
             <Grid xs={12} sm={12} md={12} lg={4}>
@@ -364,7 +384,7 @@ const DispatchDetails = ({
             </Grid>
             <Grid xs={12}>
               <TextField
-                label="Notes"
+                label="Job Details"
                 multiline
                 fullWidth
                 rows={3}
@@ -410,13 +430,12 @@ const DispatchDetails = ({
               <TextField
                 label="Status"
                 fullWidth
-                required
                 value={selectedDispatch.extendedProps.status}
                 disabled
               />
             </Grid>
           </Grid>
-          <BottomNavigation showLabels>
+          <BottomNavigation showLabels sx={{ marginTop: "8px" }}>
             <BottomNavigationAction
               label="Delete"
               icon={<DeleteForever />}
@@ -458,7 +477,9 @@ const DispatchDetails = ({
               onClick={
                 selectedDispatch.extendedProps.status === "canceled"
                   ? () =>
-                      console.log("No Update the dispatch when its canceled")
+                      console.log(
+                        "Can not Update the dispatch when its canceled"
+                      )
                   : () => submitUpdateDispatch()
               }
             />
@@ -470,6 +491,13 @@ const DispatchDetails = ({
               />
             )}
             <BottomNavigationAction
+              label="Add Log Message"
+              icon={<OpenInNew />}
+              onClick={() =>
+                openAddDispatchLog(selectedDispatch, handleDispatchLogChange)
+              }
+            />
+            <BottomNavigationAction
               label="Close"
               icon={<Close />}
               onClick={() => closeModalOne()}
@@ -477,17 +505,16 @@ const DispatchDetails = ({
           </BottomNavigation>
         </form>
       </Grid>
-      <Grid xs={4} border={1}>
-        <Typography variant="body1">Activity Feed</Typography>
-        {selectedDispatch.extendedProps.dispatchLog &&
-          selectedDispatch.extendedProps.dispatchLog.map((logEntry, index) => (
-            <div key={index}>
-              <Typography variant="caption">
-                {getFormattedCompactDateAndTime(logEntry.activityTime)}{" "}
-                {logEntry.name} {logEntry.activity}
-              </Typography>
-            </div>
-          ))}
+      <Grid xs={4}>
+        <Paper sx={{ padding: "4px" }} elevation={2}>
+          <Typography
+            variant="body1"
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            Activity Feed
+          </Typography>
+          <DispatchLog dispatchLog={dispatchData.dispatchLog} />
+        </Paper>
       </Grid>
     </Grid>
   );
