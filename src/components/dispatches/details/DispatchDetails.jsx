@@ -435,74 +435,6 @@ const DispatchDetails = ({
               />
             </Grid>
           </Grid>
-          <BottomNavigation showLabels sx={{ marginTop: "8px" }}>
-            <BottomNavigationAction
-              label="Delete"
-              icon={<DeleteForever />}
-              sx={{ color: "red" }}
-              onClick={() => openDeleteDispatch(selectedDispatch)}
-            />
-            {selectedDispatch.extendedProps.status === "holding" ? null : (
-              <BottomNavigationAction
-                label={
-                  selectedDispatch.extendedProps.status === "canceled"
-                    ? "Reschedule"
-                    : "Cancel"
-                }
-                icon={
-                  selectedDispatch.extendedProps.status === "canceled" ? (
-                    <Update />
-                  ) : (
-                    <DoNotDisturb />
-                  )
-                }
-                sx={{
-                  color:
-                    selectedDispatch.extendedProps.status === "canceled"
-                      ? "green"
-                      : "orange",
-                }}
-                onClick={() => openCancelDispatch(selectedDispatch)}
-              />
-            )}
-            <BottomNavigationAction
-              label="Update"
-              icon={<ArrowUpward />}
-              sx={{
-                color:
-                  selectedDispatch.extendedProps.status === "canceled"
-                    ? "grey"
-                    : "green",
-              }}
-              onClick={
-                selectedDispatch.extendedProps.status === "canceled"
-                  ? () =>
-                      console.log(
-                        "Can not Update the dispatch when its canceled"
-                      )
-                  : () => submitUpdateDispatch()
-              }
-            />
-            {selectedDispatch.extendedProps.status === "holding" ? null : (
-              <BottomNavigationAction
-                label="Holding"
-                icon={<Schedule />}
-                onClick={() => openHolding(selectedDispatch)}
-              />
-            )}
-            <BottomNavigationAction
-              label="Add Log Message"
-              icon={<OpenInNew />}
-              onClick={() =>
-                openAddDispatchLog(selectedDispatch, handleDispatchLogChange)
-              }
-            />
-            <BottomNavigationAction
-              label="Close"
-              icon={<Close />}
-              onClick={() => closeModalOne()}
-            />
-          </BottomNavigation>
         </form>
       </Grid>
       <Grid xs={4}>
@@ -515,6 +447,74 @@ const DispatchDetails = ({
           </Typography>
           <DispatchLog dispatchLog={dispatchData.dispatchLog} />
         </Paper>
+      </Grid>
+      <Grid xs={12}>
+        <BottomNavigation showLabels sx={{ marginTop: "8px" }}>
+          <BottomNavigationAction
+            label="Delete"
+            icon={<DeleteForever />}
+            sx={{ color: "red" }}
+            onClick={() => openDeleteDispatch(selectedDispatch)}
+          />
+          {selectedDispatch.extendedProps.status === "holding" ? null : (
+            <BottomNavigationAction
+              label={
+                selectedDispatch.extendedProps.status === "canceled"
+                  ? "Reschedule"
+                  : "Cancel"
+              }
+              icon={
+                selectedDispatch.extendedProps.status === "canceled" ? (
+                  <Update />
+                ) : (
+                  <DoNotDisturb />
+                )
+              }
+              sx={{
+                color:
+                  selectedDispatch.extendedProps.status === "canceled"
+                    ? "green"
+                    : "orange",
+              }}
+              onClick={() => openCancelDispatch(selectedDispatch)}
+            />
+          )}
+          <BottomNavigationAction
+            label="Update"
+            icon={<ArrowUpward />}
+            sx={{
+              color:
+                selectedDispatch.extendedProps.status === "canceled"
+                  ? "grey"
+                  : "green",
+            }}
+            onClick={
+              selectedDispatch.extendedProps.status === "canceled"
+                ? () =>
+                    console.log("Can not Update the dispatch when its canceled")
+                : () => submitUpdateDispatch()
+            }
+          />
+          {selectedDispatch.extendedProps.status === "holding" ? null : (
+            <BottomNavigationAction
+              label="Holding"
+              icon={<Schedule />}
+              onClick={() => openHolding(selectedDispatch)}
+            />
+          )}
+          <BottomNavigationAction
+            label="Add Log Message"
+            icon={<OpenInNew />}
+            onClick={() =>
+              openAddDispatchLog(selectedDispatch, handleDispatchLogChange)
+            }
+          />
+          <BottomNavigationAction
+            label="Close"
+            icon={<Close />}
+            onClick={() => closeModalOne()}
+          />
+        </BottomNavigation>
       </Grid>
     </Grid>
   );

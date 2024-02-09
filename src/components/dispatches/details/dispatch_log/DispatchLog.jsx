@@ -7,7 +7,7 @@ const DispatchLog = ({ dispatchLog }) => {
   const copyOfDispatchLog = dispatchLog?.length ? dispatchLog : [];
 
   return copyOfDispatchLog.length > 0 ? (
-    <div style={{ maxHeight: "530px", overflow: "auto" }}>
+    <div style={{ maxHeight: "467px", overflow: "auto" }}>
       {copyOfDispatchLog
         .sort((a, b) => b.sortingDate - a.sortingDate)
         .map((logEntry, index) => (

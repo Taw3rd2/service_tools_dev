@@ -119,6 +119,16 @@ const HomePage = () => {
     setCustomer(customer);
   };
 
+  const handleEventSelected = (event) => {
+    if (event) {
+      const tempCustomer = { id: event.customerId };
+      console.log("event: ", event);
+      setCustomer(tempCustomer);
+    } else {
+      setCustomer({ id: "" });
+    }
+  };
+
   //keep customer data display current
   useEffect(() => {
     if (customer === null || customer.id === "") {
@@ -562,6 +572,7 @@ const HomePage = () => {
         <Grid xs={12} sm={12} md={12} lg={4}>
           <CustomerSearch
             handleCustomerSelected={handleCustomerSelected}
+            handleEventSelected={handleEventSelected}
             openCreateCustomer={openCreateCustomer}
             openMaintenanceList={openMaintenanceList}
           />

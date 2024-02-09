@@ -43,7 +43,7 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
   });
 
   const equipmentWarranty = "";
-  const equipmentLabor = "";
+  const laborWarranty = "";
   const equipmentContract = "";
   const equipmentNotes = "";
 
@@ -51,19 +51,20 @@ const CreateCustomerEquipment = ({ customer, closeModalTwo }) => {
     e.preventDefault();
     const newEquipment = {
       customerId: customer.id,
-      equipmentWarranty,
-      equipmentLabor,
-      equipmentContract,
-      equipmentNotes,
       equipmentBrand: equipmentValues.equipmentBrand,
       equipmentBtu: equipmentValues.equipmentBtu,
+      equipmentContract,
       equipmentEff: equipmentValues.equipmentEff,
       equipmentFuel: equipmentValues.equipmentFuel,
+      equipmentInstallDate: equipmentValues.equipmentInstallDate,
       equipmentModel: equipmentValues.equipmentModel,
       equipmentName: equipmentValues.equipmentName,
+      equipmentNotes,
       equipmentSerial: equipmentValues.equipmentSerial,
       equipmentVoltage: equipmentValues.equipmentVoltage,
-      equipmentInstallDate: equipmentValues.equipmentInstallDate,
+      equipmentWarranty,
+      key: equipmentValues.equipmentName,
+      laborWarranty,
     };
     const equipmentDocumentRef = doc(
       db,

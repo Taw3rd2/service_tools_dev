@@ -327,7 +327,7 @@ export const updateDispatch = (
       dateScheduled: dispatchData.start,
       end: selectedDispatch.end,
       id: selectedDispatch.id,
-      scheduledDate: selectedDispatch.extendedProps.scheduledDate, //nope
+      scheduledDate: selectedDispatch.extendedProps.scheduledDate,
       status: selectedDispatch.extendedProps.status,
       techHelperId: selectedDispatch.extendedProps.techHelperId,
       title: selectedDispatch.title,

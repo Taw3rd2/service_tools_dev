@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import CustomerAutocomplete from "./CustomerAutocomplete.component";
+import EventAutocomplete from "./EventAutocomplete";
 
 import "../../global_style/style.css";
 import { AddCircleOutline, BuildCircleOutlined } from "@mui/icons-material";
@@ -19,10 +20,12 @@ import { collection } from "firebase/firestore";
 
 const CustomerSearch = ({
   handleCustomerSelected,
+  handleEventSelected,
   openCreateCustomer,
   openMaintenanceList,
 }) => {
   const customers = useSyncedCollection(collection(db, "customers"));
+  const events = useSyncedCollection(collection(db, "events"));
 
   const [selectedSearchParameter, setSelectedSearchParameter] =
     useState("lastname");
@@ -52,6 +55,7 @@ const CustomerSearch = ({
             defaultValue="lastname"
             aria-labelledby="customer_search_parameters_radio_group"
             name="customer_search_radio_buttons_group"
+            ß
             onChange={handleSearchParameterChange}
             color="primary"
           >
@@ -98,6 +102,22 @@ const CustomerSearch = ({
           Maintenance Customer List
         </Button>
       </Grid>
+      <Grid
+        xs={12}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        mt={5}
+      >
+        <Typography variant="h4">Search {events.length} Jobs</Typography>
+      </Grid>
+      <Grid xs={6}>
+        <EventAutocomplete
+          events={events}
+          handleEventSelected={handleEventSelected}
+        />
+      </Grid>
+      <Grid xs={6} />
     </Grid>
   );
 };

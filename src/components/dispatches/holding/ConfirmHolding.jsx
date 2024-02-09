@@ -42,10 +42,11 @@ const ConfirmHolding = ({ selectedDispatch, closeModalOne, closeModalTwo }) => {
         },
       });
       return;
-    } else if (
-      selectedDispatch.extendedProps.techHelperId &&
-      selectedDispatch.extendedProps.techHelper !== "NONE"
-    ) {
+    } else if (selectedDispatch.extendedProps.techHelperId) {
+      console.log(
+        "selectedDispatch.extendedProps: ",
+        selectedDispatch.extendedProps
+      );
       //we have 2 techs
 
       //TODO Validation on 2nd tech status is not done and unreachable here..

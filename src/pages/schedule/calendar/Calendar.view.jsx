@@ -286,6 +286,7 @@ const Calendar = ({
 
       //check for a 2nd tech before updating the original.
       if (eventData.techHelper !== "NONE") {
+        console.log("we have a 2nd tech here to update");
         const docForId = doc(collection(db, "events"));
         const helperEvent = {
           customerId: eventData.customerId,
@@ -376,6 +377,53 @@ const Calendar = ({
               error
             )
           );
+      } else {
+        console.log("we have a solo tech to update");
+        const originalEventUpdate = {
+          customerId: eventData.customerId,
+          dateCreated: eventData.dateCreated,
+          dateModified: new Date(),
+          dateScheduled: eventInfo.event.start,
+          dispatchLog: updatedDispatchLog,
+          end: setDateToOneAm(eventInfo.event.start),
+          firstname: eventData.firstname,
+          id: eventData.id,
+          invoiceId: eventData.invoiceId,
+          issue: eventData.issue,
+          jobNumber: eventData.jobNumber,
+          lastname: eventData.lastname,
+          leadSource: eventData.leadSource,
+          notes: eventData.notes,
+          payment: eventData.payment,
+          scheduledDate: getUnixFromDate(
+            setDateToZeroHours(eventInfo.event.start)
+          ),
+          shorthand: eventData.shorthand,
+          start: eventInfo.event.start,
+          status: "scheduled",
+          takenBy: eventData.takenBy,
+          techHelper: eventData.techHelper,
+          techHelperId: eventData.techHelperId,
+          techLead: eventData.techLead,
+          timeAlotted: eventData.timeAlotted,
+          timeOfDay: eventData.timeOfDay,
+          title: eventData.title,
+        };
+        if (eventInfo.draggedEl.getAttribute("data-id")) {
+          //if we have a id, update the dispatch in firestore
+          updateDocument(
+            doc(db, "events", eventInfo.draggedEl.getAttribute("data-id")),
+            originalEventUpdate
+          )
+            .then(() => {
+              console.log("Success updating the original dispatch");
+            })
+            .catch((error) =>
+              console.log("firestore error updating original dispatch: ", error)
+            );
+        } else {
+          console.log("No Id to update");
+        }
       }
     } else {
       console.log("event document was undefined or dose not exist");
